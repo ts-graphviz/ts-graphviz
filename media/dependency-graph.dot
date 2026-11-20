@@ -1,11 +1,11 @@
 digraph "dependency_graph" {
   newrank = true;
   rankdir = "LR";
-  edge [
-    dir = "back";
-  ];
   node [
     shape = "none";
+  ];
+  edge [
+    dir = "back";
   ];
   "@ts-graphviz/adapter" [
     label = <<table><tr><td port="name" bgcolor="#f0f0f0" align="CENTER">@ts-graphviz/adapter</td></tr><tr><td port="description" align="CENTER">Graphviz Runtime adapters for Cross Platform</td></tr></table>>;

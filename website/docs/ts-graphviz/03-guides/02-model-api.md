@@ -145,13 +145,13 @@ A statement added before any other joins the leading defaults. `attributes` (`at
 
 ## Graph attribute assignments
 
-In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. `setAttribute` sets the graph's own attribute instead, which `toDot` writes before every statement:
+In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. The graph's attribute methods work on these statements: A graph's attributes are its assignments: there is no table apart. `getAttribute(key)` is the value of the last assignment of `key`, as Graphviz gives the graph; `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned. The constructor's and the factory's attributes are the first assignments, in their order.
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';
 
 const g = new Digraph();
-g.setAttribute('bgcolor', 'white'); // the graph's own: written first
+g.setAttribute('bgcolor', 'white'); // the first statement
 g.addNode(new Node('a'));
 const later = g.addAttributeAssignment('bgcolor', 'gray'); // where it is
 g.addNode(new Node('b'));
@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` keeps every assignment of a body where it is written, the first ones included: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `undefined`, and the assignment is the first of its `statements` (filter them with `isAttributeAssignmentModel`). The graph's own attributes, written first by `toDot`, read back as such assignments. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. In the DOT DSL, `g.rankdir = 'LR'` adds an assignment where it runs. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+`fromDot` keeps every assignment of a body where it is written, and `toDot` writes them back there, so a graph, its DOT and the graph read back have the same statements: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `'LR'`, and the assignment is the first of its `statements`. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. In the DOT DSL, `g.rankdir = 'LR'` adds an assignment where it runs. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
 
 ## Comments
 

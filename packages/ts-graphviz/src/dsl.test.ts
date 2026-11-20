@@ -323,8 +323,8 @@ describe('DOT statements', () => {
       { $$type: 'AttributeAssignment', key: 'label', value: 'G' },
       { $$type: 'AttributeAssignment', key: 'label', value: 'H' },
     ]);
-    // Not the graph's own attribute.
-    expect(modelOf(g).getAttribute('label')).toBeUndefined();
+    // The graph's attribute is the last, as Graphviz reads it.
+    expect(modelOf(g).getAttribute('label')).toBe('H');
     const s = g.subgraph('s');
     s.label = 'S';
     expect(modelOf(s).statements).toMatchObject([
@@ -379,7 +379,11 @@ describe('DOT statements', () => {
     });
     expect(modelOf(G).getAttribute('label')).toBe('G');
     expect(modelOf(G).getAttribute('rankdir')).toBe('LR');
-    expect(modelOf(G).statements).toStrictEqual([]);
+    // Assignments at the start of the body, in their order.
+    expect(modelOf(G).statements).toMatchObject([
+      { key: 'label', value: 'G' },
+      { key: 'rankdir', value: 'LR' },
+    ]);
   });
 
   test('a graph returned from an async function, nested subgraphs included', async () => {

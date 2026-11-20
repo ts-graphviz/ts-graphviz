@@ -39,6 +39,10 @@ export declare abstract class AttributesBase<T extends AttributeKey, E extends o
   removeAttribute(name: SchemaAttributeKey<T, E>): void;
   hasAttribute(name: SchemaAttributeKey<T, E>): boolean;
   getAttributeNames(): SchemaAttributeKey<T, E>[];
+  protected readAttribute(name: string): unknown;
+  protected writeAttribute(name: string, value: unknown): void;
+  protected deleteAttribute(name: string): void;
+  protected attributeNames(): string[];
   setAttributes(attributes: AttributesObject<T, E> | AttributesEntities<T, E>): void;
   removeAttributes(): void;
   get size(): number;
@@ -96,6 +100,7 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   #private;
   abstract get $$type(): T;
   readonly id?: string;
+  constructor(attributes?: AttributesObject<K, GraphSchemaAttributeTypes<T, S>>);
   get comments(): ReadonlyArray<CommentModel>;
   addComment(text: string, options?: CommentOptions<CommentPosition>): CommentModel;
   removeComment(comment: CommentModel): void;
@@ -108,6 +113,11 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   addEdge(edge: EdgeModel<S>): void;
   addSubgraph(subgraph: SubgraphModel<S>): void;
   protected get keepsDefaultsInPlace(): boolean;
+  get attributesInStatements(): boolean;
+  protected override readAttribute(name: string): unknown;
+  protected override writeAttribute(name: string, value: unknown): void;
+  protected override deleteAttribute(name: string): void;
+  protected override attributeNames(): string[];
   addAttributeList(kind: "Graph", attributes: AttributeListAttributes<S, "Graph">): GraphCommonAttributes<S>["graph"];
   addAttributeList(kind: "Node", attributes: AttributeListAttributes<S, "Node">): GraphCommonAttributes<S>["node"];
   addAttributeList(kind: "Edge", attributes: AttributeListAttributes<S, "Edge">): GraphCommonAttributes<S>["edge"];
@@ -131,6 +141,7 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
 
 export declare class LegacyDigraph<S extends Schema = EmptySchema> extends Digraph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
+  override get attributesInStatements(): boolean;
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;
@@ -141,6 +152,7 @@ export declare class LegacyDigraph<S extends Schema = EmptySchema> extends Digra
 
 export declare class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
+  override get attributesInStatements(): boolean;
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;
@@ -151,6 +163,7 @@ export declare class LegacyGraph<S extends Schema = EmptySchema> extends Graph<S
 
 export declare class LegacySubgraph<S extends Schema = EmptySchema> extends Subgraph<S> {
   protected override get keepsDefaultsInPlace(): boolean;
+  override get attributesInStatements(): boolean;
   protected override get keepsEachNodeDeclaration(): boolean;
   getNode(id: string): NodeModel<S> | undefined;
   getSubgraph(id: string): SubgraphModel<S> | undefined;

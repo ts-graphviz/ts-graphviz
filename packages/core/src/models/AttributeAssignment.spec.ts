@@ -61,7 +61,8 @@ describe('a graph', () => {
     // A default statement added after it keeps its place.
     const list = g.addAttributeList('Node', { shape: 'box' });
     expect(g.statements).toStrictEqual([a, assignment, list]);
-    expect(g.getAttribute('label')).toBeUndefined();
+    // The graph's attributes are its assignments.
+    expect(g.getAttribute('label')).toBe('G');
     g.removeAttributeAssignment(a as never);
     g.removeAttributeAssignment(assignment);
     expect(g.statements).toStrictEqual([a, list]);

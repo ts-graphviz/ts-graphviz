@@ -6,6 +6,7 @@ import {
   type AttributeListKind,
   type AttributeListModel,
   type AttributeOf,
+  type AttributesObject,
   type BuiltInAttributeKey,
   type ClusterSubgraphAttributeKey,
   type CommentModel,
@@ -57,6 +58,17 @@ export abstract class GraphBase<
 {
   public abstract get $$type(): T;
   public readonly id?: string;
+
+  /**
+   * @param attributes - The graph's attributes, set once its fields are
+   * (they may be its statements).
+   */
+  constructor(
+    attributes?: AttributesObject<K, GraphSchemaAttributeTypes<T, S>>,
+  ) {
+    super();
+    if (attributes !== undefined) this.setAttributes(attributes);
+  }
 
   readonly #comments: CommentList = new CommentList(GRAPH_POSITIONS);
 
@@ -215,6 +227,86 @@ export abstract class GraphBase<
    */
   protected get keepsDefaultsInPlace(): boolean {
     return true;
+  }
+
+  /**
+   * Whether the graph's attributes are its graph attribute assignments
+   * (`key = value;` in its statements) instead of a table of its own:
+   * `true` here; the deprecated classes of `legacyModels` return `false`.
+   *
+   * Then `getAttribute(key)` is the value of the last assignment of `key`
+   * (the value Graphviz gives the graph), `setAttribute(key, value)` sets
+   * the value of the first assignment of `key` and removes the others, or,
+   * when there is none, adds one at the start of the body (after the
+   * assignments already there), `removeAttribute(key)` removes every
+   * assignment of `key`, and `getAttributeNames()` lists the keys assigned,
+   * in the order they first are: the attributes behave as an
+   * insertion-ordered map, as other objects' do. The constructor's attributes are such assignments, in their
+   * order. `fromModel` writes no attributes apart: they are statements.
+   */
+  public get attributesInStatements(): boolean {
+    return true;
+  }
+
+  /** @hidden */
+  protected override readAttribute(name: string): unknown {
+    if (!this.attributesInStatements) return super.readAttribute(name);
+    let value: unknown;
+    for (const s of this.#statements) {
+      if (s instanceof AttributeAssignment && s.key === name) value = s.value;
+    }
+    return value;
+  }
+
+  /** @hidden */
+  protected override writeAttribute(name: string, value: unknown): void {
+    if (!this.attributesInStatements) {
+      super.writeAttribute(name, value);
+      return;
+    }
+    let first: AttributeAssignment | undefined;
+    for (const s of this.#statements) {
+      if (!(s instanceof AttributeAssignment) || s.key !== name) continue;
+      if (first === undefined) first = s;
+      else this.#statements.delete(s);
+    }
+    if (first !== undefined) {
+      first.value = value as DotValue;
+      return;
+    }
+    const statements = Array.from(this.#statements);
+    let at = 0;
+    while (
+      at < statements.length &&
+      statements[at] instanceof AttributeAssignment
+    ) {
+      at++;
+    }
+    statements.splice(at, 0, new AttributeAssignment(name, value as DotValue));
+    this.#statements = new Set(statements);
+  }
+
+  /** @hidden */
+  protected override deleteAttribute(name: string): void {
+    if (!this.attributesInStatements) {
+      super.deleteAttribute(name);
+      return;
+    }
+    for (const s of this.#statements) {
+      if (s instanceof AttributeAssignment && s.key === name) {
+        this.#statements.delete(s);
+      }
+    }
+  }
+
+  /** @hidden */
+  protected override attributeNames(): string[] {
+    if (!this.attributesInStatements) return super.attributeNames();
+    const names = new Set<string>();
+    for (const s of this.#statements) {
+      if (s instanceof AttributeAssignment) names.add(s.key);
+    }
+    return Array.from(names);
   }
 
   public addAttributeList(

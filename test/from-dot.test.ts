@@ -46,7 +46,7 @@ describe('fromDot API', () => {
       );
       expect(subgraph).toBeInstanceOf(Subgraph);
       expect(subgraph.id).toStrictEqual('sub');
-      expect(subgraph.getAttribute('label')).toBeUndefined();
+      expect(subgraph.getAttribute('label')).toBe('hoge');
       expect(subgraph.statements[0]).toMatchObject({
         key: 'label',
         value: 'hoge',

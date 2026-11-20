@@ -830,6 +830,7 @@ export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesOb
 export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
+  readonly attributesInStatements: boolean;
   readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S> | AttributeAssignmentModel>;
   addNode(node: NodeModel<S>): void;
   addEdge(edge: EdgeModel<S>): void;
@@ -1157,6 +1158,7 @@ export interface ReadonlyGraphBaseModel<T extends "Graph" | "Subgraph" = "Graph"
     readonly edge: ReadonlyAttributeListModel<"Edge">;
     readonly node: ReadonlyAttributeListModel<"Node">;
   };
+  readonly attributesInStatements?: boolean;
   readonly statements: ReadonlyArray<ReadonlyGraphStatementModel>;
   existNode(nodeId: string): boolean;
   getNodes(): ReadonlyArray<ReadonlyNodeModel>;

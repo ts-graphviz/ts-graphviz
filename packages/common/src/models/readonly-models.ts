@@ -190,6 +190,12 @@ export interface ReadonlyGraphBaseModel<
     readonly node: ReadonlyAttributeListModel<'Node'>;
   };
   /**
+   * Whether the graph's attributes are its graph attribute assignments (see
+   * {@link GraphBaseModel.attributesInStatements}); without it, a table of
+   * its own.
+   */
+  readonly attributesInStatements?: boolean;
+  /**
    * The graph's contents in the order they were added (see
    * {@link GraphBaseModel.statements}).
    */

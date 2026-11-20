@@ -43,7 +43,10 @@ export type BodyEntry =
  */
 export function bodyOf(g: GraphBaseModel): BodyEntry[] {
   return [
-    ...g.values.map(([k, v]): BodyEntry => ['assignment', k, v]),
+    // A graph whose attributes are its assignments has them below.
+    ...(g.attributesInStatements ? [] : g.values).map(
+      ([k, v]): BodyEntry => ['assignment', k, v],
+    ),
     ...Object.values(g.attributes)
       .filter((list) => list.getAttributeNames().length > 0)
       .map((list): BodyEntry => ['defaults', list.$$kind, sorted(list.values)]),

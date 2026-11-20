@@ -58,7 +58,8 @@ describe('graph attribute assignments', () => {
 
   it('keep an assignment after another statement where it is written', () => {
     const g = fromDot('digraph { a; graph [bgcolor=red]; bgcolor=blue; b }');
-    expect(g.getAttribute('bgcolor')).toBeUndefined();
+    // The graph's attribute, as Graphviz reads the body: the last one.
+    expect(g.getAttribute('bgcolor')).toBe('blue');
     const [, , assignment] = g.statements;
     expect(isAttributeAssignmentModel(assignment)).toBe(true);
     expect(assignment).toMatchObject({ key: 'bgcolor', value: 'blue' });
@@ -69,8 +70,9 @@ describe('graph attribute assignments', () => {
 
   it('make every one a statement where it is, the first ones included', () => {
     const g = fromDot('digraph { rankdir=LR; bgcolor=red; bgcolor=blue; a }');
-    // Not the graph's own attributes: read them in its statements.
-    expect(g.getAttribute('rankdir')).toBeUndefined();
+    // The graph's attributes are these statements.
+    expect(g.getAttribute('rankdir')).toBe('LR');
+    expect(g.getAttribute('bgcolor')).toBe('blue');
     expect(
       g.statements
         .filter(isAttributeAssignmentModel)
@@ -85,13 +87,13 @@ describe('graph attribute assignments', () => {
     );
   });
 
-  it("write the graph's own attributes first, read back as assignments", () => {
+  it("keep the graph's attributes as they are through DOT", () => {
     const g = new Digraph(undefined, { rankdir: 'LR' });
     g.addNode(new Node('a'));
     const dot = toDot(g);
     expect(flat(dot)).toBe('digraph { rankdir = "LR"; "a"; }');
     const back = fromDot(dot);
-    expect(back.getAttribute('rankdir')).toBeUndefined();
+    expect(back.getAttribute('rankdir')).toBe('LR');
     expect(back.statements[0]).toMatchObject({ key: 'rankdir', value: 'LR' });
     expect(toDot(back)).toBe(dot);
   });
@@ -100,7 +102,7 @@ describe('graph attribute assignments', () => {
     const dot =
       'digraph {\n  node [shape=box];\n  // why\n  bgcolor=blue; # blue\n  a;\n}';
     const g = fromDot(dot);
-    expect(g.getAttribute('bgcolor')).toBeUndefined();
+    expect(g.getAttribute('bgcolor')).toBe('blue');
     const [assignment] = g.statements;
     expect(isAttributeAssignmentModel(assignment)).toBe(true);
     expect(
@@ -163,8 +165,8 @@ describe('graph attribute assignments', () => {
     expect(flat(toDot(G))).toBe(
       'digraph "G" { bgcolor = "white"; bgcolor = "red"; "a"; bgcolor = "blue"; subgraph "cluster_s" { label = "S"; } }',
     );
-    // The factory's attributes are the graph's own.
-    expect(modelOf(G).getAttribute('bgcolor')).toBe('white');
+    // The factory's attributes are assignments too; the last one counts.
+    expect(modelOf(G).getAttribute('bgcolor')).toBe('blue');
   });
 
   it('are own attributes with ts-graphviz/legacy, as in 3.x', () => {

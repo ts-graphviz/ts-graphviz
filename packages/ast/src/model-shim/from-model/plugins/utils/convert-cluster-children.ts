@@ -11,7 +11,11 @@ export function convertClusterChildren(
   const { createElement, commentKind } = context;
   return Array.from(
     (function* (): Generator<ClusterStatementASTNode> {
-      yield* convertAttributes(createElement, model);
+      // A graph whose attributes are its assignments has them among its
+      // statements.
+      if (model.attributesInStatements !== true) {
+        yield* convertAttributes(createElement, model);
+      }
       for (const attrs of Object.values(model.attributes)) {
         // A list with neither attributes nor comments writes nothing.
         if (

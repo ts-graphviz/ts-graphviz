@@ -189,7 +189,7 @@ function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
   // `label=a;` is written before `graph [...]`, so the list wins; a
   // default statement kept in place comes later still.
   const graphAttributes = textAttrs([
-    ...model.values,
+    ...(model.attributesInStatements ? [] : model.values),
     ...model.attributes.graph.values,
   ]);
   const node = (id: string, defaults: Attrs) => {

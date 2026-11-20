@@ -22,14 +22,14 @@ const G = digraph('G', { rankdir: 'LR' }, (g) => {
   g.node('a');
   g.label = 'G'; // label = "G"; here
 });
-modelOf(G).getAttribute('rankdir'); // 'LR': the graph's own
-modelOf(G).removeAttribute('rankdir');
+modelOf(G).getAttribute('rankdir'); // 'LR': the last assignment of rankdir
+modelOf(G).removeAttribute('rankdir'); // removes every assignment of rankdir
 toDot(G); // digraph "G" { "a"; label = "G"; }
 ```
 
 `ts-graphviz/legacy` keeps the 3.x meaning: the names are the graph's own attributes, readable and deletable.
 
-**`fromDot` keeps every graph attribute assignment of a body as a statement**, the first ones included: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `undefined` (3.x: `'LR'`). Read the assignments in `statements`:
+**A graph's attributes are its graph attribute assignments**, statements where they are written; there is no table apart. `getAttribute(key)` is the last assignment of `key` (as Graphviz gives the graph), so `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `'LR'`, as in 3.x; `setAttribute` sets the first assignment of the key and removes the others (or adds one at the start of the body), and `removeAttribute` removes every one. Each assignment is in `statements`:
 
 ```ts
 import { fromDot, isAttributeAssignmentModel } from 'ts-graphviz';
@@ -40,7 +40,7 @@ const rankdir = g.statements
   .findLast((s) => s.key === 'rankdir')?.value; // 'TB', as Graphviz resolves it
 ```
 
-The graph's own attributes, which `toDot` writes first, read back as assignments too. `fromDot` of `ts-graphviz/legacy` keeps the 3.x reading (every assignment an own attribute); passing `legacyModels` to `fromDot` of `ts-graphviz` does not, since it uses the classes, not the 3.x conversion.
+A graph, its DOT and the graph read back have the same statements. `fromDot` of `ts-graphviz/legacy` keeps the 3.x reading (every assignment an own attribute); passing `legacyModels` to `fromDot` of `ts-graphviz` does not, since it uses the classes, not the 3.x conversion.
 
 **Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names; the model's members of those names are on `modelOf(x)`:
 

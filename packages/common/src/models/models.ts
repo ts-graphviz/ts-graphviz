@@ -812,6 +812,14 @@ export interface GraphBaseModel<
    */
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   /**
+   * Whether the graph's attributes are its graph attribute assignments
+   * (`key = value;` among its statements) instead of a table of its own.
+   * Then the attribute methods read and write those statements, and
+   * `fromModel` writes no attributes apart. `false` for the deprecated
+   * classes of `legacyModels`.
+   */
+  readonly attributesInStatements: boolean;
+  /**
    * The graph's contents in the order they were added: nodes, edges and
    * subgraphs, attribute assignments, and the default attribute statements
    * added after them, which `toDot` writes in this order (after the graph's attributes and

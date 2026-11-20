@@ -134,7 +134,7 @@ digraph((g) => {
 
 On the DSL of a graph or subgraph, an attribute name is a DOT statement, as `rankdir = LR;` is in DOT: `g.rankdir = 'LR'` writes `rankdir = "LR";` where it runs, each time it runs (a graph attribute assignment; in Graphviz a later one overrides an earlier one). It is written only: reading `g.rankdir` or `delete g.rankdir` throws a `TypeError` with code `TSG_ERR_WRITE_ONLY_PROPERTY`, and assigning `undefined` throws one with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`. Names that JavaScript and tools look up on any object (`then`, `toJSON` and those of `Object.prototype`) read as `undefined`, so a graph's DSL can be awaited or stringified.
 
-The graph's own attributes, which `toDot` writes before every statement, are the factory's attributes argument, or the model's (`modelOf(g).setAttribute`, `getAttribute`):
+The factory's attributes argument writes the first assignments of the body, and the model reads and writes the graph's attributes (`modelOf(g).getAttribute`, `setAttribute`). A graph's attributes are its assignments: there is no table apart. `getAttribute(key)` is the value of the last assignment of `key`, as Graphviz gives the graph; `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned. The constructor's and the factory's attributes are the first assignments, in their order.
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
@@ -152,7 +152,7 @@ console.log(toDot(G));
 //   bgcolor = "gray";
 //   "b";
 // }
-console.log(modelOf(G).getAttribute('bgcolor')); // 'white', the graph's own
+console.log(modelOf(G).getAttribute('bgcolor')); // 'gray', the last one
 ```
 
 With `ts-graphviz/legacy` the names are the graph's own attributes, readable and deletable, as in 3.x.
@@ -332,7 +332,7 @@ In v4 it applies only to what follows it, as in DOT. Give the defaults before th
 
 ### Reading `g.rankdir` throws
 
-On a graph's DSL the attribute names write DOT statements. Read the graph's own attributes on the model (`modelOf(g).getAttribute('rankdir')`), and the assignments in its statements (`modelOf(g).statements`, with `isAttributeAssignmentModel`). A graph read with `fromDot` has every assignment of its body there.
+On a graph's DSL the attribute names write DOT statements. Read the graph's attributes on the model: `modelOf(g).getAttribute('rankdir')` is the last assignment of `rankdir`, and `modelOf(g).statements` has each assignment where it is (`isAttributeAssignmentModel`).
 
 ### Where did `attributes` go?
 
