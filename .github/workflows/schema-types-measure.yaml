@@ -33,6 +33,8 @@ jobs:
             sha: 9bddce7bbe8b1f33494523a46b0fe4a0910802f6
           - label: PR 1 v2 ('~schema')
             sha: 7d80a0ebacc8b57fc2acf85bf668e832744d6d5d
+          - label: PR 1 v3 (default kit types)
+            sha: 3b35db2664dc9e2e8bf799146717dbe917576327
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
