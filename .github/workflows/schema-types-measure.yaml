@@ -33,6 +33,8 @@ jobs:
             sha: 1bc5a20457158dbe0e27b0a69cdc8f68c1939ac4
           - label: PR 2 (defineSchema)
             sha: a53d738ffdecf9071bfc93d45f742426b15ef832
+          - label: PR 3 (no global augmentation)
+            sha: 5c0c81cb98b17720ce3b9e36e655ddbe24ae47bf
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
