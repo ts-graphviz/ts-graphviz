@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` は、他のどの文よりも（既定属性の文も含めて）前に書かれた代入をグラフ自身の属性にするので、`getAttribute` で読めます。それより後の代入はその位置に残します。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
+`fromDot` は、本体のどの代入も（最初のものも含めて）書かれた位置に残します。`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` は `undefined` で、代入は `statements` の最初にあります（`isAttributeAssignmentModel` で絞り込めます）。`toDot` が最初に書き出すグラフ自身の属性は、読み戻すとこのような代入になります。`ts-graphviz/legacy` は 3.x と同じく、どの代入もグラフ自身の属性にします。DOT DSL では、`g.rankdir = 'LR'` が実行した位置に代入を追加します。値が `null` か `undefined`、またはキーが文字列でない場合は、コード `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` を持つ `TypeError` を投げます。
 
 ## コメント
 
@@ -188,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。例外が 2 つあります。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。また、グラフ属性の代入（`color = blue;`）は文より前に書き出されるので、その隣のコメントは次の文の先頭コメントになります。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
+`fromDot` は文と文の間のコメントを種類と位置ごと保ち、`toDot` は同じ位置に書き戻します。例外が 2 つあります。文の中のコメント（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）は保たれません。また、`ts-graphviz/legacy` ではグラフ属性の代入（`color = blue;`）がグラフ自身の属性になり、文より前に書き出されるので、その隣のコメントは次の文の先頭コメントになります。モデルの `comment` は非推奨で、最初の先頭コメントを読み書きします。
 
 ## モデルの型ガード
 

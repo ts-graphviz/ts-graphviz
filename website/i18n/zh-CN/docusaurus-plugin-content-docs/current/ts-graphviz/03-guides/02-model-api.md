@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会把写在其他所有语句（包括默认属性语句）之前的赋值当作图自身的属性，因此可以用 `getAttribute` 读取；之后的赋值则保留在原位置。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
+`fromDot` 会把主体中的每条赋值（包括最前面的）保留在原位置：`fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` 为 `undefined`，而该赋值是 `statements` 中的第一条（可用 `isAttributeAssignmentModel` 筛选）。`toDot` 最先写出的图自身的属性，读回时就成为这样的赋值。`ts-graphviz/legacy` 与 3.x 一样，把每条赋值都当作图自身的属性。在 DOT DSL 中，`g.rankdir = 'LR'` 会在执行的位置添加一条赋值。值为 `null` 或 `undefined`，或者键不是字符串时，会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。
 
 ## 注释
 
@@ -188,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。有两个例外：语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留；图属性赋值（`color = blue;`）会写在各语句之前，因此它旁边的注释会成为下一条语句的前置注释。模型的 `comment` 已弃用：它读写第一条前置注释。
+`fromDot` 会保留语句之间的注释及其种类和位置，`toDot` 会把它们写回原处。有两个例外：语句内部的注释（`a -> /* note */ b;`、`a [ /* note */ label = x ]`）不会保留；在 `ts-graphviz/legacy` 中，图属性赋值（`color = blue;`）是图自身的属性，会写在各语句之前，因此它旁边的注释会成为下一条语句的前置注释。模型的 `comment` 已弃用：它读写第一条前置注释。
 
 ## 模型的类型守卫
 

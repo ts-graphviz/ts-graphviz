@@ -66,9 +66,7 @@ strict.graph((g) => {
   g[_.label] = 'strict';
 });
 
-// attributes by name, the model's members with $
-const rankdir = g.rankdir;
-assertType<Equal<typeof rankdir, Attribute<'rankdir'> | undefined>>();
+// attributes by name, the model's members with $; on a graph, written only
 g.rankdir = 'TB';
 // @ts-expect-error not an attribute of graphs
 g.shape = 'box';
@@ -76,6 +74,8 @@ g.shape = 'box';
 g.rankdir = 'XX';
 g.node('a').shape = 'box';
 modelOf(g).setAttribute('rankdir', 'TB');
+const rankdir = modelOf(g).getAttribute('rankdir');
+assertType<Equal<typeof rankdir, Attribute<'rankdir'> | undefined>>();
 modelOf(g.node('a')).id satisfies string;
 g.node('a').port('p');
 const model: RootGraphModel = modelOf(g);

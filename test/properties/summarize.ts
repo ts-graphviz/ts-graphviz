@@ -5,7 +5,7 @@ import type {
   RootGraphModel,
   SubgraphModel,
 } from '@ts-graphviz/common';
-import { isAttributeAssignmentModel, isNodeModel } from '@ts-graphviz/common';
+import { isNodeModel } from '@ts-graphviz/common';
 
 /**
  * A plain, order-preserving description of a model, for structural equality
@@ -15,13 +15,8 @@ import { isAttributeAssignmentModel, isNodeModel } from '@ts-graphviz/common';
 interface GraphSummary {
   id?: string;
   comment?: string;
-  attributes: [string, unknown][];
-  /** `graph [...]`, `node [...]` and `edge [...]` default statements. */
-  defaults: {
-    graph: [string, unknown][];
-    node: [string, unknown][];
-    edge: [string, unknown][];
-  };
+  /** The body as DOT has it (see {@link bodyOf}). */
+  body: BodyEntry[];
   nodes: { id: string; comment?: string; attributes: [string, unknown][] }[];
   edges: {
     targets: TargetSummary[];
@@ -29,8 +24,44 @@ interface GraphSummary {
     attributes: [string, unknown][];
   }[];
   subgraphs: GraphSummary[];
-  /** Graph attribute assignments kept in place (`color=blue;`), in order. */
-  assignments: [string, unknown][];
+}
+
+/** A statement of a body, by its kind. */
+export type BodyEntry =
+  | ['assignment', string, unknown]
+  | ['defaults', string, [string, unknown][]]
+  | ['node', string]
+  | ['edge']
+  | ['subgraph', string | undefined, BodyEntry[]];
+
+/**
+ * A graph's body as DOT has it: its own attributes, which `toDot` writes
+ * first as graph attribute assignments (`key = value;`), its leading default
+ * statements, and its statements in order. `fromDot` reads them back as
+ * statements of the graph, so a model and the model read from its DOT have
+ * the same body.
+ */
+export function bodyOf(g: GraphBaseModel): BodyEntry[] {
+  return [
+    ...g.values.map(([k, v]): BodyEntry => ['assignment', k, v]),
+    ...Object.values(g.attributes)
+      .filter((list) => list.getAttributeNames().length > 0)
+      .map((list): BodyEntry => ['defaults', list.$$kind, sorted(list.values)]),
+    ...g.statements.map((s): BodyEntry => {
+      switch (s.$$type) {
+        case 'Node':
+          return ['node', s.id];
+        case 'Edge':
+          return ['edge'];
+        case 'Subgraph':
+          return ['subgraph', s.id, bodyOf(s)];
+        case 'AttributeAssignment':
+          return ['assignment', s.key, s.value];
+        default:
+          return ['defaults', s.$$kind, sorted(s.values)];
+      }
+    }),
+  ];
 }
 
 export interface RootGraphSummary extends GraphSummary {
@@ -91,18 +122,10 @@ function summarizeGraph(model: GraphBaseModel | SubgraphModel): GraphSummary {
   return {
     id: model.id,
     comment: model.comment,
-    attributes: sorted(model.values),
-    defaults: {
-      graph: sorted(model.attributes.graph.values),
-      node: sorted(model.attributes.node.values),
-      edge: sorted(model.attributes.edge.values),
-    },
+    body: bodyOf(model),
     nodes: model.getNodes().map(summarizeNode),
     edges: model.getEdges().map(summarizeEdge),
     subgraphs: model.getSubgraphs().map(summarizeGraph),
-    assignments: model.statements
-      .filter(isAttributeAssignmentModel)
-      .map((a): [string, unknown] => [a.key, a.value]),
   };
 }
 

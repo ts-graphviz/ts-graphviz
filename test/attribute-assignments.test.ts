@@ -67,17 +67,33 @@ describe('graph attribute assignments', () => {
     );
   });
 
-  it("make one before every other statement the graph's own attribute", () => {
-    const g = fromDot('digraph { bgcolor=blue; node [shape=box]; a }');
-    expect(g.getAttribute('bgcolor')).toBe('blue');
-    expect(g.statements.map((s) => s.$$type)).toEqual(['Node']);
-    // After a `graph [...]` list, it stays after it.
-    const h = fromDot('digraph { graph [bgcolor=red]; bgcolor=blue; a }');
-    expect(h.getAttribute('bgcolor')).toBeUndefined();
-    expect(h.statements.map((s) => s.$$type)).toEqual([
-      'AttributeAssignment',
-      'Node',
+  it('make every one a statement where it is, the first ones included', () => {
+    const g = fromDot('digraph { rankdir=LR; bgcolor=red; bgcolor=blue; a }');
+    // Not the graph's own attributes: read them in its statements.
+    expect(g.getAttribute('rankdir')).toBeUndefined();
+    expect(
+      g.statements
+        .filter(isAttributeAssignmentModel)
+        .map((s) => [s.key, s.value]),
+    ).toEqual([
+      ['rankdir', 'LR'],
+      ['bgcolor', 'red'],
+      ['bgcolor', 'blue'],
     ]);
+    expect(flat(toDot(g))).toBe(
+      'digraph { rankdir = "LR"; bgcolor = "red"; bgcolor = "blue"; "a"; }',
+    );
+  });
+
+  it("write the graph's own attributes first, read back as assignments", () => {
+    const g = new Digraph(undefined, { rankdir: 'LR' });
+    g.addNode(new Node('a'));
+    const dot = toDot(g);
+    expect(flat(dot)).toBe('digraph { rankdir = "LR"; "a"; }');
+    const back = fromDot(dot);
+    expect(back.getAttribute('rankdir')).toBeUndefined();
+    expect(back.statements[0]).toMatchObject({ key: 'rankdir', value: 'LR' });
+    expect(toDot(back)).toBe(dot);
   });
 
   it('keep one after a leading default statement in place, with its comments', () => {
@@ -98,13 +114,6 @@ describe('graph attribute assignments', () => {
       'digraph { node [ shape = "box"; ]; // why bgcolor = "blue"; # blue "a"; }',
     );
     expect(toDot(fromDot(once))).toBe(once);
-  });
-
-  it('make consecutive leading ones own attributes, the last of a key winning', () => {
-    const g = fromDot('digraph { bgcolor=red; label=L; bgcolor=blue; a }');
-    expect(g.getAttribute('bgcolor')).toBe('blue');
-    expect(g.getAttribute('label')).toBe('L');
-    expect(g.statements.map((s) => s.$$type)).toEqual(['Node']);
   });
 
   it('give an assignment its comments', () => {
@@ -142,22 +151,29 @@ describe('graph attribute assignments', () => {
     );
   });
 
-  it("come from the DSL's assign", () => {
-    const G = digraph((g) => {
+  it("come from the attribute names of a graph's DSL", () => {
+    const G = digraph('G', { bgcolor: 'white' }, (g) => {
       g.bgcolor = 'red';
       g.node('a');
-      const assignment = g.assign('bgcolor', 'blue');
-      expect(assignment.$$type).toBe('AttributeAssignment');
-      expect([assignment.key, assignment.value]).toEqual(['bgcolor', 'blue']);
-      assignment.addComment('later');
+      g.bgcolor = 'blue';
+      g.subgraph('cluster_s', (s) => {
+        s.label = 'S';
+      });
     });
     expect(flat(toDot(G))).toBe(
-      'digraph { bgcolor = "red"; "a"; // later bgcolor = "blue"; }',
+      'digraph "G" { bgcolor = "white"; bgcolor = "red"; "a"; bgcolor = "blue"; subgraph "cluster_s" { label = "S"; } }',
     );
-    expect(modelOf(G).getAttribute('bgcolor')).toBe('red');
+    // The factory's attributes are the graph's own.
+    expect(modelOf(G).getAttribute('bgcolor')).toBe('white');
   });
 
   it('are own attributes with ts-graphviz/legacy, as in 3.x', () => {
+    const G = legacy.digraph((g) => {
+      g.node('a');
+      g.bgcolor = 'blue';
+      expect(g.bgcolor).toBe('blue');
+    });
+    expect(flat(toDot(G))).toBe('digraph { bgcolor = "blue"; "a"; }');
     const g = legacy.fromDot(
       'digraph { a; graph [bgcolor=red]; bgcolor=blue; b }',
     );

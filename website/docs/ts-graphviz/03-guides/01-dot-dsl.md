@@ -130,13 +130,41 @@ digraph((g) => {
 });
 ```
 
+### A graph's attributes are DOT statements {#a-graphs-attributes-are-dot-statements}
+
+On the DSL of a graph or subgraph, an attribute name is a DOT statement, as `rankdir = LR;` is in DOT: `g.rankdir = 'LR'` writes `rankdir = "LR";` where it runs, each time it runs (a graph attribute assignment; in Graphviz a later one overrides an earlier one). It is written only: reading `g.rankdir` or `delete g.rankdir` throws a `TypeError` with code `TSG_ERR_WRITE_ONLY_PROPERTY`, and assigning `undefined` throws one with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`. Names that JavaScript and tools look up on any object (`then`, `toJSON` and those of `Object.prototype`) read as `undefined`, so a graph's DSL can be awaited or stringified.
+
+The graph's own attributes, which `toDot` writes before every statement, are the factory's attributes argument, or the model's (`modelOf(g).setAttribute`, `getAttribute`):
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', { bgcolor: 'white' }, (g) => {
+  g.node('a');
+  g.bgcolor = 'gray'; // bgcolor = "gray"; here
+  g.node('b');
+});
+
+console.log(toDot(G));
+// digraph "G" {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "gray";
+//   "b";
+// }
+console.log(modelOf(G).getAttribute('bgcolor')); // 'white', the graph's own
+```
+
+With `ts-graphviz/legacy` the names are the graph's own attributes, readable and deletable, as in 3.x.
+
 ## What is on the DSL, and what on the model {#what-is-on-the-dsl-and-what-on-the-model}
 
 The DSL keeps DOT's words only, so none of its names is a Graphviz attribute, and your editor's completion lists the attributes and the few DSL members (an attribute of your own schema named like one, `port` say, is read and written on the model with `getAttribute` / `setAttribute`):
 
 | On the DSL | Meaning |
 | --- | --- |
-| `a.label`, `a.id`, `a.comment`, `g.size`, … | the Graphviz attributes |
+| `a.label`, `a.id`, `a.comment`, … | the Graphviz attributes of a node, an edge or a default attribute list |
+| `g.size = '7,7'`, `s.label = 'S'`, … | a graph attribute assignment (`size = "7,7";`) on a graph or subgraph, written only |
 | `g.node(...)`, `g.edge(...)`, `g.subgraph(...)`, `g.graph(...)` | the DOT statements (on graphs and subgraphs) |
 | `a.port('p')` | a node at a port, for an edge target |
 | `a.addComment('note')` | a comment written into the DOT source |
@@ -248,7 +276,7 @@ console.log(toDot(G));
 
 `fromDot` keeps each default attribute statement of a source where it is, so `node [color=red]; a; node [color=blue]; b` renders `a` red and `b` blue, as Graphviz does. A node's own attribute (`g.node('a', { color: 'green' })`) always wins over a default.
 
-A graph attribute assignment (`bgcolor=gray;` in a body) is to Graphviz the same as `graph [bgcolor=gray]` where it is written. `g.assign('bgcolor', 'gray')` adds one where it is called and returns its DSL, with its `key` and `value`. Setting the attribute on the DSL (`g.bgcolor = 'gray'`) sets the graph's own attribute instead, which `toDot` writes before every statement. `fromDot` keeps an assignment written after other statements where it is.
+A graph attribute assignment (`bgcolor=gray;` in a body) is to Graphviz the same as `graph [bgcolor=gray]` where it is written. `g.bgcolor = 'gray'` adds one where it runs (see [A graph's attributes are DOT statements](#a-graphs-attributes-are-dot-statements)), and `fromDot` keeps every one where it is written.
 
 3.x merged every default attribute statement into one set of defaults per graph, written first, so a default given after other statements applied to what came before it too. To keep that output while you move to v4, import from `ts-graphviz/legacy`, which has the same names as `ts-graphviz`, with factories and `fromDot` that use the 3.x classes (`legacyModels`); it is deprecated and removed in v5. The classes exported under their own names (`Digraph`, `Graph`, `Subgraph`) are v4's there too: where you construct a graph yourself, use `LegacyDigraph`, `LegacyGraph` or `LegacySubgraph`.
 
@@ -301,6 +329,10 @@ digraph((g) => {
 ### A default given after other statements changed my 3.x output
 
 In v4 it applies only to what follows it, as in DOT. Give the defaults before the other statements to have them apply to the whole graph, or import from `ts-graphviz/legacy` to keep the 3.x output for now.
+
+### Reading `g.rankdir` throws
+
+On a graph's DSL the attribute names write DOT statements. Read the graph's own attributes on the model (`modelOf(g).getAttribute('rankdir')`), and the assignments in its statements (`modelOf(g).statements`, with `isAttributeAssignmentModel`). A graph read with `fromDot` has every assignment of its body there.
 
 ### Where did `attributes` go?
 

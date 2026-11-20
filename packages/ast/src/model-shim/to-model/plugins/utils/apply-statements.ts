@@ -135,8 +135,9 @@ function applySubgraph(
  *
  * @param statements - The array of AST nodes representing graph statements to apply.
  * @param legacy - Whether a node or a subgraph declared again adds to the
- * first one with its id, as 3.x did (the deprecated legacy plugins), instead
- * of being a declaration of its own.
+ * first one with its id, and a graph attribute assignment sets the graph's
+ * own attribute, as 3.x did (the deprecated legacy plugins), instead of
+ * each being a statement of its own.
  */
 export function applyStatements(
   context: ConvertToModelContext,
@@ -145,10 +146,6 @@ export function applyStatements(
   legacy = false,
 ): void {
   const comments = new BodyComments();
-  // Whether a statement other than an assignment has been written (a
-  // default attribute statement included): an assignment after one stays
-  // after it.
-  let other = false;
   for (const stmt of statements) {
     switch (stmt.type) {
       case 'Subgraph': {
@@ -159,12 +156,10 @@ export function applyStatements(
       case 'Attribute': {
         const key = idFromLiteral(stmt.key) as AttributeKey;
         const value = valueFromLiteral(stmt.value) as AttributeValue;
-        // Before every other statement, an assignment is one of the graph's
-        // own attributes, which `fromModel` writes first, so a graph's
-        // attributes read back as they were. After one, it is a statement
-        // where it is written, as Graphviz reads it. The legacy conversion
-        // makes every one an own attribute, as 3.x did.
-        if (legacy || !other) {
+        // A statement where it is written, as Graphviz reads it (`graph
+        // [key=value]` there). The legacy conversion makes every one an own
+        // attribute, as 3.x did.
+        if (legacy) {
           graph.setAttribute(key, value);
           comments.statement(undefined, stmt);
         } else {
@@ -242,7 +237,6 @@ export function applyStatements(
       case 'Comment':
         comments.comment(stmt);
     }
-    if (stmt.type !== 'Attribute' && stmt.type !== 'Comment') other = true;
   }
   comments.end(graph);
 }

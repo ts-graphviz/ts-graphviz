@@ -12,6 +12,36 @@ Requirements: **Node.js 22 or later** (Node.js 20 reached end of life) and, for 
 
 `digraph()`, `graph()`, `strict.*` and `withModelKit().*` give the graph's **DOT DSL** instead of the model, and so do the callbacks and everything you reach from a DSL. The DSL has DOT's words only: the statements `node`, `edge`, `subgraph` and `graph` are methods, **attributes are properties under their own names**, and besides those it has `addComment`, a node's `port` and `$$type`. **The model's other members are on the model**, which `modelOf(x)` gives. The models only hold the data (`node()`, `edge()`, `subgraph()` and `graph()` are no longer model methods).
 
+**A graph's attribute names write DOT statements.** On the DSL of a graph or subgraph, `g.rankdir = 'LR'` writes `rankdir = "LR";` where it runs, each time it runs, as the line does in DOT (a graph attribute assignment, an `AttributeAssignmentModel` in `statements`; in Graphviz a later one overrides an earlier one). Reading `g.rankdir` or `delete g.rankdir` throws a `TypeError` with code `TSG_ERR_WRITE_ONLY_PROPERTY`, and assigning `undefined` one with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`. A program that sets the graph's attributes first renders as before (`toDot` writes the assignments where the own attributes were); one that reads them, deletes them or sets one twice to change it changes:
+
+```ts
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+// 3.x: g.rankdir = 'LR'; ... g.rankdir === 'LR'; delete g.rankdir;
+const G = digraph('G', { rankdir: 'LR' }, (g) => {
+  g.node('a');
+  g.label = 'G'; // label = "G"; here
+});
+modelOf(G).getAttribute('rankdir'); // 'LR': the graph's own
+modelOf(G).removeAttribute('rankdir');
+toDot(G); // digraph "G" { "a"; label = "G"; }
+```
+
+`ts-graphviz/legacy` keeps the 3.x meaning: the names are the graph's own attributes, readable and deletable.
+
+**`fromDot` keeps every graph attribute assignment of a body as a statement**, the first ones included: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `undefined` (3.x: `'LR'`). Read the assignments in `statements`:
+
+```ts
+import { fromDot, isAttributeAssignmentModel } from 'ts-graphviz';
+
+const g = fromDot('digraph { rankdir=LR; a; rankdir=TB }');
+const rankdir = g.statements
+  .filter(isAttributeAssignmentModel)
+  .findLast((s) => s.key === 'rankdir')?.value; // 'TB', as Graphviz resolves it
+```
+
+The graph's own attributes, which `toDot` writes first, read back as assignments too. `fromDot` of `ts-graphviz/legacy` keeps the 3.x reading (every assignment an own attribute); passing `legacyModels` to `fromDot` of `ts-graphviz` does not, since it uses the classes, not the 3.x conversion.
+
 **Names whose meaning changed.** On a DSL, `id`, `comment` and `size` are the Graphviz attributes of those names; the model's members of those names are on `modelOf(x)`:
 
 | 3.x (on what the factories give) | v4 |
@@ -27,7 +57,7 @@ TypeScript reports most other changes, but these three still compile, so search 
 
 | 3.x | v4 |
 | --- | --- |
-| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | `g.rankdir = 'LR'`, `g.rankdir` (or `modelOf(g).setAttribute(...)`, `modelOf(g).getAttribute(...)`; see section 14) |
+| `g.set('rankdir', 'LR')`, `g.get('rankdir')` | the graph's own attributes: the factory's argument (`digraph('G', { rankdir: 'LR' })`), `modelOf(g).setAttribute(...)`, `modelOf(g).getAttribute(...)` (see section 14); `g.rankdir = 'LR'` writes a graph attribute assignment where it runs (below) |
 | `node.attributes.set('label', 'A')` | `node.label = 'A'` (or `modelOf(node).setAttribute(...)`) |
 | `node.attributes.delete('label')` | `delete node.label` or `node.label = undefined` |
 | `g.attributes.node.set('shape', 'box')` | `g.node({ shape: 'box' })` (before the other statements) |
@@ -315,7 +345,7 @@ digraph((g) => {
 - To keep the 3.x output, import from `ts-graphviz/legacy` (the same API with the 3.x classes), or pass `legacyModels` as the model classes (`withModelKit(legacyModels)`, `fromDot(source, { convert: { models: legacyModels } })`). Both are deprecated and removed in v5.
 - `addAttributeList(kind, attributes)` returns the list it adds (the DSL's `g.node({ ... })` returns its DSL); keep it to change those defaults later.
 - `graph.attributes` is deprecated, removed in v5: it is the leading defaults only. Write a default attribute statement instead.
-- A graph attribute assignment (`bgcolor=gray;` in a body) keeps its place too: Graphviz reads it as `graph [bgcolor=gray]` where it is written. `fromDot` makes one written before every other statement (default attribute statements included) one of the graph's own attributes (`getAttribute`), as before, and one written later an `AttributeAssignmentModel` in `statements`, which `toDot` writes back as `bgcolor = "gray";` in its place. 3.x made every one an own attribute, written first, so `a; graph [bgcolor=red]; bgcolor=gray` rendered red; `fromDot` of `ts-graphviz/legacy` still does. Passing `legacyModels` to `fromDot` of `ts-graphviz` does not: it uses the classes, not the 3.x conversion. To add one in place, use `addAttributeAssignment(key, value)` on a model or `g.assign(key, value)` in the DSL; `setAttribute` (`g.bgcolor = ...`) sets the graph's own attribute.
+- A graph attribute assignment (`bgcolor=gray;` in a body) keeps its place too, as an `AttributeAssignmentModel` in `statements`: Graphviz reads it as `graph [bgcolor=gray]` where it is written, and `toDot` writes it back as `bgcolor = "gray";` there. 3.x made every one an own attribute, written first, so `a; graph [bgcolor=red]; bgcolor=gray` rendered red. See section 1 for the DSL, and the list below for `fromDot`.
 
 ## 14. Attributes: on every object, under the DOM's names
 

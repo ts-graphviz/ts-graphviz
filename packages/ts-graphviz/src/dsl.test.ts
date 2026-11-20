@@ -1,6 +1,7 @@
 import { fromModel } from '@ts-graphviz/ast';
 import {
   type AnyDotObjectModel,
+  type AttributeAssignmentModel,
   type AttributeListAttributes,
   type AttributeListKind,
   type EdgeTargetTuple,
@@ -218,7 +219,9 @@ describe('DOT statements', () => {
       expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo', {
         label: 'Test label',
       });
-      expect(G.subgraph({ rank: 'same' }).rank).toBe('same');
+      expect(modelOf(G.subgraph({ rank: 'same' })).getAttribute('rank')).toBe(
+        'same',
+      );
       expect(modelOf(g).getSubgraphs().slice(0, 2)).toStrictEqual([
         modelOf(anonymous),
         modelOf(named),
@@ -238,7 +241,7 @@ describe('DOT statements', () => {
         modelOf(created),
         modelOf(subgraph),
       ]);
-      expect(subgraph.label).toBe('Test label');
+      expect(modelOf(subgraph).getAttribute('label')).toBe('Test label');
     });
 
     test('gives the subgraph there is with a kit of ts-graphviz/legacy', () => {
@@ -308,27 +311,94 @@ describe('DOT statements', () => {
     expect(modelOf(s).attributes.graph.get('label')).toBe('g');
   });
 
-  test('assign adds a graph attribute assignment where it is written', () => {
+  test("a graph's attribute names write graph attribute assignments", () => {
     g.node('a');
-    const assignment = g.assign('label', 'G');
-    const model = modelOf(g).statements.at(-1);
-    expect(modelOf(assignment)).toBe(model);
-    expect(assignment.$$type).toBe('AttributeAssignment');
-    expect([assignment.key, assignment.value]).toEqual(['label', 'G']);
+    g.label = 'G';
+    g.label = 'H';
+    const [, first, second] = modelOf(g).statements;
+    expect([first, second]).toMatchObject([
+      { $$type: 'AttributeAssignment', key: 'label', value: 'G' },
+      { $$type: 'AttributeAssignment', key: 'label', value: 'H' },
+    ]);
     // Not the graph's own attribute.
-    expect(g.label).toBeUndefined();
+    expect(modelOf(g).getAttribute('label')).toBeUndefined();
     const s = g.subgraph('s');
-    expect(modelOf(s.assign('label', 'S')).$$type).toBe('AttributeAssignment');
-    expect(() => g.assign('label', undefined as never)).toThrow(
-      expect.objectContaining({ code: 'TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT' }),
+    s.label = 'S';
+    expect(modelOf(s).statements).toMatchObject([
+      { $$type: 'AttributeAssignment', key: 'label', value: 'S' },
+    ]);
+    expect(toDot(g).replace(/\s+/g, ' ')).toBe(
+      'digraph "G" { "a"; label = "G"; label = "H"; subgraph "s" { label = "S"; } }',
     );
   });
 
+  test("reading or deleting a graph's attribute name throws", () => {
+    const writeOnly = expect.objectContaining({
+      name: 'TypeError',
+      code: 'TSG_ERR_WRITE_ONLY_PROPERTY',
+    });
+    g.label = 'G';
+    expect(() => g.label).toThrow(writeOnly);
+    expect(() => g.subgraph('s').rank).toThrow(writeOnly);
+    expect(() => {
+      delete g.label;
+    }).toThrow(writeOnly);
+    // An assignment needs a value.
+    expect(() => {
+      g.label = undefined;
+    }).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT' }),
+    );
+    expect(modelOf(g).statements.map((s) => s.$$type)).toStrictEqual([
+      'AttributeAssignment',
+      'Subgraph',
+    ]);
+    // No attribute is an own property, nor `in` the DSL.
+    expect('label' in g).toBe(false);
+    expect(Reflect.ownKeys(g)).toStrictEqual([]);
+    expect(Reflect.getOwnPropertyDescriptor(g, 'label')).toBeUndefined();
+  });
+
+  test('names JavaScript and tools look up read as undefined on a graph', async () => {
+    const any = g as unknown as Record<string, unknown>;
+    expect(any.then).toBeUndefined();
+    expect(any.toJSON).toBeUndefined();
+    expect(any.constructor).toBeUndefined();
+    expect(Reflect.deleteProperty(g, 'then')).toBe(true);
+    // So a DSL can be awaited, and stringified.
+    expect(await Promise.resolve(g)).toBe(g);
+    expect(JSON.stringify(g)).toBe('{}');
+  });
+
+  test("a graph's own attributes are the factory's and the model's", () => {
+    const G = digraph('G', { label: 'G' }, (g) => {
+      modelOf(g).setAttribute('rankdir', 'LR');
+    });
+    expect(modelOf(G).getAttribute('label')).toBe('G');
+    expect(modelOf(G).getAttribute('rankdir')).toBe('LR');
+    expect(modelOf(G).statements).toStrictEqual([]);
+  });
+
+  test('a graph of ts-graphviz/legacy has its own attributes as names', () => {
+    const G = legacyDigraph();
+    G.label = 'L';
+    expect(G.label).toBe('L');
+    expect(modelOf(G).getAttribute('label')).toBe('L');
+    expect(modelOf(G).statements).toStrictEqual([]);
+    delete G.label;
+    expect(modelOf(G).getAttribute('label')).toBeUndefined();
+  });
+
   test("an assignment's DSL has its key and value, and no attributes", () => {
-    const assignment = g.assign('label', 'G');
+    g.label = 'G';
+    const assignment = dsl(
+      modelOf(g).statements.at(-1) as AttributeAssignmentModel,
+    );
     const unwritable = expect.objectContaining({
       code: 'TSG_ERR_UNWRITABLE_PROPERTY',
     });
+    expect(assignment.$$type).toBe('AttributeAssignment');
+    expect([assignment.key, assignment.value]).toEqual(['label', 'G']);
     expect(() => {
       (assignment as unknown as Record<string, unknown>).value = 'H';
     }).toThrow(unwritable);
@@ -370,7 +440,10 @@ describe('attributes by name', () => {
     expect(modelOf(a).attributes.size).toBe(0);
 
     g.rankdir = 'LR';
-    expect(modelOf(g).get('rankdir')).toBe('LR');
+    expect(modelOf(g).statements.at(-1)).toMatchObject({
+      key: 'rankdir',
+      value: 'LR',
+    });
     const e = g.edge(['a', 'b']);
     e.URL = 'https://example.com';
     expect(modelOf(e).attributes.get('URL')).toBe('https://example.com');
@@ -391,19 +464,22 @@ describe('attributes by name', () => {
       'DOT comment',
     ]);
     g.size = '7,7';
-    expect(modelOf(g).getAttribute('size')).toBe('7,7');
+    expect(modelOf(g).statements.at(-1)).toMatchObject({
+      key: 'size',
+      value: '7,7',
+    });
     expect(modelOf(g).id).toBe('G');
     expect(g.$$type).toBe('Graph');
     expect(dsl(modelOf(g).attributes.node).$$kind).toBe('Node');
     expect(toDot(g)).toBe(
       [
         'digraph "G" {',
-        '  size = "7,7";',
         '  // DOT comment',
         '  "a" [',
         '    id = "svg-a";',
         '    comment = "attribute";',
         '  ];',
+        '  size = "7,7";',
         '}',
       ].join('\n'),
     );
@@ -414,9 +490,12 @@ describe('attributes by name', () => {
     const a = g.node('a');
     const e = g.edge(['a', 'b']);
     const any = (x: object) => x as unknown as Record<string, unknown>;
-    // The model's other members read as attributes (none set).
+    // The model's other members are attribute names: on a graph's DSL,
+    // written only.
     for (const name of ['createNode', 'nodes', 'getAttribute', 'comments']) {
-      expect(any(g)[name]).toBeUndefined();
+      expect(() => any(g)[name]).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_WRITE_ONLY_PROPERTY' }),
+      );
     }
     expect(any(a).getAttribute).toBeUndefined();
     expect(any(e).targets).toBeUndefined();
@@ -581,7 +660,7 @@ describe('models that cannot be extended', () => {
     expect(a).toBeInstanceOf(Node);
     const g = dsl(Object.seal(new Digraph('G')));
     g.rankdir = 'LR';
-    expect(Object.keys(g)).toStrictEqual(['rankdir']);
+    expect(modelOf(g).statements).toMatchObject([{ key: 'rankdir' }]);
     expect(modelOf(g.node('b')).id).toBe('b');
   });
 

@@ -15,6 +15,7 @@ import {
   type ModelKit,
   Node,
 } from 'ts-graphviz';
+import { bodyOf } from './summarize.js';
 
 const legacyModelKit: ModelKit = createModelKit(legacyModels);
 
@@ -167,9 +168,9 @@ type DefaultsKind = keyof DefaultsSpec;
  * - `mention`: that node again for a node of the graph, with more
  *   attributes, before or after its own `node` step;
  * - `subgraph` / `edge`: `subgraphs[index]` / `edges[index]`;
- * - `assign`: a graph attribute assignment (`label=x;`), as `toModel`
- *   makes one: before every other statement and `graph [...]`, one of the
- *   graph's own attributes; after one, a statement where it is written.
+ * - `assign`: a graph attribute assignment (`label=x;`) where it is; with
+ *   the deprecated `legacyModels`, the graph's own attribute, as 3.x read
+ *   one.
  */
 export type GraphOp =
   | { op: 'attribute'; index: number }
@@ -496,18 +497,10 @@ function applyCommonOp(
       applySubgraph(g, spec.subgraphs[op.index], kit);
       break;
     case 'assign':
-      // As toModel reads it back: before every other statement (leading
-      // default statements included), one of the graph's own attributes.
-      if (
-        g.statements.length === 0 &&
-        [g.attributes.graph, g.attributes.node, g.attributes.edge].every(
-          (list) => list.getAttributeNames().length === 0,
-        )
-      ) {
-        g.setAttribute(op.key as 'label', op.value);
-      } else {
-        g.addAttributeAssignment(op.key as 'label', op.value);
-      }
+      // In place; a graph of the deprecated classes, read back with the 3.x
+      // conversion, has its own attribute instead, as in 3.x.
+      if (kit === legacyModelKit) g.setAttribute(op.key as 'label', op.value);
+      else g.addAttributeAssignment(op.key as 'label', op.value);
       break;
   }
 }
@@ -571,27 +564,10 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
 }
 
 /**
- * Where each statement of a graph stands, subgraphs included: the kind of
- * each, a node's id, a kept default statement's kind and attributes. What
- * the statements hold is compared by `summarize`.
+ * Where each statement of a graph stands, subgraphs included: its body as
+ * DOT has it ({@link bodyOf}). What the statements hold is compared by
+ * `summarize`.
  */
 export function statementOrder(g: GraphBaseModel): unknown[] {
-  return g.statements.map((s) => {
-    switch (s.$$type) {
-      case 'Node':
-        return ['node', s.id];
-      case 'Edge':
-        return ['edge'];
-      case 'Subgraph':
-        return ['subgraph', s.id, statementOrder(s)];
-      case 'AttributeAssignment':
-        return ['assignment', s.key, s.value];
-      default:
-        return [
-          'defaults',
-          s.$$kind,
-          [...s.values].sort(([a], [b]) => a.localeCompare(b)),
-        ];
-    }
-  });
+  return bodyOf(g);
 }

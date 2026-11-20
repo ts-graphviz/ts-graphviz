@@ -55,7 +55,6 @@ export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel, M 
   edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<M["Edge"]>) => void): DSL<M["Edge"]>;
   edge(attributes: EdgeAttributesObject): DSL<T["attributes"]["edge"]>;
   graph(attributes: SubgraphAttributesObject): DSL<T["attributes"]["graph"]>;
-  assign<A extends AttributeKeysOf<T> & AttributeKey>(key: A, value: Attribute<A>): DSL<AttributeAssignmentModel<A, Attribute<A>>>;
 }
 
 export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {

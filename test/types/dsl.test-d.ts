@@ -1,8 +1,8 @@
 import {
   type AnyDotObjectModel,
   type Attribute,
+  AttributeAssignment,
   type AttributeAssignmentDSL,
-  type AttributeAssignmentModel,
   type AttributeListDSL,
   type AttributeListModel,
   createModelKit,
@@ -266,23 +266,29 @@ describe('the statements', () => {
     s.subgraph((sub) => expectTypeOf(sub).toEqualTypeOf<DSL<SubgraphModel>>());
   });
 
-  it('type assign by the graph’s attribute keys', () => {
-    const assignment = g.assign('bgcolor', 'red');
+  it('type a graph’s attribute names by its keys, to write', () => {
+    g.bgcolor = 'red';
+    s.label = 'S';
+    // @ts-expect-error not an attribute of a root graph
+    g.shape = 'box';
+    // @ts-expect-error a string
+    s.label = 1;
+    // The DSL of an assignment in a graph's statements.
+    const assignment = dsl(
+      new AttributeAssignment<'bgcolor', Attribute<'bgcolor'>>(
+        'bgcolor',
+        'red',
+      ),
+    );
     expectTypeOf(assignment).toEqualTypeOf<
       AttributeAssignmentDSL<
-        AttributeAssignmentModel<'bgcolor', Attribute<'bgcolor'>>
+        AttributeAssignment<'bgcolor', Attribute<'bgcolor'>>
       >
     >();
     expectTypeOf(assignment.key).toEqualTypeOf<'bgcolor'>();
     expectTypeOf(assignment.$$type).toEqualTypeOf<'AttributeAssignment'>();
     // @ts-expect-error read-only on the DSL: modelOf(x).value
     assignment.value = 'blue';
-    // @ts-expect-error not an attribute of a root graph
-    g.assign('shape', 'box');
-    // @ts-expect-error a number
-    s.assign('label', 1);
-    // @ts-expect-error a node has no statements
-    n.assign;
   });
 
   it('take the cluster attributes for a cluster only', () => {

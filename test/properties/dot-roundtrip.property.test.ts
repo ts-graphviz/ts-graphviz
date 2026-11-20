@@ -12,6 +12,7 @@ import {
   toDot,
 } from 'ts-graphviz';
 
+import * as legacy from 'ts-graphviz/legacy';
 import { describe, expect, it } from 'vitest';
 import {
   buildGraph,
@@ -26,14 +27,13 @@ import { summarize } from './summarize.js';
 // Property-based tests for the DOT printer and parser.
 // A failing run prints its seed; reproduce it with FC_SEED=<seed>.
 
-// A graph built with the deprecated `legacyModels` is read back with them,
-// so that merged default statements stay merged.
+// A graph built with the deprecated `legacyModels` is read back as 3.x did
+// (`ts-graphviz/legacy`), so that merged default statements stay merged and
+// graph attribute assignments are its own attributes.
 const roundTrip = (spec: Parameters<typeof buildGraph>[0]) => {
   const model = buildGraph(spec);
   const dot = toDot(model);
-  const reparsed = spec.ordered
-    ? fromDot(dot)
-    : fromDot(dot, { convert: { models: legacyModels } });
+  const reparsed = spec.ordered ? fromDot(dot) : legacy.fromDot(dot);
   return { model, dot, reparsed };
 };
 

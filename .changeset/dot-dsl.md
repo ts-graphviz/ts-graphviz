@@ -11,7 +11,7 @@ The factories give the graph's DOT DSL; the models only hold the data
 `digraph()`, `graph()`, `strict.*` and `withModelKit().*` give the graph's **DOT DSL** (`DSL<G>`) instead of the model, and so do their callbacks. The DSL has DOT's words only:
 
 - the DOT statements `node`, `edge`, `subgraph` and `graph` are its methods, with the same overloads as before (`g.node(id, attributes?, callback?)`, `g.node(attributes)` for `node [...]`, and so on);
-- attributes are properties under their own names: `g.rankdir = 'LR'`, `a.label`, `delete a.label` (assigning `undefined` deletes too), `a.id` and `a.comment` (the Graphviz attributes);
+- attributes are properties under their own names: `a.label`, `delete a.label` (assigning `undefined` deletes too), `a.id` and `a.comment` (the Graphviz attributes); on a graph's DSL, `g.rankdir = 'LR'` writes a graph attribute assignment where it runs (see the attribute assignments entry);
 - besides those, a DSL has only `addComment`, `$$type` (and an attribute list's `$$kind`), and a node's `port` (`g.edge([a.port('p'), b])`).
 
 Everything else the model does is on the model, which `modelOf(x)` gives: `modelOf(a).id` (the node's name), `modelOf(g).getNodes()`, `getNodes('a')`, `addNode`, `getAttribute`, `comments`, `directed`, and the members of your own classes. A name that is not a statement or one of those few members is an attribute; none of those names is a Graphviz attribute. An attribute of your own schema named like one (`port`, say) is read and written on the model: `modelOf(a).getAttribute('port')`.

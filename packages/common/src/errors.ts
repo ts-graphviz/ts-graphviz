@@ -64,8 +64,10 @@ export const ERROR_CODES = [
   'TSG_ERR_NOT_A_MODEL',
   /** `dsl` of `ts-graphviz` was given a second argument that is not a model kit (`TypeError`). */
   'TSG_ERR_NOT_A_MODEL_KIT',
-  /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`, `assign`), a symbol, or an attribute of a model that has none (`TypeError`). */
+  /** A DOT DSL property that cannot be written was assigned: a DOT statement (`node`, `edge`, `subgraph`, `graph`), a symbol, or an attribute of a model that has none (`TypeError`). */
   'TSG_ERR_UNWRITABLE_PROPERTY',
+  /** An attribute property of a graph's or subgraph's DOT DSL was read or deleted: assigning one writes a graph attribute assignment (`TypeError`). Read the graph's attributes on the model (`modelOf(g)`). */
+  'TSG_ERR_WRITE_ONLY_PROPERTY',
   /** The feature is not available on the current runtime, e.g. the adapter in a browser (`Error`). */
   'TSG_ERR_UNSUPPORTED_ENVIRONMENT',
   /** The Graphviz command could not be run or exited with an error (`CommandExecutionError`, an `Error`). */

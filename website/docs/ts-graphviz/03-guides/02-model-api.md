@@ -166,7 +166,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` makes an assignment written before every other statement (default attribute statements included) one of the graph's own attributes, so `getAttribute` reads it, and keeps a later one where it is. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
+`fromDot` keeps every assignment of a body where it is written, the first ones included: `fromDot('digraph { rankdir=LR; a }').getAttribute('rankdir')` is `undefined`, and the assignment is the first of its `statements` (filter them with `isAttributeAssignmentModel`). The graph's own attributes, written first by `toDot`, read back as such assignments. `ts-graphviz/legacy` makes every one an own attribute, as 3.x did. In the DOT DSL, `g.rankdir = 'LR'` adds an assignment where it runs. A value of `null` or `undefined`, or a key that is not a string, throws a `TypeError` with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`.
 
 ## Comments
 
@@ -188,7 +188,7 @@ console.log(toDot(g));
 // }
 ```
 
-`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. Two exceptions: a comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept, and a graph attribute assignment (`color = blue;`) is written before the statements, so a comment next to one leads the next statement instead. `comment` on a model is deprecated: it reads and sets the first leading comment.
+`fromDot` keeps the comments between statements, with their kind and place, and `toDot` writes them back there. Two exceptions: a comment inside a statement (`a -> /* note */ b;`, `a [ /* note */ label = x ]`) is not kept, and with `ts-graphviz/legacy` a graph attribute assignment (`color = blue;`) is the graph's own attribute, written before the statements, so a comment next to one leads the next statement instead. `comment` on a model is deprecated: it reads and sets the first leading comment.
 
 ## The model guards
 

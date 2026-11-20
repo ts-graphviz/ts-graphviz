@@ -189,8 +189,8 @@ function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
   // `label=a;` is written before `graph [...]`, so the list wins; a
   // default statement kept in place comes later still.
   const graphAttributes = textAttrs([
-    ...root.attributes,
-    ...root.defaults.graph,
+    ...model.values,
+    ...model.attributes.graph.values,
   ]);
   const node = (id: string, defaults: Attrs) => {
     const n = nodes.get(id) ?? new Effective(defaults);
@@ -203,8 +203,8 @@ function expected(model: RootGraphModel, root: RootGraphSummary): Expected {
     nodeDefaults: Attrs,
     edgeDefaults: Attrs,
   ) => {
-    let nd = new Map([...nodeDefaults, ...textAttrs(g.defaults.node)]);
-    let ed = new Map([...edgeDefaults, ...textAttrs(g.defaults.edge)]);
+    let nd = new Map([...nodeDefaults, ...textAttrs(m.attributes.node.values)]);
+    let ed = new Map([...edgeDefaults, ...textAttrs(m.attributes.edge.values)]);
     const next = { node: 0, edge: 0, subgraph: 0 };
     for (const statement of m.statements) {
       switch (statement.$$type) {

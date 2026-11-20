@@ -130,13 +130,41 @@ digraph((g) => {
 });
 ```
 
+### 图的属性是 DOT 语句 {#a-graphs-attributes-are-dot-statements}
+
+在图或子图的 DSL 上，属性名就是 DOT 语句，正如 DOT 中的 `rankdir = LR;`：`g.rankdir = 'LR'` 每执行一次，就在执行的位置写出一条 `rankdir = "LR";`（图属性赋值；在 Graphviz 中，后面的赋值会覆盖前面的）。它只能写入：读取 `g.rankdir` 或 `delete g.rankdir` 会抛出带有代码 `TSG_ERR_WRITE_ONLY_PROPERTY` 的 `TypeError`，赋值 `undefined` 会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。JavaScript 和工具会在任何对象上查找的名字（`then`、`toJSON` 以及 `Object.prototype` 上的名字）读取为 `undefined`，因此图的 DSL 可以被 await 或序列化。
+
+`toDot` 写在所有语句之前的图自身的属性，通过工厂函数的属性参数或模型（`modelOf(g).setAttribute`、`getAttribute`）来设置和读取：
+
+```typescript
+import { digraph, modelOf, toDot } from 'ts-graphviz';
+
+const G = digraph('G', { bgcolor: 'white' }, (g) => {
+  g.node('a');
+  g.bgcolor = 'gray'; // 在这里写出 bgcolor = "gray";
+  g.node('b');
+});
+
+console.log(toDot(G));
+// digraph "G" {
+//   bgcolor = "white";
+//   "a";
+//   bgcolor = "gray";
+//   "b";
+// }
+console.log(modelOf(G).getAttribute('bgcolor')); // 'white'（图自身的属性）
+```
+
+在 `ts-graphviz/legacy` 中，与 3.x 一样，属性名是图自身的属性，可以读取和删除。
+
 ## DSL 上有什么，模型上有什么 {#what-is-on-the-dsl-and-what-on-the-model}
 
 DSL 只包含 DOT 的词汇，所以它的名字都不是 Graphviz 属性，编辑器的补完中只有属性和少数几个 DSL 成员（若你自己的 schema 中有与之同名的属性，例如 `port`，请在模型上用 `getAttribute` / `setAttribute` 读写）：
 
 | DSL 上 | 含义 |
 | --- | --- |
-| `a.label`、`a.id`、`a.comment`、`g.size` 等 | Graphviz 的属性 |
+| `a.label`、`a.id`、`a.comment` 等 | 节点、边或默认属性列表的 Graphviz 属性 |
+| `g.size = '7,7'`、`s.label = 'S'` 等 | 图或子图上的图属性赋值（`size = "7,7";`），只能写入 |
 | `g.node(...)`、`g.edge(...)`、`g.subgraph(...)`、`g.graph(...)` | DOT 语句（图和子图上） |
 | `a.port('p')` | 用作边端点的、带端口的节点 |
 | `a.addComment('note')` | 写入 DOT 源码的注释 |
@@ -248,7 +276,7 @@ console.log(toDot(G));
 
 `fromDot` 会把源码中的每条默认属性语句保留在原位置，因此 `node [color=red]; a; node [color=blue]; b` 与 Graphviz 一样，`a` 为红色、`b` 为蓝色。节点自身设置的属性（`g.node('a', { color: 'green' })`）总是优先于默认值。
 
-图属性赋值（主体中的 `bgcolor=gray;`）对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`。`g.assign('bgcolor', 'gray')` 在调用的位置添加一条赋值，并返回带有 `key` 和 `value` 的 DSL。在 DSL 上设置属性（`g.bgcolor = 'gray'`）则设置图自身的属性，`toDot` 会把它写在所有语句之前。`fromDot` 会把写在其他语句之后的赋值保留在原位置。
+图属性赋值（主体中的 `bgcolor=gray;`）对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`。`g.bgcolor = 'gray'` 会在执行的位置添加一条赋值（参见[图的属性是 DOT 语句](#a-graphs-attributes-are-dot-statements)），`fromDot` 会把每条赋值保留在原位置。
 
 3.x 会把所有默认属性语句合并为每个图一组默认值并写在最前面，因此写在其他语句之后的默认值也会作用于它之前的内容。在迁移到 v4 期间，如需保持 3.x 的输出，请从 `ts-graphviz/legacy` 导入：它与 `ts-graphviz` 的名字相同，其工厂函数和 `fromDot` 使用 3.x 的类（`legacyModels`）。该入口已弃用，将在 v5 中移除。以原名导出的类（`Digraph`、`Graph`、`Subgraph`）在这里也是 v4 的类：自己构造图时，请使用 `LegacyDigraph`、`LegacyGraph` 或 `LegacySubgraph`。
 
@@ -301,6 +329,10 @@ digraph((g) => {
 ### 写在其他语句之后的默认值改变了 3.x 的输出
 
 在 v4 中，它与 DOT 一样只作用于之后的内容。要让默认值作用于整个图，请把它写在其他语句之前；或者暂时从 `ts-graphviz/legacy` 导入，保持 3.x 的输出。
+
+### 读取 `g.rankdir` 会抛出异常
+
+在图的 DSL 上，属性名写出 DOT 语句。图自身的属性在模型上读取（`modelOf(g).getAttribute('rankdir')`），赋值则在它的语句中读取（`modelOf(g).statements`，配合 `isAttributeAssignmentModel`）。用 `fromDot` 读入的图，其主体中的每条赋值都在那里。
 
 ### `attributes` 去哪儿了？
 
