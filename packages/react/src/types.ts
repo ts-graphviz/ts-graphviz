@@ -162,7 +162,7 @@ type WithReactLabel<T> = T extends unknown
     ? T
     : Omit<T, 'label'> & {
         /** Subgraph label */
-        label?: ReactElement | string;
+        label?: ReactElement | LabelValue<T, 'label'>;
       }
   : never;
 
