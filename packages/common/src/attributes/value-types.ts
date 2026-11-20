@@ -76,6 +76,32 @@ export interface ValueTypes {
 export type ValueTypeName = keyof ValueTypes;
 
 /**
+ * The names of {@link ValueTypes}, at run time.
+ * @group Attribute
+ */
+export const VALUE_TYPE_NAMES: readonly ValueTypeName[] = Object.freeze(
+  // A key for each name, no more and no fewer.
+  Object.keys({
+    arrowType: true,
+    clusterMode: true,
+    color: true,
+    compass: true,
+    dirType: true,
+    outputMode: true,
+    packMode: true,
+    pagedir: true,
+    quadType: true,
+    rankdir: true,
+    rankType: true,
+    shape: true,
+    smoothType: true,
+    startType: true,
+    style: true,
+    tbBalanceType: true,
+  } satisfies Record<ValueTypeName, true>) as ValueTypeName[],
+);
+
+/**
  * The `style` values built from the style items `I`, as {@link Style} is
  * built from the built-in ones.
  * @group Attribute

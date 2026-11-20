@@ -1,3 +1,4 @@
+import { attr, defineSchema } from '@ts-graphviz/common';
 import { describe, expect, it } from 'vitest';
 import { Digraph } from './Digraph.js';
 import { Dot } from './Dot.js';
@@ -72,6 +73,38 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
     expect(createModelKit(defaultModelKit)).toBe(defaultModelKit);
     class MyNode extends Node {}
     expect(createModelKit({ Node: MyNode })).not.toBe(defaultModelKit);
+  });
+
+  it('has the schema it is given, checked and frozen', () => {
+    const schema = defineSchema({ node: { 'data-id': attr<number>() } });
+    const kit = createModelKit({ schema });
+    expect(kit).not.toBe(defaultModelKit);
+    expect(kit.schema).toBe(schema);
+    expect(kit.Node).toBe(Node);
+    expect(kit.createNode('a', { 'data-id': 1 }).getAttribute('data-id')).toBe(
+      1,
+    );
+    // A schema not made by defineSchema is checked as it does.
+    const plain = { node: { 'data-id': attr<number>() } };
+    expect(createModelKit({ schema: plain }).schema).toEqual(plain);
+    expect(Object.isFrozen(createModelKit({ schema: plain }).schema)).toBe(
+      true,
+    );
+    expect(() => createModelKit({ schema: { nodes: {} } as never })).toThrow(
+      expect.objectContaining({ code: 'TSG_ERR_INVALID_SCHEMA' }),
+    );
+    // Taken with the classes of another kit.
+    expect(createModelKit({ ...kit }).schema).toBe(schema);
+  });
+
+  it('has the empty schema without one', () => {
+    expect(defaultModelKit.schema).toEqual({});
+    expect(Object.isFrozen(defaultModelKit.schema)).toBe(true);
+    expect(createModelKit({ schema: {} })).toBe(defaultModelKit);
+    class MyNode extends Node {}
+    expect(createModelKit({ Node: MyNode }).schema).toBe(
+      defaultModelKit.schema,
+    );
   });
 
   it('takes own properties only', () => {

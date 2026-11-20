@@ -10,8 +10,8 @@ import * as legacy from '@ts-graphviz/ast/legacy';
 import {
   type EdgeModel,
   isDotModel,
-  type ModelClasses,
   type ModelKit,
+  type ModelKitOptions,
   type NodeModel,
   ownOptions,
   type RootGraphModel,
@@ -25,7 +25,7 @@ import { isLegacyKit } from './legacy-kit.js';
 type AnyFromDotModel = RootGraphModel | NodeModel | EdgeModel | SubgraphModel;
 
 type ConvertOptions = NonNullable<
-  FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>['convert']
+  FromDotOptions<FromDotRule, ModelKitOptions, boolean>['convert']
 >;
 
 /** The conversion of the kit: as 3.x had it for a kit of `ts-graphviz/legacy`. */
@@ -43,7 +43,7 @@ function convert<T extends ToModelConvertableASTNode>(
 /** `fromDot` with the kit; `own` holds own properties only. */
 export function fromDotWith(
   dot: string,
-  own: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  own: FromDotOptions<FromDotRule, ModelKitOptions, boolean>,
   kit: ModelKit,
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
   const model = read(dot, own, kit);
@@ -53,7 +53,7 @@ export function fromDotWith(
 /** `fromDotAll` with the kit; `own` holds own properties only. */
 export function fromDotAllWith(
   dot: string,
-  own: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, boolean>, 'parse'> & {
+  own: Omit<FromDotOptions<'Dot', ModelKitOptions, boolean>, 'parse'> & {
     parse?: object;
   },
   kit: ModelKit,
@@ -67,7 +67,7 @@ export function fromDotAllWith(
 
 function read(
   dot: string,
-  own: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  own: FromDotOptions<FromDotRule, ModelKitOptions, boolean>,
   kit: ModelKit,
 ): AnyFromDotModel {
   // `as` picks what fromDot returns. Widened to every rule on

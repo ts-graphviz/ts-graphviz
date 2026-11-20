@@ -31,7 +31,8 @@
 import type { CommonParseOptions } from '@ts-graphviz/ast';
 import {
   type EdgeModel,
-  type ModelClasses,
+  type ModelKitOptions,
+  type ModelKitOptionsOf,
   type NodeModel,
   ownOptions,
   type ResolvedModelTypes,
@@ -44,6 +45,7 @@ import type {
   FromDotOptions,
   FromDotResult,
   FromDotRule,
+  NoSchemaClasses,
 } from './from-dot.js';
 import { fromDotAllWith, fromDotWith } from './from-dot-with.js';
 import { createLegacyKit } from './legacy-kit.js';
@@ -58,7 +60,7 @@ export * from './ts-graphviz.js';
 
 /** The factories with a kit of `ts-graphviz/legacy` for the classes. */
 function factoriesOf(
-  classes: Partial<ModelClasses> | undefined,
+  classes: ModelKitOptions | undefined,
 ): ModelFactoriesWithStrict {
   const kit = createLegacyKit(classes);
   return Object.freeze({
@@ -121,7 +123,8 @@ export const strict: ModelFactories = legacy.strict;
  * Factories with the given classes and, for the kinds it leaves out, those
  * of `legacyModels`.
  *
- * @param classes - The classes to create the models from.
+ * @param classes - The classes to create the models from, and the schema
+ * of the models (from `defineSchema`).
  * @returns The factories `digraph`, `graph` and `strict` that create with that kit.
  * @deprecated v4's models keep a default attribute statement in its place,
  * as in DOT. For node and edge defaults of a whole graph or subgraph, add
@@ -133,10 +136,11 @@ export const strict: ModelFactories = legacy.strict;
  * v5.
  * @group Model Factory
  */
-export function withModelKit<const P extends Partial<ModelClasses>>(
-  classes: P,
+export function withModelKit<const P extends ModelKitOptions>(
+  classes: ModelKitOptionsOf<P>,
 ): ModelFactoriesWithStrict<ResolvedModelTypes<P>> {
-  return factoriesOf(classes) as ModelFactoriesWithStrict<
+  // The factories of the kit, typed with what it was made from.
+  return factoriesOf(classes) as unknown as ModelFactoriesWithStrict<
     ResolvedModelTypes<P>
   >;
 }
@@ -166,12 +170,12 @@ export function withModelKit<const P extends Partial<ModelClasses>>(
  * With `dsl: true`, its DOT DSL.
  */
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<'Dot' | 'Graph', P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -183,13 +187,13 @@ export function fromDot<
  * of a whole graph, write them first in the DOT source. Removed in v5.
  */
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<R, P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   FromDotModel<R, ResolvedModelTypes<P>>,
@@ -210,7 +214,7 @@ export function fromDot(
  */
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
+  options: FromDotOptions<'Dot' | 'Graph', NoSchemaClasses, D>,
 ): FromDotResult<RootGraphModel, D>;
 /**
  * @deprecated The 3.x models (`legacyModels`). For node and edge defaults
@@ -221,11 +225,11 @@ export function fromDot<
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, Partial<ModelClasses>, D>,
+  options: FromDotOptions<R, NoSchemaClasses, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  options?: FromDotOptions<FromDotRule, ModelKitOptions, boolean>,
 ):
   | RootGraphModel
   | NodeModel
@@ -257,13 +261,13 @@ export function fromDot(
  * @returns The graphs, possibly none; with `dsl: true`, their DOT DSLs.
  */
 export function fromDotAll<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P, D>, 'parse'> & {
     parse?: CommonParseOptions;
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -286,16 +290,13 @@ export function fromDotAll(
  */
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', NoSchemaClasses, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];
 export function fromDotAll(
   dot: string,
-  options?: Omit<
-    FromDotOptions<'Dot', Partial<ModelClasses>, boolean>,
-    'parse'
-  > & {
+  options?: Omit<FromDotOptions<'Dot', ModelKitOptions, boolean>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): (RootGraphModel | DSL<RootGraphModel>)[] {
