@@ -34,7 +34,8 @@ export abstract class RootGraph<S extends Schema = EmptySchema>
    * takes no attributes here: as in DOT, they are statements of its body
    * (`setAttribute`, `addAttributeAssignment`). A call that fits neither
    * signature (3.x's attributes argument or `strict` flag included) throws
-   * a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+   * a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`; an empty object
+   * there is empty options, so 3.x's `new Digraph('G', {})` still runs.
    */
   constructor(id?: string, options?: RootGraphOptions);
 

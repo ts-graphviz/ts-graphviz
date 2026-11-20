@@ -1000,8 +1000,9 @@ export interface RootGraphModel<S extends Schema = EmptySchema>
    * For undirected graphs, there can be at most one edge connected to the same two nodes.
    * Subsequent edge statements using the same two nodes will identify the edge with the previously defined one and apply any attributes given in the edge statement.
    *
-   * Set it when the graph is created: `{ strict: true }` after the
-   * attributes, or the `strict` factories of `ts-graphviz`.
+   * Set it when the graph is created: `{ strict: true }` after the id
+   * (`new Digraph('G', { strict: true })`), or the `strict` factories of
+   * `ts-graphviz`.
    */
   strict: boolean;
 }

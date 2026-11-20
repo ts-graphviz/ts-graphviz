@@ -31,6 +31,7 @@ describe('Constructor', () => {
     [['G', { strict: true }], 'G', true],
     [[undefined, { strict: true }], undefined, true],
     [[{ strict: true }], undefined, true],
+    // 3.x's empty attributes are empty options.
     [['G', {}], 'G', false],
     [['G', { strict: false }], 'G', false],
     [['G', null], 'G', false],
