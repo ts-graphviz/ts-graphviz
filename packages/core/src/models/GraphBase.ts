@@ -14,6 +14,7 @@ import {
   type GraphBaseModel,
   type GraphCommonAttributes,
   type GraphSchemaAttributeTypes,
+  isAttributeListModel,
   modelOf,
   type NodeAttributeKey,
   type NodeModel,
@@ -287,6 +288,19 @@ export abstract class GraphBase<
     if (!this.#subgraphs.delete(model)) return;
     unfile(this.#subgraphsById, this.#indexedAs, model);
     this.#statements.delete(model);
+  }
+
+  public removeAttributeList(list: StatementAttributeListModel<S>): void {
+    const model = modelOf(list);
+    // Only a list: a node or another statement keeps its place.
+    if (!isAttributeListModel(model)) return;
+    if (this.#statements.delete(model)) return;
+    // A leading list stays, as the graph's leading defaults: emptied, it
+    // writes nothing.
+    if ((Object.values(this.attributes) as unknown[]).includes(model)) {
+      model.removeAttributes();
+      for (const comment of [...model.comments]) model.removeComment(comment);
+    }
   }
 
   public getNodes(): NodeModel<S>[];
