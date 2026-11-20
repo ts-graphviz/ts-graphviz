@@ -1115,7 +1115,7 @@ export interface DotConstructor<
 }
 
 /**
- * The options of a root graph's constructor, after its id and attributes.
+ * The options of a root graph's constructor, after its id.
  * @group Models
  */
 export interface RootGraphOptions {
@@ -1124,58 +1124,39 @@ export interface RootGraphOptions {
 }
 
 /**
- * The arguments are read by position: an id, then the attributes, then the
- * options, each of which may be left out. A call that fits none of the
- * signatures, or options with other properties than these, throws a
- * `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+ * The arguments are read by position: an id, then the options, either of
+ * which may be left out. A graph takes no attributes here: as in DOT, they
+ * are statements of its body (`setAttribute`, `addAttributeAssignment`). A
+ * call that fits neither signature, or options with other properties than
+ * these, throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
  *
  * @typeParam G - The model the constructor creates.
- * @typeParam S - The schema of the models; none by default.
+ * @typeParam _S - The schema of the models; none by default. A graph takes
+ * no attributes, so it types nothing here.
  * @group Models
  */
 export interface RootGraphConstructor<
   G extends ReadonlyRootGraphModel = RootGraphModel,
-  S extends Schema = EmptySchema,
+  _S extends Schema = EmptySchema,
 > {
-  new (
-    id?: string,
-    attributes?: GraphAttributesObject<S>,
-    options?: RootGraphOptions,
-  ): G;
-  new (attributes: GraphAttributesObject<S>, options?: RootGraphOptions): G;
-  /**
-   * @deprecated Pass `{ strict }` after the attributes:
-   * `(id, attributes, { strict })`. Removed in v5.
-   */
-  new (
-    id: string | undefined,
-    strict: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): G;
-  /**
-   * @deprecated Pass `{ strict }` after the attributes:
-   * `(attributes, { strict })`. Removed in v5.
-   */
-  new (strict: boolean, attributes?: GraphAttributesObject<S>): G;
+  new (id?: string, options?: RootGraphOptions): G;
+  new (options: RootGraphOptions): G;
 }
 
 /**
+ * A subgraph takes an id only: as in DOT, its attributes are statements of
+ * its body.
+ *
  * @typeParam G - The model the constructor creates.
- * @typeParam S - The schema of the models; none by default.
+ * @typeParam _S - The schema of the models; none by default. A subgraph
+ * takes no attributes, so it types nothing here.
  * @group Models
  */
 export interface SubgraphConstructor<
   G extends ReadonlySubgraphModel = SubgraphModel,
-  S extends Schema = EmptySchema,
+  _S extends Schema = EmptySchema,
 > {
-  /** An id that starts with `cluster`: the attributes of a cluster. */
-  new (
-    id: ClusterSubgraphId,
-    attributes?: ClusterSubgraphAttributesObject<S>,
-  ): G;
-  /** Any other id, or none: see {@link NonClusterSubgraphAttributesObject}. */
-  new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
-  new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
+  new (id?: string): G;
 }
 
 /**

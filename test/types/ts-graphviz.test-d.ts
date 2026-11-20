@@ -30,13 +30,11 @@ describe('model factories', () => {
   it('return the graph’s DSL and pass it to the callback', () => {
     expectTypeOf(digraph()).toEqualTypeOf<DSL<RootGraphModel>>();
     expectTypeOf(graph('G')).toEqualTypeOf<DSL<RootGraphModel>>();
-    expectTypeOf(strict.digraph('G', { rankdir: 'LR' })).toEqualTypeOf<
-      DSL<RootGraphModel>
-    >();
+    expectTypeOf(strict.digraph('G')).toEqualTypeOf<DSL<RootGraphModel>>();
     digraph('G', (g) => expectTypeOf(g).toEqualTypeOf<DSL<RootGraphModel>>());
-    graph({ label: 'x' }, (g) =>
-      expectTypeOf(g).toEqualTypeOf<DSL<RootGraphModel>>(),
-    );
+    graph((g) => expectTypeOf(g).toEqualTypeOf<DSL<RootGraphModel>>());
+    // @ts-expect-error as in DOT, a graph's attributes are in its body
+    digraph('G', { rankdir: 'LR' });
     expectTypeOf(modelOf(digraph())).toEqualTypeOf<RootGraphModel>();
   });
 
@@ -85,30 +83,20 @@ describe('model factories', () => {
 });
 
 describe('root graph constructors', () => {
-  it('take the options after the attributes', () => {
-    expectTypeOf(
-      new Digraph('G', { label: 'x' }, { strict: true }),
-    ).toEqualTypeOf<Digraph>();
-    new Digraph('G', undefined, { strict: true });
-    new Digraph({ label: 'x' }, { strict: true });
-    defaultModelKit.createDigraph('G', {}, { strict: true });
-    defaultModelKit.createGraph(undefined, undefined, { strict: false });
-    // @ts-expect-error strict is not an attribute: pass it in the options
-    new Digraph('G', { strict: true });
-    // @ts-expect-error strict is a boolean
-    new Digraph('G', {}, { strict: 'yes' });
-    // @ts-expect-error the id left out takes no place: options need attributes before them
+  it('take an id and the options', () => {
+    expectTypeOf(new Digraph('G', { strict: true })).toEqualTypeOf<Digraph>();
     new Digraph(undefined, { strict: true });
-    // @ts-expect-error attributes are not options
-    new Digraph('G', undefined, { label: 'x' });
-  });
-
-  it('still take the deprecated strict flag', () => {
-    new Digraph('G', true, { label: 'x' });
-    new Digraph(true);
-    defaultModelKit.createDigraph('G', true);
-    // @ts-expect-error the flag is not optional there: an object after it would be options
-    new Digraph('G', undefined as boolean | undefined, { label: 'x' });
+    new Digraph({ strict: true });
+    defaultModelKit.createDigraph('G', { strict: true });
+    defaultModelKit.createGraph(undefined, { strict: false });
+    // @ts-expect-error strict is a boolean
+    new Digraph('G', { strict: 'yes' });
+    // @ts-expect-error as in DOT, a graph takes no attributes here
+    new Digraph('G', { label: 'x' });
+    // @ts-expect-error nor 3.x's strict flag
+    new Digraph('G', true);
+    // @ts-expect-error nor attributes before the options
+    defaultModelKit.createDigraph('G', {}, { strict: true });
   });
 });
 

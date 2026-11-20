@@ -80,40 +80,30 @@ describe('createModelKit', { tags: ['SM-5'] }, () => {
 
   it('creates root graphs with the arguments of their constructors', () => {
     const kit = createModelKit();
-    const g = kit.createDigraph('G', { label: 'x' }, { strict: true });
+    const g = kit.createDigraph('G', { strict: true });
     expect(g.id).toBe('G');
     expect(g.directed).toBe(true);
     expect(g.strict).toBe(true);
-    expect(g.get('label')).toBe('x');
-    const u = kit.createGraph({ label: 'y' });
+    const u = kit.createGraph({ strict: false });
     expect(u.id).toBeUndefined();
     expect(u.directed).toBe(false);
     expect(u.strict).toBe(false);
-    expect(u.get('label')).toBe('y');
   });
 
   it('creates subgraphs with the argument shape it was called with', () => {
     const calls: unknown[][] = [];
     class MySubgraph extends Subgraph {
-      constructor(...args: unknown[]) {
-        super(...(args as []));
+      constructor(...args: [id?: string]) {
+        super(...args);
         calls.push(args);
       }
     }
     const kit = createModelKit({ Subgraph: MySubgraph });
-    const sub = kit.createSubgraph('cluster_0', { label: 'x' });
+    const sub = kit.createSubgraph('cluster_0');
     expect(sub).toBeInstanceOf(MySubgraph);
     expect(sub.id).toBe('cluster_0');
-    expect(sub.get('label')).toBe('x');
-    expect(kit.createSubgraph({ rank: 'same' }).id).toBeUndefined();
     expect(kit.createSubgraph().id).toBeUndefined();
-    expect(kit.createSubgraph(undefined, { rank: 'min' }).id).toBeUndefined();
-    expect(calls).toStrictEqual([
-      ['cluster_0', { label: 'x' }],
-      [{ rank: 'same' }],
-      [],
-      [undefined, { rank: 'min' }],
-    ]);
+    expect(calls).toStrictEqual([['cluster_0'], []]);
   });
 
   it('create* only creates: nothing is added to a graph', () => {

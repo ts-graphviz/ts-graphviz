@@ -45,8 +45,6 @@ export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel, M ext
 
 export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> {
   subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
-  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
   subgraph(callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
   node(id: string, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
   node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
@@ -72,8 +70,6 @@ export interface ModelFactoriesWithStrict<M extends ModelTypes = ModelTypes> ext
 }
 
 export interface ModelFactory<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> {
-  (id?: string, attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
-  (attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
   (id?: string, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
   (callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
 }

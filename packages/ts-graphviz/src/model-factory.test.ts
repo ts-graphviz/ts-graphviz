@@ -66,7 +66,8 @@ describe('withModelKit function allows the class RootGraph to be generated with 
 test('withModelKit builds with subclasses that set their own id and attributes, printed like the core classes', () => {
   class MyDigraph extends Digraph {
     constructor() {
-      super('G', { label: 'Custom Digraph' });
+      super('G');
+      this.setAttribute('label', 'Custom Digraph');
     }
   }
   class MyNode extends Node {

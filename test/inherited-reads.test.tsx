@@ -194,7 +194,8 @@ describe('the packages read no inherited property', { tags: ['SM-8'] }, () => {
         ]),
       );
       g.addEdge(kit.createEdge([{ id: 'e' }, { id: 'f', port: 'r' }]));
-      const s = kit.createSubgraph('cluster_s', { label: 's' });
+      const s = kit.createSubgraph('cluster_s');
+      s.setAttribute('label', 's');
       s.addNode(kit.createNode('g'));
       g.addSubgraph(s);
       g.addAttributeList('Node', { shape: 'box' });

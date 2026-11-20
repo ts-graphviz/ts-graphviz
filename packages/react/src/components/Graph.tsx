@@ -10,7 +10,7 @@ export const Graph: FC<RootGraphProps> = (props) => {
   const { id, strict } = ownOptions(props);
   return useHostGraph(
     props,
-    (models) => models.createGraph(id, undefined, { strict }),
+    (models) => models.createGraph(id, { strict }),
     true,
   );
 };

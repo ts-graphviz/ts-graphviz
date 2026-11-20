@@ -37,61 +37,32 @@ describe.each([
     expect(modelOf(g).strict).toStrictEqual(strict);
   });
 
-  test('first argument is attribute object', () => {
-    const g = factory({ [_.label]: 'Test label' });
-    expect(modelOf(g).id).toBeUndefined();
-    expect(modelOf(g).getAttribute(_.label)).toBe('Test label');
-
-    expect(modelOf(g).directed).toStrictEqual(directed);
-    expect(modelOf(g).strict).toStrictEqual(strict);
-  });
-
-  test('first argument is attribute object, seccond argument is callback', () => {
+  test('takes undefined for an id left out', () => {
     const callback = vi.fn();
-    const g = factory({ [_.label]: 'Test label' }, callback);
+    const g = factory(undefined, callback);
     expect(modelOf(g).id).toBeUndefined();
-    expect(modelOf(g).getAttribute(_.label)).toBe('Test label');
-    expect(callback).toHaveBeenCalledWith(g);
-
-    expect(modelOf(g).directed).toStrictEqual(directed);
-    expect(modelOf(g).strict).toStrictEqual(strict);
-  });
-
-  test('first argument is id, seccond argument is attribute object', () => {
-    const g = factory('foo', { [_.label]: 'Test label' });
-    expect(modelOf(g).id).toStrictEqual('foo');
-    expect(modelOf(g).getAttribute(_.label)).toBe('Test label');
-
-    expect(modelOf(g).directed).toStrictEqual(directed);
-    expect(modelOf(g).strict).toStrictEqual(strict);
-  });
-
-  test('first argument is id, seccond argument is attribute object, third arguments is callback', () => {
-    const callback = vi.fn();
-    const g = factory('foo', { [_.label]: 'Test label' }, callback);
-    expect(modelOf(g).id).toStrictEqual('foo');
-    expect(modelOf(g).getAttribute(_.label)).toBe('Test label');
-    expect(callback).toHaveBeenCalledWith(g);
-
-    expect(modelOf(g).directed).toStrictEqual(directed);
-    expect(modelOf(g).strict).toStrictEqual(strict);
-  });
-
-  test('takes undefined for an argument left out', () => {
-    const callback = vi.fn();
-    const g = factory(undefined, { [_.label]: 'Test label' }, callback);
-    expect(modelOf(g).id).toBeUndefined();
-    expect({ ...g }).toStrictEqual({ [_.label]: 'Test label' });
     expect(callback).toHaveBeenCalledWith(g);
     expect(modelOf(g).strict).toStrictEqual(strict);
+  });
+
+  test("the callback writes the graph's attributes in its body", () => {
+    const g = factory('foo', (g) => {
+      g[_.label] = 'Test label';
+    });
+    expect(modelOf(g).getAttribute(_.label)).toBe('Test label');
+    expect(modelOf(g).statements).toMatchObject([
+      { key: 'label', value: 'Test label' },
+    ]);
   });
 
   test.each([
     ['two ids', ['foo', 'bar']],
     ['a callback before the id', [() => {}, 'foo']],
-    ['an id after the attributes', [{}, 'foo']],
+    // 3.x's attributes argument: as in DOT, a graph takes none here.
+    ['attributes', [{ label: 'x' }]],
+    ['an id and attributes', ['foo', { label: 'x' }, () => {}]],
     ['a strict flag', ['foo', true]],
-    ['too many arguments', ['foo', {}, () => {}, undefined]],
+    ['too many arguments', ['foo', () => {}, undefined]],
   ])(
     'throws a TypeError with code TSG_ERR_INVALID_ARGUMENTS for %s',
     (_name, args) => {

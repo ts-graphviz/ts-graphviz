@@ -191,18 +191,14 @@ export declare abstract class RootGraph<S extends Schema = EmptySchema> extends 
   readonly id?: string;
   abstract readonly directed: boolean;
   strict: boolean;
-  constructor(id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions);
-  constructor(attributes: GraphAttributesObject<S>, options?: RootGraphOptions);
-  constructor(id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>);
-  constructor(strict: boolean, attributes?: GraphAttributesObject<S>);
+  constructor(id?: string, options?: RootGraphOptions);
+  constructor(options: RootGraphOptions);
 }
 
 export declare class Subgraph<S extends Schema = EmptySchema> extends GraphBase<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> implements SubgraphModel<S> {
   get $$type(): "Subgraph";
   readonly id?: string;
-  constructor(id: ClusterSubgraphId, attributes?: ClusterSubgraphAttributesObject<S>);
-  constructor(id?: string, attributes?: NonClusterSubgraphAttributesObject<S>);
-  constructor(attributes?: NonClusterSubgraphAttributesObject<S>);
+  constructor(...args: [id?: string]);
   isSubgraphCluster(): boolean;
 }
 

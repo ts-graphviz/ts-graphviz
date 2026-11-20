@@ -16,13 +16,15 @@ description: 使用 DOT Object Model（DOM），把图当作数据来构建、�
 ```typescript
 import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
-const g = new Digraph('G', { rankdir: 'LR' });
+const g = new Digraph('G');
+g.setAttribute('rankdir', 'LR');
 const a = new Node('a', { label: 'Start' });
 const b = new Node('b');
 g.addNode(a);
 g.addNode(b);
 g.addEdge(new Edge([a, b], { color: 'red' }));
-const s = new Subgraph('cluster_0', { label: 'Group' });
+const s = new Subgraph('cluster_0');
+s.setAttribute('label', 'Group');
 g.addSubgraph(s);
 s.addNode(new Node('c'));
 
@@ -43,7 +45,7 @@ console.log(toDot(g));
 // }
 ```
 
-构造函数按位置读取参数：先是 ID，再是属性，二者都可以省略。根图还在属性之后接受选项：`new Digraph('G', { rankdir: 'LR' }, { strict: true })` 创建 strict 图（在属性之前传布尔值的 `new Digraph('G', true)` 已弃用）。不符合任何签名的调用会抛出代码为 `TSG_ERR_INVALID_ARGUMENTS` 的 `TypeError`。
+构造函数按位置读取参数。节点和边在 ID 或目标之后接受属性。图和子图不接受属性：与 DOT 一样，属性是其主体中的语句（`setAttribute`、`addAttributeAssignment`）。根图在 ID 之后接受选项：`new Digraph('G', { strict: true })` 创建 strict 图。不符合任何签名的调用会抛出代码为 `TSG_ERR_INVALID_ARGUMENTS` 的 `TypeError`。
 
 单独创建的模型用 `addNode`、`addEdge` 和 `addSubgraph` 添加：
 
@@ -147,7 +149,7 @@ console.log(toDot(g));
 
 ## 图属性赋值
 
-在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。图的属性方法作用于这些语句：图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。构造函数和工厂函数的属性按给出的顺序成为最前面的赋值。
+在图的主体中，`bgcolor=gray;` 对 Graphviz 来说等同于写在该位置的 `graph [bgcolor=gray]`：之后的赋值会覆盖它，而且它只作为之后子图的默认值。`addAttributeAssignment(key, value)` 把一条赋值作为图的最后一条语句添加，并返回一个 `AttributeAssignmentModel`，它带有 `key` 和 `value`（设置 `value` 会在原位置修改它），也可以带注释；`removeAttributeAssignment` 移除它。图的属性方法作用于这些语句：图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';

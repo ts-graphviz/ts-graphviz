@@ -44,8 +44,8 @@ The DSL stands for the graph's models, the [DOT Object Model (DOM)](./02-model-a
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
-| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
-| `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', (s) => { s.label = 'Group'; s.node('d'); s.node('e'); });` |
+| `{ rank = same; b; c; }` | `g.subgraph((s) => { s.rank = 'same'; s.node('b'); s.node('c'); });` |
 | `// note` | `a.addComment('note');` |
 
 Together:
@@ -60,11 +60,13 @@ const G = digraph('G', (g) => {
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
   g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
-  g.subgraph('cluster_0', { label: 'Group' }, (s) => {
+  g.subgraph('cluster_0', (s) => {
+    s.label = 'Group';
     s.node('d');
     s.node('e');
   });
-  g.subgraph({ rank: 'same' }, (s) => {
+  g.subgraph((s) => {
+    s.rank = 'same';
     s.node('b');
     s.node('c');
   });
@@ -134,12 +136,13 @@ digraph((g) => {
 
 On the DSL of a graph or subgraph, an attribute name is a DOT statement, as `rankdir = LR;` is in DOT: `g.rankdir = 'LR'` writes `rankdir = "LR";` where it runs, each time it runs (a graph attribute assignment; in Graphviz a later one overrides an earlier one). It is written only: reading `g.rankdir` or `delete g.rankdir` throws a `TypeError` with code `TSG_ERR_WRITE_ONLY_PROPERTY`, and assigning `undefined` throws one with code `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT`. Names that JavaScript and tools look up on any object (`then`, `toJSON` and those of `Object.prototype`) read as `undefined`, so a graph's DSL can be awaited or stringified.
 
-The factory's attributes argument writes the first assignments of the body, and the model reads and writes the graph's attributes (`modelOf(g).getAttribute`, `setAttribute`). A graph's attributes are its assignments: there is no table apart. `getAttribute(key)` is the value of the last assignment of `key` (not of a `graph [...]` list); `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned. The constructor's and the factory's attributes are the first assignments, in their order.
+The model reads and writes the graph's attributes (`modelOf(g).getAttribute`, `setAttribute`). A graph's attributes are its assignments: there is no table apart. `getAttribute(key)` is the value of the last assignment of `key` (not of a `graph [...]` list); `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned.
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
 
-const G = digraph('G', { bgcolor: 'white' }, (g) => {
+const G = digraph('G', (g) => {
+  g.bgcolor = 'white';
   g.node('a');
   g.bgcolor = 'gray'; // bgcolor = "gray"; here
   g.node('b');

@@ -10,7 +10,7 @@ export const Digraph: FC<RootGraphProps> = (props) => {
   const { id, strict } = ownOptions(props);
   return useHostGraph(
     props,
-    (models) => models.createDigraph(id, undefined, { strict }),
+    (models) => models.createDigraph(id, { strict }),
     true,
   );
 };

@@ -20,8 +20,8 @@ export function graphPlugin(
       const name = id ? idFromLiteral(id) : undefined;
       const options = { strict: ast.strict };
       const graph = ast.directed
-        ? context.models.createDigraph(name, undefined, options)
-        : context.models.createGraph(name, undefined, options);
+        ? context.models.createDigraph(name, options)
+        : context.models.createGraph(name, options);
       applyStatements(context, graph, ast.children, legacy);
       return graph;
     },

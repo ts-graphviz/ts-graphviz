@@ -1,17 +1,13 @@
 import type {
   Attributes,
   ClusterSubgraphAttributeKey,
-  ClusterSubgraphAttributesObject,
-  ClusterSubgraphId,
   EmptySchema,
-  NonClusterSubgraphAttributesObject,
   Schema,
   SubgraphAttributeKey,
-  SubgraphAttributesObject,
   SubgraphModel,
 } from '@ts-graphviz/common';
 import { readArguments } from '@ts-graphviz/common';
-import { isRecord, isString } from './arguments.js';
+import { isString } from './arguments.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
@@ -32,37 +28,17 @@ export class Subgraph<S extends Schema = EmptySchema>
   public readonly id?: string;
 
   /**
-   * A subgraph whose id starts with `cluster`, in any case, is a cluster,
-   * and takes the attributes of a cluster. For an id known at run time
-   * only, the attributes of a cluster need `cluster: true`.
-   *
-   * Only `createSubgraph` of a kit also refuses, for a cluster id, the
-   * attributes that only a subgraph takes.
+   * A subgraph whose id starts with `cluster`, in any case, is a cluster.
+   * A subgraph takes no attributes here: as in DOT, they are statements of
+   * its body (`setAttribute`, `addAttributeAssignment`). Anything but an id
+   * throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
    */
-  constructor(
-    id: ClusterSubgraphId,
-    attributes?: ClusterSubgraphAttributesObject<S>,
-  );
-
-  /**
-   * Any other id, or none: the attributes of a subgraph, or those of a
-   * cluster with `cluster: true`.
-   */
-  constructor(id?: string, attributes?: NonClusterSubgraphAttributesObject<S>);
-
-  constructor(attributes?: NonClusterSubgraphAttributesObject<S>);
-
-  constructor(...args: unknown[]) {
+  constructor(...args: [id?: string]) {
     super();
-    // By position: an id, then the attributes, each of which may be left out.
-    const [id, attributes] = readArguments('new Subgraph()', args, [
-      isString,
-      isRecord,
-    ]) as [string | undefined, SubgraphAttributesObject<S> | undefined];
+    const [id] = readArguments('new Subgraph()', args, [isString]) as [
+      string | undefined,
+    ];
     this.id = id;
-    if (attributes !== undefined) {
-      this.setAttributes(attributes);
-    }
   }
 
   public isSubgraphCluster(): boolean {

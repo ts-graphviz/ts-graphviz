@@ -22,10 +22,11 @@ describe('class Subgraph', () => {
   describe('Constructor', () => {
     test.each([
       ['two ids', ['a', 'b']],
-      ['an id after the attributes', [{ label: 'x' }, 'a']],
-      ['two attribute objects', [{}, {}]],
+      // As in DOT, a subgraph takes no attributes here.
+      ['attributes', [{ label: 'x' }]],
+      ['an id and attributes', ['a', { label: 'x' }]],
       ['a boolean', [true]],
-      ['too many arguments', ['a', {}, undefined]],
+      ['too many arguments', ['a', undefined]],
     ])(
       'throws a TypeError with code TSG_ERR_INVALID_ARGUMENTS for %s',
       (_, args) => {
@@ -39,26 +40,10 @@ describe('class Subgraph', () => {
       },
     );
 
-    test('takes undefined or null for an argument left out', () => {
-      const s = new Subgraph(undefined, { rank: 'same' });
-      expect(s.id).toBeUndefined();
-      expect(s.values).toStrictEqual([['rank', 'same']]);
-      expect(new Subgraph('a', null as never).values).toStrictEqual([]);
-    });
-
-    test('first argument is id, and second attributes object', () => {
-      subgraph = new Subgraph('cluster_test', {
-        K: 1,
-      });
-      expect(subgraph.id).toBe('cluster_test');
-      expect(subgraph.get('K')).toBe(1);
-    });
-    test('first argument is attributes object', () => {
-      subgraph = new Subgraph({
-        cluster: true,
-        K: 1,
-      });
-      expect(subgraph.get('K')).toBe(1);
+    test('takes an id, or none', () => {
+      expect(new Subgraph('cluster_test').id).toBe('cluster_test');
+      expect(new Subgraph(undefined).id).toBeUndefined();
+      expect(new Subgraph().statements).toStrictEqual([]);
     });
   });
 
@@ -166,7 +151,9 @@ describe('isSubgraphCluster with the cluster attribute', () => {
   });
 
   test('an anonymous subgraph with cluster = true is a cluster', () => {
-    expect(new Subgraph({ cluster: true }).isSubgraphCluster()).toBe(true);
+    const s = new Subgraph();
+    s.setAttribute('cluster', true);
+    expect(s.isSubgraphCluster()).toBe(true);
     expect(new Subgraph().isSubgraphCluster()).toBe(false);
   });
 });

@@ -1,7 +1,6 @@
 import type {
   EmptySchema,
   GraphAttributeKey,
-  GraphAttributesObject,
   RootGraphModel,
   RootGraphOptions,
   Schema,
@@ -11,7 +10,7 @@ import {
   ownOptions,
   readArguments,
 } from '@ts-graphviz/common';
-import { isBoolean, isRecord, isString } from './arguments.js';
+import { isRecord, isString } from './arguments.js';
 import { GraphBase } from './GraphBase.js';
 
 /**
@@ -30,35 +29,16 @@ export abstract class RootGraph<S extends Schema = EmptySchema>
   public strict: boolean;
 
   /**
-   * The arguments are read by position: an id, then the attributes, then
-   * the options, each of which may be left out
-   * (`new Digraph('G', { label: 'x' }, { strict: true })`). A call that fits
-   * none of the signatures throws a `TypeError` with code
-   * `TSG_ERR_INVALID_ARGUMENTS`.
+   * The arguments are read by position: an id, then the options, either of
+   * which may be left out (`new Digraph('G', { strict: true })`). A graph
+   * takes no attributes here: as in DOT, they are statements of its body
+   * (`setAttribute`, `addAttributeAssignment`). A call that fits neither
+   * signature (3.x's attributes argument or `strict` flag included) throws
+   * a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
    */
-  constructor(
-    id?: string,
-    attributes?: GraphAttributesObject<S>,
-    options?: RootGraphOptions,
-  );
+  constructor(id?: string, options?: RootGraphOptions);
 
-  constructor(attributes: GraphAttributesObject<S>, options?: RootGraphOptions);
-
-  /**
-   * @deprecated Pass `{ strict }` after the attributes:
-   * `new Digraph(id, attributes, { strict })`. Removed in v5.
-   */
-  constructor(
-    id: string | undefined,
-    strict: boolean,
-    attributes?: GraphAttributesObject<S>,
-  );
-
-  /**
-   * @deprecated Pass `{ strict }` after the attributes:
-   * `new Digraph(attributes, { strict })`. Removed in v5.
-   */
-  constructor(strict: boolean, attributes?: GraphAttributesObject<S>);
+  constructor(options: RootGraphOptions);
 
   constructor(...args: unknown[]) {
     super();
@@ -74,41 +54,20 @@ export abstract class RootGraph<S extends Schema = EmptySchema>
         return 'the root graph constructor';
       }
     };
-    let id: string | undefined;
-    let strict: boolean | undefined;
-    let attributes: GraphAttributesObject<S> | undefined;
-    if (isBoolean(args[0]) || isBoolean(args[1])) {
-      // The deprecated form: the strict flag before the attributes.
-      [id, strict, attributes] = readArguments(name, args, [
-        isString,
-        isBoolean,
-        isRecord,
-      ]) as [string | undefined, boolean, GraphAttributesObject<S> | undefined];
-    } else {
-      let options: RootGraphOptions | undefined;
-      [id, attributes, options] = readArguments(name, args, [
-        isString,
-        isRecord,
-        isRecord,
-      ]) as [
-        string | undefined,
-        GraphAttributesObject<S> | undefined,
-        RootGraphOptions | undefined,
-      ];
-      const given = ownOptions(options);
-      strict = given.strict;
-      // Only the options there are: attributes put there would be lost.
-      if (
-        (strict !== undefined && typeof strict !== 'boolean') ||
-        Object.keys(given).some((key) => key !== 'strict')
-      ) {
-        throw invalidArguments(name(), args);
-      }
+    const [id, options] = readArguments(name, args, [isString, isRecord]) as [
+      string | undefined,
+      RootGraphOptions | undefined,
+    ];
+    const given = ownOptions(options);
+    const strict = given.strict;
+    // Only the options there are: attributes put there would be lost.
+    if (
+      (strict !== undefined && typeof strict !== 'boolean') ||
+      Object.keys(given).some((key) => key !== 'strict')
+    ) {
+      throw invalidArguments(name(), args);
     }
     this.id = id;
     this.strict = strict ?? false;
-    if (attributes !== undefined) {
-      this.setAttributes(attributes);
-    }
   }
 }

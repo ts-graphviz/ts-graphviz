@@ -528,8 +528,8 @@ export function buildGraph(spec: GraphSpec): RootGraphModel {
   // Legacy graphs hold legacy subgraphs.
   const kit = spec.ordered ? defaultModelKit : legacyModelKit;
   const g: RootGraphModel = spec.directed
-    ? kit.createDigraph(spec.id, undefined, { strict: spec.strict })
-    : kit.createGraph(spec.id, undefined, { strict: spec.strict });
+    ? kit.createDigraph(spec.id, { strict: spec.strict })
+    : kit.createGraph(spec.id, { strict: spec.strict });
   // A plain string target is split on `:` by the model API, so references are
   // passed as objects to keep ids that contain a colon intact.
   const ref = (t: NodeRefSpec): ForwardRefNode => ({

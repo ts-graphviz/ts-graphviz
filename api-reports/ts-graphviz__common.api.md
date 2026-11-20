@@ -989,16 +989,11 @@ export interface ModelClasses<M extends AnyModelTypes = ModelTypes, S extends Sc
 }
 
 export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends ModelClasses<M, S> {
-  createDigraph(id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): M["Digraph"];
-  createDigraph(attributes: GraphAttributesObject<S>, options?: RootGraphOptions): M["Digraph"];
-  createDigraph(id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createDigraph(strict: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
-  createGraph(id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): M["Graph"];
-  createGraph(attributes: GraphAttributesObject<S>, options?: RootGraphOptions): M["Graph"];
-  createGraph(id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
-  createGraph(strict: boolean, attributes?: GraphAttributesObject<S>): M["Graph"];
-  createSubgraph<const Id extends string | undefined = undefined>(id?: Id, attributes?: SubgraphAttributesFor<Id, S>): M["Subgraph"];
-  createSubgraph(attributes?: NonClusterSubgraphAttributesObject<S>): M["Subgraph"];
+  createDigraph(id?: string, options?: RootGraphOptions): M["Digraph"];
+  createDigraph(options: RootGraphOptions): M["Digraph"];
+  createGraph(id?: string, options?: RootGraphOptions): M["Graph"];
+  createGraph(options: RootGraphOptions): M["Graph"];
+  createSubgraph(id?: string): M["Subgraph"];
   createNode(id: string, attributes?: NodeAttributesObject<S>): M["Node"];
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<S>): M["Edge"];
 }
@@ -1218,11 +1213,9 @@ export interface ResolvedModelTypes<P extends Partial<ModelClasses> = Record<nev
   } ? Creates<C, EdgeModel> : EdgeModel;
 }
 
-export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGraphModel, S extends Schema = EmptySchema> {
-  new (id?: string, attributes?: GraphAttributesObject<S>, options?: RootGraphOptions): G;
-  new (attributes: GraphAttributesObject<S>, options?: RootGraphOptions): G;
-  new (id: string | undefined, strict: boolean, attributes?: GraphAttributesObject<S>): G;
-  new (strict: boolean, attributes?: GraphAttributesObject<S>): G;
+export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGraphModel, _S extends Schema = EmptySchema> {
+  new (id?: string, options?: RootGraphOptions): G;
+  new (options: RootGraphOptions): G;
 }
 
 export interface RootGraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Graph", GraphAttributeKey, S> {
@@ -1334,10 +1327,8 @@ export type SubgraphAttributesFor<Id extends string | undefined, S extends Schem
 
 export type SubgraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<ClusterSubgraphAttributeKey | SubgraphAttributeKey, SubgraphSchemaAttributeTypes<S>>;
 
-export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphModel, S extends Schema = EmptySchema> {
-  new (id: ClusterSubgraphId, attributes?: ClusterSubgraphAttributesObject<S>): G;
-  new (id?: string, attributes?: NonClusterSubgraphAttributesObject<S>): G;
-  new (attributes?: NonClusterSubgraphAttributesObject<S>): G;
+export interface SubgraphConstructor<G extends ReadonlySubgraphModel = SubgraphModel, _S extends Schema = EmptySchema> {
+  new (id?: string): G;
 }
 
 export interface SubgraphModel<S extends Schema = EmptySchema> extends GraphBaseModel<"Subgraph", SubgraphAttributeKey | ClusterSubgraphAttributeKey, S> {

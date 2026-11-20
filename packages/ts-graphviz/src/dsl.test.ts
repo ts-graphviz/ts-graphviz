@@ -218,13 +218,8 @@ describe('DOT statements', () => {
       const anonymous = G.subgraph();
       expect(modelOf(anonymous)).toBeInstanceOf(Subgraph);
       expect(kit.createSubgraph).toHaveBeenLastCalledWith();
-      const named = G.subgraph('cluster_foo', { label: 'Test label' });
-      expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo', {
-        label: 'Test label',
-      });
-      expect(modelOf(G.subgraph({ rank: 'same' })).getAttribute('rank')).toBe(
-        'same',
-      );
+      const named = G.subgraph('cluster_foo');
+      expect(kit.createSubgraph).toHaveBeenLastCalledWith('cluster_foo');
       expect(modelOf(g).getSubgraphs().slice(0, 2)).toStrictEqual([
         modelOf(anonymous),
         modelOf(named),
@@ -234,23 +229,20 @@ describe('DOT statements', () => {
     test('declares the subgraph again when the graph has one with the id', () => {
       const created = g.subgraph('cluster_foo');
       const kit = spyKit();
-      const subgraph = dsl(modelOf(g), kit).subgraph('cluster_foo', {
-        label: 'Test label',
-      });
-      expect(kit.createSubgraph).toHaveBeenCalledWith('cluster_foo', {
-        label: 'Test label',
-      });
+      const subgraph = dsl(modelOf(g), kit).subgraph('cluster_foo');
+      expect(kit.createSubgraph).toHaveBeenCalledWith('cluster_foo');
       expect(modelOf(g).getSubgraphs('cluster_foo')).toStrictEqual([
         modelOf(created),
         modelOf(subgraph),
       ]);
-      expect(modelOf(subgraph).getAttribute('label')).toBe('Test label');
     });
 
     test('gives the subgraph there is with a kit of ts-graphviz/legacy', () => {
       const legacy = legacyDigraph();
       const created = legacy.subgraph('cluster_foo');
-      const subgraph = legacy.subgraph('cluster_foo', { label: 'L' });
+      const subgraph = legacy.subgraph('cluster_foo', (s) => {
+        s.label = 'L';
+      });
       expect(modelOf(subgraph)).toBe(modelOf(created));
       expect(modelOf(legacy).getSubgraphs()).toEqual([modelOf(created)]);
       expect(subgraph.label).toBe('L');
@@ -260,12 +252,8 @@ describe('DOT statements', () => {
       const callback = vi.fn();
       const a = g.subgraph(callback);
       expect(callback).toHaveBeenLastCalledWith(a);
-      const b = g.subgraph({ rank: 'same' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(b);
       const c = g.subgraph('foo', callback);
       expect(callback).toHaveBeenLastCalledWith(c);
-      const d = g.subgraph('cluster_foo', { label: 'L' }, callback);
-      expect(callback).toHaveBeenLastCalledWith(d);
     });
 
     test('a subgraph’s DSL creates with the same kit', () => {
@@ -373,13 +361,15 @@ describe('DOT statements', () => {
     expect(JSON.stringify(g)).toBe('{}');
   });
 
-  test("a graph's own attributes are the factory's and the model's", () => {
-    const G = digraph('G', { label: 'G' }, (g) => {
+  test("a graph's attributes are the model's too", () => {
+    const G = digraph('G', (g) => {
+      g.label = 'G';
       modelOf(g).setAttribute('rankdir', 'LR');
     });
     expect(modelOf(G).getAttribute('label')).toBe('G');
     expect(modelOf(G).getAttribute('rankdir')).toBe('LR');
-    // Assignments at the start of the body, in their order.
+    // Assignments at the start of the body: setAttribute adds one after
+    // those there.
     expect(modelOf(G).statements).toMatchObject([
       { key: 'label', value: 'G' },
       { key: 'rankdir', value: 'LR' },
@@ -463,9 +453,8 @@ describe('DOT statements', () => {
     const callback = vi.fn();
     const node = call('node', 'a', undefined, callback);
     expect(callback).toHaveBeenCalledWith(node);
-    const subgraph = call('subgraph', undefined, { rank: 'same' }, callback);
+    const subgraph = call('subgraph', undefined, callback);
     expect(modelOf(subgraph as typeof g).id).toBeUndefined();
-    expect({ ...(subgraph as object) }).toStrictEqual({ rank: 'same' });
     expect(callback).toHaveBeenLastCalledWith(subgraph);
   });
 
@@ -479,8 +468,10 @@ describe('DOT statements', () => {
     ['edge', [{}, {}]],
     ['edge', ['a']],
     ['subgraph', [() => {}, 's']],
-    ['subgraph', [{}, 's']],
     ['subgraph', ['s', 't']],
+    // As in DOT, a subgraph takes no attributes in its header.
+    ['subgraph', [{ rank: 'same' }]],
+    ['subgraph', ['s', { label: 'S' }, () => {}]],
     ['graph', [{}, {}]],
     ['graph', []],
   ])(
@@ -905,7 +896,8 @@ describe('the rules', () => {
 });
 
 describe('the readers take a DSL', () => {
-  const g = digraph('G', { label: 'root' }, (g) => {
+  const g = digraph('G', (g) => {
+    g.label = 'root';
     g.node('a', { label: 'A' });
     g.edge(['a', 'b']);
     g.subgraph('cluster_s', (s) => s.node('c'));
@@ -962,8 +954,8 @@ describe('custom models', () => {
       }
     }
     class MySubgraph extends Subgraph {
-      constructor(...args: (string | SubgraphAttributesObject | undefined)[]) {
-        super(...(args as [string?, NonClusterSubgraphAttributesObject?]));
+      constructor(...args: [id?: string]) {
+        super(...args);
         seen.push(args);
       }
     }
@@ -972,22 +964,13 @@ describe('custom models', () => {
       createModelKit({ Node: MyNode, Subgraph: MySubgraph }),
     );
     g.node('a', { label: 'A' });
-    g.subgraph('s', { rank: 'same' });
-    g.subgraph({ rank: 'min' });
+    g.subgraph('s');
     g.subgraph();
-    expect(seen).toEqual([
-      ['a', { label: 'A' }],
-      ['s', { rank: 'same' }],
-      [{ rank: 'min' }],
-      [],
-    ]);
+    expect(seen).toEqual([['a', { label: 'A' }], ['s'], []]);
     // A statement written again is a new model too.
     g.node('a', { color: 'red' });
-    g.subgraph('s', { rank: 'max' });
-    expect(seen.slice(4)).toEqual([
-      ['a', { color: 'red' }],
-      ['s', { rank: 'max' }],
-    ]);
+    g.subgraph('s');
+    expect(seen.slice(3)).toEqual([['a', { color: 'red' }], ['s']]);
   });
 
   test('the kit is the receiver of its methods', () => {

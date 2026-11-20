@@ -16,13 +16,15 @@ A graph holds what you add to it. Create the models with their classes, or with 
 ```typescript
 import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
-const g = new Digraph('G', { rankdir: 'LR' });
+const g = new Digraph('G');
+g.setAttribute('rankdir', 'LR');
 const a = new Node('a', { label: 'Start' });
 const b = new Node('b');
 g.addNode(a);
 g.addNode(b);
 g.addEdge(new Edge([a, b], { color: 'red' }));
-const s = new Subgraph('cluster_0', { label: 'Group' });
+const s = new Subgraph('cluster_0');
+s.setAttribute('label', 'Group');
 g.addSubgraph(s);
 s.addNode(new Node('c'));
 
@@ -43,7 +45,7 @@ console.log(toDot(g));
 // }
 ```
 
-The constructors read their arguments by position: an id, then the attributes, each of which may be left out. A root graph also takes options after the attributes: `new Digraph('G', { rankdir: 'LR' }, { strict: true })` creates a strict graph (the boolean before the attributes, `new Digraph('G', true)`, is deprecated). A call that fits none of the signatures throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
+The constructors read their arguments by position. A node or an edge takes its attributes after its id or targets. A graph or subgraph takes no attributes: as in DOT, they are statements of its body (`setAttribute`, `addAttributeAssignment`). A root graph takes options after its id: `new Digraph('G', { strict: true })` creates a strict graph. A call that fits none of the signatures throws a `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
 
 Models created on their own are added with `addNode`, `addEdge` and `addSubgraph`:
 
@@ -147,7 +149,7 @@ A statement added before any other joins the leading defaults. `attributes` (`at
 
 ## Graph attribute assignments
 
-In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. The graph's attribute methods work on these statements: a graph's attributes are its assignments, with no table apart. `getAttribute(key)` is the value of the last assignment of `key` (not of a `graph [...]` list); `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned. The constructor's and the factory's attributes are the first assignments, in their order.
+In a graph's body, `bgcolor=gray;` is to Graphviz the same as `graph [bgcolor=gray]` where it is written: a later one overrides it, and it is the default of the subgraphs that follow it only. `addAttributeAssignment(key, value)` adds one as the graph's last statement and returns it, an `AttributeAssignmentModel` with its `key` and `value` (setting `value` changes it where it is) that takes comments; `removeAttributeAssignment` takes it out. The graph's attribute methods work on these statements: a graph's attributes are its assignments, with no table apart. `getAttribute(key)` is the value of the last assignment of `key` (not of a `graph [...]` list); `setAttribute(key, value)` sets the first assignment of `key` and removes the others, or adds one at the start of the body (after the assignments there) when there is none; `removeAttribute(key)` removes every assignment of `key`; `getAttributeNames()` lists the keys assigned.
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';

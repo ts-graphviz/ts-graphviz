@@ -88,7 +88,8 @@ describe('graph attribute assignments', () => {
   });
 
   it("keep the graph's attributes as they are through DOT", () => {
-    const g = new Digraph(undefined, { rankdir: 'LR' });
+    const g = new Digraph();
+    g.setAttribute('rankdir', 'LR');
     g.addNode(new Node('a'));
     const dot = toDot(g);
     expect(flat(dot)).toBe('digraph { rankdir = "LR"; "a"; }');
@@ -154,7 +155,8 @@ describe('graph attribute assignments', () => {
   });
 
   it("come from the attribute names of a graph's DSL", () => {
-    const G = digraph('G', { bgcolor: 'white' }, (g) => {
+    const G = digraph('G', (g) => {
+      g.bgcolor = 'white';
       g.bgcolor = 'red';
       g.node('a');
       g.bgcolor = 'blue';
@@ -165,7 +167,7 @@ describe('graph attribute assignments', () => {
     expect(flat(toDot(G))).toBe(
       'digraph "G" { bgcolor = "white"; bgcolor = "red"; "a"; bgcolor = "blue"; subgraph "cluster_s" { label = "S"; } }',
     );
-    // The factory's attributes are assignments too; the last one counts.
+    // The last one counts.
     expect(modelOf(G).getAttribute('bgcolor')).toBe('blue');
   });
 

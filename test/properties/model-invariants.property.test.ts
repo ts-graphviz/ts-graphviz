@@ -459,7 +459,9 @@ describe('root graphs', { tags: ['SM-5'] }, () => {
           // constructable.
           const Class: RootGraphConstructor = directed ? Digraph : Graph;
           const fromClass =
-            id === undefined ? new Class(isStrict) : new Class(id, isStrict);
+            id === undefined
+              ? new Class({ strict: isStrict })
+              : new Class(id, { strict: isStrict });
           for (const g of [modelOf(fromFactory), fromClass]) {
             expect([g.id, g.directed, g.strict]).toStrictEqual([
               id,
