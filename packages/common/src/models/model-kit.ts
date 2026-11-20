@@ -161,7 +161,6 @@ export interface ModelKitOptions {
   readonly Edge?: AnyConstructor;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: matches any constructor arguments
 type AnyConstructor = abstract new (...args: any[]) => unknown;
 
 /**
