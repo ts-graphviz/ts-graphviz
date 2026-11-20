@@ -29,10 +29,10 @@ jobs:
         ref:
           - label: next 856bb0df
             sha: 856bb0df8afc5f609ce4698d30d657327dea87fc
-          - label: PR 1 v3 (default kit types)
-            sha: 3b35db2664dc9e2e8bf799146717dbe917576327
+          - label: PR 1 (final)
+            sha: 1bc5a20457158dbe0e27b0a69cdc8f68c1939ac4
           - label: PR 2 (defineSchema)
-            sha: 5285bfae4276b5ab5b194ffba401d7403fefe3fe
+            sha: a53d738ffdecf9071bfc93d45f742426b15ef832
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
