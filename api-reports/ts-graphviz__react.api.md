@@ -195,7 +195,7 @@ type LabelValue<O, K extends string> = O extends { readonly [P in K]?: infer V; 
 type WithReactLabel<T> = T extends unknown ? T extends {
   label?: undefined;
 } ? T : Omit<T, "label"> & {
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<T, "label">;
 } : never;
 
 // Module augmentations

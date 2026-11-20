@@ -137,6 +137,17 @@ describe('createComponents', () => {
     <Node id="a" tier="core" />;
   });
 
+  it('types a cluster label with the schema where it changes it', () => {
+    const clusterSchema = defineSchema({
+      cluster: { label: attr.override<number>() },
+    });
+    const K = createComponents(createModelKit({ schema: clusterSchema }));
+    <K.Subgraph id="cluster_a" label={1} />;
+    // @ts-expect-error the schema makes a cluster's label a number
+    <K.Subgraph id="cluster_a" label="A" />;
+    <Subgraph id="cluster_a" label="A" />;
+  });
+
   it('types the labels with the schema where it changes them', () => {
     <C.Node id="a" label={1} />;
     // @ts-expect-error the schema makes a node's label a number
