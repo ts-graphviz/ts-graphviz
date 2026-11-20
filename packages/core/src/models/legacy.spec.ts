@@ -43,4 +43,13 @@ describe.each([
     expect(g.edges).toEqual([edge]);
     expect(g.subgraphs).toEqual([t]);
   });
+
+  it('empties the leading list a default attribute statement went into', () => {
+    const g = create();
+    g.addNode(new Node('a'));
+    const list = g.addAttributeList('Node', { color: 'red' });
+    expect(list).toBe(g.attributes.node);
+    g.removeAttributeList(list);
+    expect(g.attributes.node.getAttributeNames()).toEqual([]);
+  });
 });

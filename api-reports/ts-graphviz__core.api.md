@@ -106,6 +106,7 @@ export declare abstract class GraphBase<T extends DotObjectType, K extends Attri
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
+  removeAttributeList(list: StatementAttributeListModel<S>): void;
   getNodes(): NodeModel<S>[];
   getNodes(id: string): NodeModel<S>[];
   getEdges(): EdgeModel<S>[];

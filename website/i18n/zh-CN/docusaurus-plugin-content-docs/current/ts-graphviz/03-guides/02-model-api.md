@@ -65,7 +65,7 @@ g.addEdge(new Edge([a, b]));
 | `statements` | 按添加顺序排列的节点、边、子图以及开头之外的默认属性语句，`toDot` 按此顺序输出；图自身的属性和开头的默认值写在它们之前 |
 | `getNodes(id)`、`getSubgraphs(id)` | 按声明顺序获取以该 id 声明的节点或子图；与 DOT 一样，`a; b; a [color=red]` 声明了两次 `a`，每次声明都是一个独立的节点模型 |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | 图中是否存在 |
-| `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 移除 |
+| `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)`、`removeAttributeList(list)` | 移除 |
 | `addAttributeList(kind, attributes)` | 在当前位置添加一条默认属性语句（`node [...]` 等）并返回它 |
 
 `removeNode` 只移除本图中的节点语句：指向该节点的边，以及子图中该节点的语句都会保留，Graphviz 渲染它们时会重新创建这个节点。若要去掉该节点，请在所有子图中一并移除它们，包括边分组（`b -> { a c }`）中的成员：
@@ -141,6 +141,8 @@ console.log(toDot(g));
 ```
 
 在其他任何语句之前添加的语句会并入开头的默认值。`attributes`（`attributes.node` 等）已弃用：它只表示开头的默认值。
+
+`removeAttributeList(list)` 把 `addAttributeList` 返回的列表从 `statements` 中移除。开头的列表仍属于该图，因此会被清空（属性和注释），不再输出任何内容；同一种类的开头语句是同一个列表，因此它们会全部被清空。
 
 ## 注释
 
