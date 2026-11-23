@@ -127,7 +127,8 @@ export interface LiteralASTProperties<T extends string = string>
  * The kinds of DOT ID a {@link LiteralASTNode} can be:
  *
  * - `'bare'`: an identifier or a numeral, written without quotes (`a`,
- *   `-1.5`);
+ *   `-1.5`); a value that is not one (a keyword such as `edge`, `1abc`) is
+ *   written quoted, which Graphviz reads as the same string;
  * - `'quoted'`: a double-quoted string; `value` is the text between the
  *   quotes as written, escape sequences intact;
  * - `'html'`: an HTML-like string; `value` is the markup between the outer
