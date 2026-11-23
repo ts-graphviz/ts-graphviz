@@ -103,6 +103,29 @@ describe('the default classes', () => {
     });
     expect(toDot(G)).toContain('color = "green"');
   });
+
+  it('take a list out with removeAttributeList, comments and all', () => {
+    const G = digraph((g) => {
+      g.node({ shape: 'box' });
+      g.node('a');
+      g.subgraph('s', (s) => {
+        s.node('b');
+        const later = s.edge({ color: 'red' });
+        later.addComment('later');
+        s.node('c');
+        modelOf(s).removeAttributeList(modelOf(later));
+      });
+    });
+    const g = modelOf(G);
+    expect(toDot(G)).toBe(
+      'digraph {\n  node [\n    shape = "box";\n  ];\n  "a";\n  subgraph "s" {\n    "b";\n    "c";\n  }\n}',
+    );
+    // The leading list stays the graph's, emptied.
+    g.removeAttributeList(g.attributes.node);
+    expect(toDot(G)).toBe(
+      'digraph {\n  "a";\n  subgraph "s" {\n    "b";\n    "c";\n  }\n}',
+    );
+  });
 });
 
 describe('the deprecated legacyModels', () => {
@@ -113,6 +136,17 @@ describe('the deprecated legacyModels', () => {
     expect(g).toBeInstanceOf(LegacyDigraph);
     expect(g.attributes.node.values).toEqual([['color', 'blue']]);
     expect(g.statements.every((s) => s.$$type === 'Node')).toBe(true);
+  });
+
+  it('removeAttributeList empties the list the statements were merged into', () => {
+    const g = new LegacyDigraph();
+    g.addNode(new Node('a'));
+    const first = g.addAttributeList('Node', { color: 'blue' });
+    const second = g.addAttributeList('Node', { shape: 'box' });
+    expect(second).toBe(first);
+    g.removeAttributeList(first);
+    expect(g.attributes.node.getAttributeNames()).toEqual([]);
+    expect(toDot(g)).toBe('digraph {\n  "a";\n}');
   });
 
   it('merge by hand and through ts-graphviz/legacy, subgraphs included', () => {

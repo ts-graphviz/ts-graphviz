@@ -861,6 +861,16 @@ export interface GraphBaseModel<
    */
   removeSubgraph(subgraph: SubgraphModel<S>): void;
   /**
+   * Remove a default attribute statement that
+   * {@link GraphBaseModel.addAttributeList} returned. One in
+   * {@link GraphBaseModel.statements} is taken out; a leading one (which
+   * every graph has, and the deprecated classes of `legacyModels` return
+   * for each) loses its attributes and comments, so it writes nothing:
+   * those of every statement merged into it. Anything else is left as it
+   * is.
+   */
+  removeAttributeList(list: StatementAttributeListModel<S>): void;
+  /**
    * The subgraphs in the graph, in the order they were added; a new array
    * each time. As in DOT, a subgraph may be declared more than once.
    */

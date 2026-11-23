@@ -839,6 +839,7 @@ export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K exten
   removeNode(node: NodeModel<S> | string): void;
   removeEdge(edge: EdgeModel<S>): void;
   removeSubgraph(subgraph: SubgraphModel<S>): void;
+  removeAttributeList(list: StatementAttributeListModel<S>): void;
   getSubgraphs(): SubgraphModel<S>[];
   getSubgraphs(id: string): SubgraphModel<S>[];
   getNodes(): NodeModel<S>[];

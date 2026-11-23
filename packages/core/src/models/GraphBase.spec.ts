@@ -71,6 +71,45 @@ describe('Imperative API(addXxx existXxx removeXxx methods)', () => {
   });
 });
 
+describe('removeAttributeList', () => {
+  test('takes a list out of the statements', () => {
+    const a = new Node('a');
+    g.addNode(a);
+    const list = g.addAttributeList('Node', { color: 'red' });
+    const other = g.addAttributeList('Edge', { color: 'blue' });
+    expect(g.statements).toStrictEqual([a, list, other]);
+    g.removeAttributeList(list);
+    expect(g.statements).toStrictEqual([a, other]);
+    // Taken out once; again, nothing changes.
+    g.removeAttributeList(list);
+    expect(g.statements).toStrictEqual([a, other]);
+  });
+
+  test('empties a leading list, which stays the graph’s', () => {
+    const list = g.addAttributeList('Node', { color: 'red' });
+    list.addComment('defaults');
+    expect(list).toBe(g.attributes.node);
+    g.removeAttributeList(list);
+    expect(g.attributes.node).toBe(list);
+    expect(list.getAttributeNames()).toStrictEqual([]);
+    expect(list.comments).toStrictEqual([]);
+  });
+
+  test('leaves anything else as it is', () => {
+    const a = new Node('a');
+    g.addNode(a);
+    const list = g.addAttributeList('Node', { color: 'red' });
+    const elsewhere = new TestGraph();
+    elsewhere.addNode(new Node('b'));
+    const foreign = elsewhere.addAttributeList('Node', { color: 'blue' });
+    g.removeAttributeList(foreign);
+    g.removeAttributeList(a as never);
+    expect(g.statements).toStrictEqual([a, list]);
+    expect(foreign.getAttribute('color')).toBe('blue');
+    expect(g.getNodes()).toStrictEqual([a]);
+  });
+});
+
 describe('getNodes, getEdges and getSubgraphs', () => {
   test('without an id give everything, in order, as a new array', () => {
     const a = new Node('a');

@@ -380,6 +380,9 @@ describe('a schema', () => {
       expectTypeOf(list.getAttribute('data-id')).toEqualTypeOf<
         number | undefined
       >();
+      // A list of the schema is one the graph takes out.
+      g.removeAttributeList(list);
+      g.removeAttributeList(g.addAttributeList('Graph', {}));
     });
   });
 

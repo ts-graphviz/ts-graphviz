@@ -65,7 +65,7 @@ g.addEdge(new Edge([a, b]));
 | `statements` | グラフのノード、エッジ、サブグラフ、先頭以外の既定属性の文を追加した順に並べたもの。`toDot` はこの順に書き出します。グラフ自身の属性と先頭の既定値はその前に書き出されます |
 | `getNodes(id)`、`getSubgraphs(id)` | その id で宣言されたノードやサブグラフを、宣言の順に得る。DOT と同じく `a; b; a [color=red]` は `a` を 2 度宣言し、宣言ごとに別のノードモデルになる |
 | `existNode(id)`、`existEdge(edge)`、`existSubgraph(subgraph)` | グラフにあるかどうか |
-| `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)` | 取り除く |
+| `removeNode(nodeOrId)`、`removeEdge(edge)`、`removeSubgraph(subgraph)`、`removeAttributeList(list)` | 取り除く |
 | `addAttributeList(kind, attributes)` | 既定属性の文（`node [...]` など）をその位置に追加して返す |
 
 `removeNode` が取り除くのは、そのグラフのノード文だけです。そのノードへのエッジや、サブグラフの中にあるそのノードの文は残り、Graphviz はそれらを描くときにノードを作り直します。ノードを消したい場合は、すべてのサブグラフで、エッジのグループ（`b -> { a c }`）のメンバーも含めて、それらも取り除いてください。
@@ -141,6 +141,8 @@ console.log(toDot(g));
 ```
 
 他のどの文よりも前に追加した文は、先頭の既定値に加わります。`attributes`（`attributes.node` など）は非推奨です。これは先頭の既定値だけを指します。
+
+`removeAttributeList(list)` は、`addAttributeList` が返したリストを `statements` から取り除きます。先頭のリストはグラフのものとして残るので、代わりに空にされ（属性とコメント）、何も出力しなくなります。同じ種類の先頭の文は 1 つのリストなので、そのすべてが空になります。
 
 ## コメント
 

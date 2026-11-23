@@ -65,7 +65,7 @@ g.addEdge(new Edge([a, b]));
 | `statements` | the graph's nodes, edges, subgraphs and default attribute statements after the leading ones, in the order they were added, which `toDot` writes in that order; the graph's own attributes and the leading defaults are written before them |
 | `getNodes(id)`, `getSubgraphs(id)` | the nodes or subgraphs declared with the id, in order; as in DOT, `a; b; a [color=red]` declares `a` twice, and each declaration is a node model of its own |
 | `existNode(id)`, `existEdge(edge)`, `existSubgraph(subgraph)` | whether the graph has it |
-| `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)` | take it out |
+| `removeNode(nodeOrId)`, `removeEdge(edge)`, `removeSubgraph(subgraph)`, `removeAttributeList(list)` | take it out |
 | `addAttributeList(kind, attributes)` | add a default attribute statement (`node [...]` and so on) where the graph is, and return it |
 
 `removeNode` takes out the node statement of this graph only: an edge to the node stays, as does a statement of it in a subgraph, and Graphviz creates the node again when it renders them. Where the node should go, remove those too, in every subgraph and with the members of edge groups (`b -> { a c }`):
@@ -141,6 +141,8 @@ console.log(toDot(g));
 ```
 
 A statement added before any other joins the leading defaults. `attributes` (`attributes.node` and so on) is deprecated: it is the leading defaults only.
+
+`removeAttributeList(list)` takes a list `addAttributeList` returned out of `statements`. A leading list stays the graph's, so it is emptied instead (its attributes and comments), and writes nothing; the leading statements of a kind are one list, so this empties all of them.
 
 ## Comments
 
