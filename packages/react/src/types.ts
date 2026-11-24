@@ -3,6 +3,7 @@ import type {
   AttributeKey,
   DotObjectType,
   EdgeAttributesObject,
+  EscStringValue,
   GraphAttributesObject,
   GraphBaseModel,
   HasComment,
@@ -128,15 +129,16 @@ export type SubgraphProps<
 };
 
 /**
- * A label prop's value besides a React element: a string, or the type the
- * kit's schema gives the attribute where it changes it to one without
- * strings.
+ * A label prop's value besides a React element: a string where the type
+ * takes strings (an escString or HTML-like value is given as a string or an
+ * element instead), with the other members of the type the kit's schema
+ * gives the attribute.
  */
 type LabelValue<O, K extends string> = O extends {
   readonly [P in K]?: infer V;
 }
   ? string extends Exclude<V, undefined>
-    ? string
+    ? string | Exclude<V, undefined | string | EscStringValue | HTMLLikeLabel>
     : Exclude<V, undefined>
   : string;
 

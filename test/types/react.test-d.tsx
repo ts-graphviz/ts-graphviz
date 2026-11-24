@@ -148,6 +148,18 @@ describe('createComponents', () => {
     <Subgraph id="cluster_a" label="A" />;
   });
 
+  it('keeps the other members of a label type with strings', () => {
+    const mixedSchema = defineSchema({
+      cluster: { label: attr.override<string | number>() },
+    });
+    const K = createComponents(createModelKit({ schema: mixedSchema }));
+    <K.Subgraph id="cluster_a" label={1} />;
+    <K.Subgraph id="cluster_a" label="A" />;
+    <K.Subgraph id="cluster_a" label={<dot:b>A</dot:b>} />;
+    // @ts-expect-error neither a string nor a number
+    <K.Subgraph id="cluster_a" label={true} />;
+  });
+
   it('types the labels with the schema where it changes them', () => {
     <C.Node id="a" label={1} />;
     // @ts-expect-error the schema makes a node's label a number

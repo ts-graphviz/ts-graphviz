@@ -190,7 +190,7 @@ type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K>
 
 type GraphRef<M extends AnyModelTypes, Model> = GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>> | Model;
 
-type LabelValue<O, K extends string> = O extends { readonly [P in K]?: infer V; } ? string extends Exclude<V, undefined> ? string : Exclude<V, undefined> : string;
+type LabelValue<O, K extends string> = O extends { readonly [P in K]?: infer V; } ? string extends Exclude<V, undefined> ? string | Exclude<V, undefined | string | EscStringValue | HTMLLikeLabel> : Exclude<V, undefined> : string;
 
 type WithReactLabel<T> = T extends unknown ? T extends {
   label?: undefined;
