@@ -12,7 +12,7 @@ A schema says which attributes, and which value types, the models of a kit take 
 import { attr, defineSchema, values, withModelKit } from 'ts-graphviz';
 
 const schema = defineSchema({
-  types: { style: values.extend<'my-style'>() },   // every attribute of the style type
+  types: { style: values.extend<'sketchy'>() },   // every attribute of the style type
   graph: { hoge: attr<string>() },                 // a new attribute
   cluster: { team: attr<'core' | 'infra'>() },
   node: {
@@ -24,7 +24,7 @@ const schema = defineSchema({
 
 const { digraph } = withModelKit({ schema });
 digraph((g) => {
-  g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+  g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
   g.node('b', { 'data-id': 'x' }); // type error: a number is expected
 });
 ```
