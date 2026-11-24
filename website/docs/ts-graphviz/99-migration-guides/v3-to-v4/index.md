@@ -179,7 +179,7 @@ const { digraph } = withModelKit({ schema });
 const g = digraph((g) => { g.hoge = 'fuga'; });
 ```
 
-A value enumeration extended with `declare module` (`Style.$styleItem`, `Color.$colors`, `ArrowType.$shape`, …) becomes `types: { style: values.extend<'my-style'>() }` (or `color`, `arrowType`, …) in the schema. Search your code for `declare module '@ts-graphviz/common'`: importing `$keywords` no longer compiles, but a block that does not import it compiles and adds nothing. `PackMode` no longer refers to the misspelt `PickMode` namespace, which is gone. The AST's `AttributeASTNode` and `AttributeASTProperties` take any string as their key by default (`AttributeASTNode<T extends string = string>`), as DOT does.
+A value enumeration extended with `declare module` (`Style.$styleItem`, `Color.$colors`, `ArrowType.$shape`, …) becomes `types: { style: values.extend<'my-style'>() }` (or `color`, `arrowType`, …) in the schema. `ArrowType.build` takes the shapes Graphviz draws only, as Graphviz has no arrow shapes of your own; a name extended through `ArrowType.$shape` is written as a string on an attribute whose `arrowType` the schema extends (`types: { arrowType: values.extend<'myarrow'>() }`). Search your code for `declare module '@ts-graphviz/common'`: importing `$keywords` no longer compiles, but a block that does not import it compiles and adds nothing. `PackMode` no longer refers to the misspelt `PickMode` namespace, which is gone. The AST's `AttributeASTNode` and `AttributeASTProperties` take any string as their key by default (`AttributeASTNode<T extends string = string>`), as DOT does.
 
 ## 8. `@ts-graphviz/ast`
 
