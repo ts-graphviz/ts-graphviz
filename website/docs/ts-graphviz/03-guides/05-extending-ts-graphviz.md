@@ -232,7 +232,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // a number instead of the built-in type
   },
-  types: { color: values.extend<'brand-blue'>() }, // every color attribute
+  types: { style: values.extend<'my-style'>() }, // every style attribute
 });
 
 const { digraph } = withModelKit({ schema });
@@ -240,14 +240,14 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
     }),
   ),
 );
 ```
 
 - `attr<T>()` adds an attribute; `attr.extend<T>()` (the built-in type, or `T`) and `attr.override<T>()` (`T` instead) change a built-in one. Each entry gives its type, and which of them applies is always said: `attr<T>()` on a built-in attribute is a type error.
-- `types` changes a value type (`color`, `style`, `shape`, `arrowType`, …) and so every attribute that uses it, with `values.extend<T>()` or `values.override<T>()`.
+- `types` changes a value type (`color`, `style`, `shape`, `arrowType`, …) and so every attribute that uses it, with `values.extend<T>()` or `values.override<T>()`. It types the names only: a name you add must be one the output you render to understands. Graphviz writes a style it does not know into PostScript output as a procedure call, which a PostScript library loaded with `dot -l` can define; SVG output ignores it with a warning.
 - The kinds are `graph`, `subgraph`, `cluster`, `node` and `edge`.
 - Only the models of that kit are typed with the schema: `withModelKit({ schema })`, `createModelKit({ schema, Node: MyNode })` (with `class MyNode extends Node<typeof schema> {}`) and `fromDot(dot, { convert: { models: { schema } } })`. Other graphs, a library's for instance, are not changed.
 

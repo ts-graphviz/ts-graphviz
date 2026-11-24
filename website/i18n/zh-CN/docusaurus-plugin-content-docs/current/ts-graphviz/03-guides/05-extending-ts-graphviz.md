@@ -169,7 +169,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // 用数字代替内置类型
   },
-  types: { color: values.extend<'brand-blue'>() }, // 所有 color 类型的属性
+  types: { style: values.extend<'my-style'>() }, // 所有 style 类型的属性
 });
 
 const { digraph } = withModelKit({ schema });
@@ -177,14 +177,14 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
     }),
   ),
 );
 ```
 
 - `attr<T>()` 添加属性；`attr.extend<T>()`（内置类型或 `T`）和 `attr.override<T>()`（用 `T` 代替）修改内置属性。每个条目都给出其类型，并且总是明确说明适用哪一种：对内置属性使用 `attr<T>()` 是类型错误。
-- `types` 通过 `values.extend<T>()` 或 `values.override<T>()` 修改值类型（`color`、`style`、`shape`、`arrowType` 等），从而修改使用该类型的所有属性。
+- `types` 通过 `values.extend<T>()` 或 `values.override<T>()` 修改值类型（`color`、`style`、`shape`、`arrowType` 等），从而修改使用该类型的所有属性。它只为名称提供类型：添加的名称必须是渲染目标输出能理解的。Graphviz 会把不认识的样式作为过程调用写入 PostScript 输出，由 `dot -l` 加载的 PostScript 库定义它；SVG 输出会发出警告并忽略它。
 - 种类为 `graph`、`subgraph`、`cluster`、`node` 和 `edge`。
 - 只有该套件的模型使用模式进行类型检查：`withModelKit({ schema })`、`createModelKit({ schema, Node: MyNode })`（配合 `class MyNode extends Node<typeof schema> {}`）以及 `fromDot(dot, { convert: { models: { schema } } })`。其他图（例如某个库的图）不受影响。
 

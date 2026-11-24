@@ -730,7 +730,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // a number instead of the built-in type
   },
-  types: { color: values.extend<'brand-blue'>() }, // every color attribute
+  types: { style: values.extend<'my-style'>() }, // every style attribute
 });
 
 const { digraph } = withModelKit({ schema });
@@ -738,7 +738,7 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
     }),
   ),
 );
@@ -747,12 +747,12 @@ console.log(
 //   "a" [
 //     "data-id" = 1;
 //     label = 2;
-//     color = "brand-blue";
+//     style = "my-style";
 //   ];
 // }
 ```
 
-`attr<T>()` adds an attribute, `attr.extend<T>()` / `attr.override<T>()` change a built-in one, and `types` changes a value type with `values.extend<T>()` / `values.override<T>()`. `createModelKit({ schema, Node: MyNode })` and `fromDot(dot, { convert: { models: { schema } } })` take the schema too.
+`attr<T>()` adds an attribute, `attr.extend<T>()` / `attr.override<T>()` change a built-in one, and `types` changes a value type with `values.extend<T>()` / `values.override<T>()`; it types the names only, so a name you add must be one the output you render to understands (Graphviz writes an unknown style into PostScript output as a procedure call, which a library loaded with `dot -l` can define; SVG output ignores it with a warning). `createModelKit({ schema, Node: MyNode })` and `fromDot(dot, { convert: { models: { schema } } })` take the schema too.
 
 #### Use Case: Specifying Custom Graph Layout and Output Formats
 
