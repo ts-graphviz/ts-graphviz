@@ -10,14 +10,16 @@ describe('runScript', () => {
   it('renders the graph of the last expression', () => {
     const result = run(`
       import { digraph, attribute as _ } from 'ts-graphviz';
-      digraph('G', { [_.rankdir]: 'LR' }, (g) => {
+      digraph('G', (g) => {
+        g[_.rankdir] = 'LR';
         g.edge(['a', 'b'], { [_.label]: 'x' });
       });
     `);
     expect(result).toEqual({
       ok: true,
       dot: toDot(
-        digraph('G', { rankdir: 'LR' }, (g) => {
+        digraph('G', (g) => {
+          g.rankdir = 'LR';
           g.edge(['a', 'b'], { label: 'x' });
         }),
       ),
