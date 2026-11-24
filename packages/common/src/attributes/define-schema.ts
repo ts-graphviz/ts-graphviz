@@ -203,7 +203,7 @@ function entriesOf(
  *
  * ```ts
  * const schema = defineSchema({
- *   types: { style: values.extend<'my-style'>() },
+ *   types: { style: values.extend<'sketchy'>() },
  *   graph: { hoge: attr<string>() },
  *   node: {
  *     'data-id': attr<number>(),
@@ -212,7 +212,7 @@ function entriesOf(
  * });
  * const { digraph } = withModelKit({ schema });
  * digraph((g) => {
- *   g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+ *   g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
  * });
  * ```
  *
