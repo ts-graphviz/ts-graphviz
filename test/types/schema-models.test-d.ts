@@ -524,7 +524,8 @@ describe('a schema', () => {
       g.addNode(plain);
       // @ts-expect-error a node of another schema may hold a string label
       g.addNode(otherKit.createNode('a'));
-      // Its edges have the same attribute types as ours.
+      // @ts-expect-error nor an edge of another schema, even one whose
+      // edge attributes are the same
       g.addEdge(otherKit.createEdge(['a', 'b']));
       // @ts-expect-error nor a subgraph of another schema
       g.addSubgraph(otherKit.createSubgraph('s'));

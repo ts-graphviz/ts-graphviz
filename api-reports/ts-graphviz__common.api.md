@@ -750,7 +750,7 @@ export interface DotConstructor<D extends ReadonlyDotModel = DotModel, S extends
   new (graphs?: RootGraphModel<S>[], comment?: string): D;
 }
 
-export interface DotModel<S extends Schema = EmptySchema> extends HasComment, HasComments<"leading" | "end">, DotObjectModel<"Dot"> {
+export interface DotModel<S extends Schema = EmptySchema> extends HasSchema<S>, HasComment, HasComments<"leading" | "end">, DotObjectModel<"Dot"> {
   readonly graphs: ReadonlyArray<RootGraphModel<S>>;
   addGraph(graph: RootGraphModel<S>): void;
   existGraph(graph: RootGraphModel<S>): boolean;
@@ -784,7 +784,7 @@ export interface EdgeConstructor<E extends ReadonlyEdgeModel = EdgeModel, S exte
   new (targets: EdgeTargetTuple, attributes?: EdgeAttributesObject<S>): E;
 }
 
-export interface EdgeModel<S extends Schema = EmptySchema> extends HasComment, HasComments, Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
+export interface EdgeModel<S extends Schema = EmptySchema> extends HasSchema<S>, HasComment, HasComments, Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, "edge">>, DotObjectModel<"Edge"> {
   readonly targets: EdgeTargetTuple;
 }
 
@@ -822,7 +822,7 @@ export declare namespace GraphAttributeKey {
 
 export type GraphAttributesObject<S extends Schema = EmptySchema> = AttributesObject<GraphAttributeKey, SchemaAttributeTypes<S, "graph">>;
 
-export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
+export interface GraphBaseModel<T extends DotObjectType = DotObjectType, K extends AttributeKey = AttributeKey, S extends Schema = EmptySchema> extends HasSchema<S>, HasComment, HasComments<CommentPosition>, Attributes<K, GraphSchemaAttributeTypes<T, S>>, DotObjectModel<T> {
   readonly id?: string;
   readonly attributes: Readonly<GraphCommonAttributes<S>>;
   readonly statements: ReadonlyArray<NodeModel<S> | EdgeModel<S> | SubgraphModel<S> | StatementAttributeListModel<S>>;
@@ -951,6 +951,10 @@ export interface HasComments<P extends CommentPosition = "leading" | "trailing">
   removeComment(comment: CommentModel): void;
 }
 
+export interface HasSchema<S extends Schema = EmptySchema> {
+  readonly "~schema"?: S;
+}
+
 export type Insensitive<T> = T & Insensitive.LowercaseKeys<T> & Insensitive.UppercaseKeys<T>;
 export declare namespace Insensitive {
   type LowercaseKeys<T> = { [key in keyof T as Lowercase<string & key>]: T[key]; };
@@ -1024,7 +1028,7 @@ export interface NodeConstructor<N extends ReadonlyNodeModel = NodeModel, S exte
   new (id: string, attributes?: NodeAttributesObject<S>): N;
 }
 
-export interface NodeModel<S extends Schema = EmptySchema> extends HasComment, HasComments, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
+export interface NodeModel<S extends Schema = EmptySchema> extends HasSchema<S>, HasComment, HasComments, Attributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, "node">>, DotObjectModel<"Node"> {
   readonly id: string;
   port(port: string | Partial<Port>): ForwardRefNode;
 }

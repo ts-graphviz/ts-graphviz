@@ -14,6 +14,7 @@ import {
   type GraphBaseModel,
   type GraphCommonAttributes,
   type GraphSchemaAttributeTypes,
+  type HasSchema,
   modelOf,
   type NodeAttributeKey,
   type NodeModel,
@@ -29,6 +30,16 @@ import { AttributeList } from '../attributes/AttributeList.js';
 import { AttributesBase } from '../attributes/AttributesBase.js';
 import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
 
+// The schema of the models, for the types only (`HasSchema`): an interface
+// merged with the class adds the member with nothing at run time.
+export interface GraphBase<
+  // biome-ignore lint/correctness/noUnusedVariables: the class's type parameters
+  T extends DotObjectType,
+  // biome-ignore lint/correctness/noUnusedVariables: the class's type parameters
+  K extends AttributeKey = AttributeKey,
+  S extends Schema = EmptySchema,
+> extends HasSchema<S> {}
+
 /**
  * Base class for Graph objects.
  *
@@ -38,6 +49,7 @@ import { CommentList, GRAPH_POSITIONS } from './comment-list.js';
  * the models it holds; none by default.
  * @group Models
  */
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: the interface above has a type-only member
 export abstract class GraphBase<
     T extends DotObjectType,
     K extends AttributeKey = AttributeKey,

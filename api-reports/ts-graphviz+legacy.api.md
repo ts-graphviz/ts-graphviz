@@ -6,21 +6,54 @@
 export * from "@ts-graphviz/common";
 export * from "@ts-graphviz/core";
 
-export type AttributeListDSL<T extends AttributeListModel, K extends AttributeListKind, A extends AttributeKey> = AttributeListDSLMembers<T, K> & AttributeProperties<A>;
+export type AttributeListDSL<T extends DSLModel, K extends AttributeListKind, A extends AttributeKey, E extends object = Record<never, never>> = AttributeListDSLMembers<T, K> & AttributesObject<A, E>;
 
-export interface AttributeListDSLMembers<T extends AttributeListModel, K extends AttributeListKind> extends ModelDSLMembers<T> {
+export interface AttributeListDSLMembers<T extends DSLModel, K extends AttributeListKind> extends ModelDSLMembers<T> {
   readonly $$kind: K;
 }
 
-export type DSL<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes> = T extends NodeModel ? NodeDSL<T> : T extends EdgeModel ? EdgeDSL<T> : T extends SubgraphModel ? SubgraphDSL<T, M> : T extends RootGraphModel ? RootGraphDSL<T, M> : T extends AttributeListModel<infer K, infer A> ? AttributeListDSL<T, K, A> : T extends DotModel ? DotDSL<T> : never;
+export type DSL<T extends DSLModel, M extends DSLModelTypes = DefaultModelTypesOf<T>> = T extends {
+  readonly $$type: "Node";
+} ? NodeDSL<T> : T extends {
+  readonly $$type: "Edge";
+} ? EdgeDSL<T> : T extends {
+  readonly $$type: "Subgraph";
+} ? SubgraphDSL<Extract<T, DSLGraphModel>, M> : T extends {
+  readonly $$type: "Graph";
+} ? RootGraphDSL<Extract<T, DSLGraphModel>, M> : T extends AttributeListModel<infer K, infer A, infer E> ? AttributeListDSL<T, K, A, E> : T extends {
+  readonly $$type: "Dot";
+} ? DotDSL<T> : never;
 
 export type DSLEdgeTargetLikeTuple = ReadonlyEdgeTargetLikeTuple | readonly [from: DSLNodeRefLike | readonly DSLNodeRefLike[], to: DSLNodeRefLike | readonly DSLNodeRefLike[], ...rest: (DSLNodeRefLike | readonly DSLNodeRefLike[])[]];
 
-export type DotDSL<T extends DotModel> = ModelDSLMembers<T>;
+export type DSLGraphModel = (ReadonlyRootGraphModel | ReadonlySubgraphModel) & HasComments<CommentPosition> & WritesAttributes & WritesStatements & {
+  readonly attributes: {
+    readonly graph: DSLModel;
+    readonly edge: DSLModel;
+    readonly node: DSLModel;
+  };
+};
 
-export type EdgeDSL<T extends EdgeModel> = ModelDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
+export type DSLModel = (ReadonlyDotModel & HasComments<CommentPosition>) | ((ReadonlyNodeModel | ReadonlyEdgeModel | ReadonlyAttributeListModel) & HasComments<CommentPosition> & WritesAttributes) | DSLGraphModel;
 
-export type FromDotModel<R extends FromDotRule, M extends ModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
+export interface DSLModelTypes extends AnyModelTypes {
+  Dot: ReadonlyDotModel & DSLModel;
+  Graph: ReadonlyRootGraphModel & DSLGraphModel;
+  Digraph: ReadonlyRootGraphModel & DSLGraphModel;
+  Subgraph: ReadonlySubgraphModel & DSLGraphModel;
+  Node: ReadonlyNodeModel & DSLModel;
+  Edge: ReadonlyEdgeModel & DSLModel;
+}
+
+export type DefaultModelTypesOf<T> = T extends {
+  readonly "~schema"?: infer S extends Schema;
+} ? [keyof S] extends [never] ? ModelTypes : ModelTypes<S> : ModelTypes;
+
+export type DotDSL<T extends DSLModel> = ModelDSLMembers<T>;
+
+export type EdgeDSL<T extends DSLModel> = ModelDSLMembers<T> & AttributeProperties<EdgeAttributeKey, SchemaOfModel<T>, SchemaAttributeTypes<SchemaOfModel<T>, "edge">>;
+
+export type FromDotModel<R extends FromDotRule, M extends DSLModelTypes = ModelTypes> = R extends "Dot" | "Graph" ? M["Graph"] | M["Digraph"] : R extends "Node" ? M["Node"] : R extends "Edge" ? M["Edge"] : M["Subgraph"];
 
 export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelClasses> = Partial<ModelClasses>, D extends boolean = false> = {
   parse?: ParseOptions<T>;
@@ -32,58 +65,62 @@ export type FromDotOptions<T extends FromDotRule, P extends Partial<ModelClasses
   dsl: true;
 } : unknown);
 
-export type FromDotResult<T extends AnyDotObjectModel, D extends boolean, M extends ModelTypes = ModelTypes> = D extends true ? DSL<T, M> : T;
+export type FromDotResult<T extends DSLModel, D extends boolean, M extends DSLModelTypes = DefaultModelTypesOf<T>> = D extends true ? DSL<T, M> : T;
 
 export type FromDotRule = "Dot" | "Graph" | "Node" | "Edge" | "Subgraph";
 
-export interface GraphDSLMembers<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> extends ModelDSLMembers<T>, GraphDSLStatements<T, M> {}
+export interface GraphDSLMembers<T extends DSLGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<T>> extends ModelDSLMembers<T>, GraphDSLStatements<T, M> {}
 
-export interface GraphDSLStatements<T extends RootGraphModel | SubgraphModel, M extends ModelTypes = ModelTypes> {
+export interface GraphDSLStatements<T extends DSLGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<T>> {
   subgraph<const Id extends string>(id: Id, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
-  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id>, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
-  subgraph(attributes: NonClusterSubgraphAttributesObject, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  subgraph<const Id extends string>(id: Id, attributes: SubgraphAttributesFor<Id, SchemaOf<M>>, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
+  subgraph(attributes: NonClusterSubgraphAttributesObject<SchemaOf<M>>, callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
   subgraph(callback?: (subgraph: DSL<M["Subgraph"], M>) => void): DSL<M["Subgraph"], M>;
-  node(id: string, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
-  node(id: string, attributes: NodeAttributesObject, callback?: (node: DSL<M["Node"]>) => void): DSL<M["Node"]>;
-  node(attributes: NodeAttributesObject): DSL<T["attributes"]["node"]>;
-  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<M["Edge"]>) => void): DSL<M["Edge"]>;
-  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject, callback?: (edge: DSL<M["Edge"]>) => void): DSL<M["Edge"]>;
-  edge(attributes: EdgeAttributesObject): DSL<T["attributes"]["edge"]>;
-  graph(attributes: SubgraphAttributesObject): DSL<T["attributes"]["graph"]>;
+  node(id: string, callback?: (node: DSL<M["Node"], M>) => void): DSL<M["Node"], M>;
+  node(id: string, attributes: NodeAttributesObject<SchemaOf<M>>, callback?: (node: DSL<M["Node"], M>) => void): DSL<M["Node"], M>;
+  node(attributes: NodeAttributesObject<SchemaOfModel<T>>): DSL<T["attributes"]["node"], M>;
+  edge(targets: DSLEdgeTargetLikeTuple, callback?: (edge: DSL<M["Edge"], M>) => void): DSL<M["Edge"], M>;
+  edge(targets: DSLEdgeTargetLikeTuple, attributes: EdgeAttributesObject<SchemaOf<M>>, callback?: (edge: DSL<M["Edge"], M>) => void): DSL<M["Edge"], M>;
+  edge(attributes: EdgeAttributesObject<SchemaOfModel<T>>): DSL<T["attributes"]["edge"], M>;
+  graph(attributes: SubgraphAttributesObject<SchemaOfModel<T>>): DSL<T["attributes"]["graph"], M>;
 }
 
-export interface ModelDSLMembers<T extends AnyDotObjectModel> extends ModelView<T> {
+export interface ModelDSLMembers<T extends DSLModel> extends ModelView<T> {
   readonly $$type: T["$$type"];
   readonly addComment: OmitThisParameter<T["addComment"]>;
 }
 
-export interface ModelFactories<M extends ModelTypes = ModelTypes> {
+export interface ModelFactories<M extends DSLModelTypes = ModelTypes> {
   digraph: ModelFactory<M["Digraph"], M>;
   graph: ModelFactory<M["Graph"], M>;
 }
 
-export interface ModelFactoriesWithStrict<M extends ModelTypes = ModelTypes> extends ModelFactories<M> {
+export interface ModelFactoriesWithStrict<M extends DSLModelTypes = ModelTypes> extends ModelFactories<M> {
   strict: ModelFactories<M>;
 }
 
-export interface ModelFactory<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> {
-  (id?: string, attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
-  (attributes?: GraphAttributesObject, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
+export interface ModelFactory<G extends DSLGraphModel = RootGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<G>> {
+  (id?: string, attributes?: GraphAttributesObject<SchemaOf<M>>, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
+  (attributes?: GraphAttributesObject<SchemaOf<M>>, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
   (id?: string, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
   (callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
 }
 
-export type ModelFactoryCallback<G extends RootGraphModel = RootGraphModel, M extends ModelTypes = ModelTypes> = (g: DSL<G, M>) => void;
+export type ModelFactoryCallback<G extends DSLGraphModel = RootGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<G>> = (g: DSL<G, M>) => void;
 
-export type NodeDSL<T extends NodeModel> = NodeDSLMembers<T> & AttributeProperties<AttributeKeysOf<T>>;
+export type NodeDSL<T extends DSLModel> = NodeDSLMembers<T> & AttributeProperties<NodeAttributeKey, SchemaOfModel<T>, SchemaAttributeTypes<SchemaOfModel<T>, "node">>;
 
-export interface NodeDSLMembers<T extends NodeModel> extends ModelDSLMembers<T> {
+export interface NodeDSLMembers<T extends DSLModel> extends ModelDSLMembers<T> {
   readonly port: (port: string | Partial<Port>) => ForwardRefNode;
 }
 
-export type RootGraphDSL<T extends RootGraphModel, M extends ModelTypes = ModelTypes> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
+export type RootGraphDSL<T extends DSLGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<T>> = GraphDSLMembers<T, M> & AttributeProperties<GraphAttributeKey, SchemaOfModel<T>, SchemaAttributeTypes<SchemaOfModel<T>, "graph">>;
 
-export type SubgraphDSL<T extends SubgraphModel, M extends ModelTypes = ModelTypes> = GraphDSLMembers<T, M> & AttributeProperties<AttributeKeysOf<T>>;
+export type SchemaOfModel<T> = T extends {
+  readonly "~schema"?: infer S extends Schema;
+} ? S : EmptySchema;
+
+export type SubgraphDSL<T extends DSLGraphModel, M extends DSLModelTypes = DefaultModelTypesOf<T>> = GraphDSLMembers<T, M> & AttributeProperties<SubgraphAttributeKey | ClusterSubgraphAttributeKey, SchemaOfModel<T>, GraphSchemaAttributeTypes<"Subgraph", SchemaOfModel<T>>>;
 
 export interface ToDotOptions {
   convert?: ConvertFromModelOptions;
@@ -94,9 +131,9 @@ export declare const attribute: Attribute.keys;
 
 export declare const digraph: ModelFactory;
 
-export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes = ModelTypes>(model: T | ModelView<T>, kit: ModelKit<M>): DSL<T, M>;
-export declare function dsl<T extends AnyDotObjectModel, M extends ModelTypes>(dsl: DSL<T, M>): DSL<T, M>;
-export declare function dsl<T extends AnyDotObjectModel>(model: T | ModelView<T>): DSL<T>;
+export declare function dsl<T extends DSLModel, M extends DSLModelTypes = DefaultModelTypesOf<T>>(model: T | ModelView<T>, kit: ModelKit<M> & KitOfSchema<T, M>): DSL<T, M>;
+export declare function dsl<T extends DSLModel, M extends DSLModelTypes>(dsl: DSL<T, M>): DSL<T, M>;
+export declare function dsl<T extends DSLModel>(model: T | ModelView<T>): DSL<T>;
 
 export declare function fromDot<const P extends Partial<ModelClasses>, const D extends boolean = false>(dot: string, options: FromDotOptions<"Dot" | "Graph", P, D> & {
   convert: {
@@ -176,15 +213,25 @@ declare function fromDotAll<const P extends Partial<ModelClasses>, const D exten
 
 declare function withModelKit<const P extends Partial<ModelClasses>>(classes: P): ModelFactoriesWithStrict<ResolvedModelTypes<P>>;
 
-type AttributeKeysOf<T> = T extends {
-  readonly values: ReadonlyArray<[infer K, unknown]>;
-} ? K : T extends {
-  readonly attributes: {
-    readonly values: ReadonlyArray<[infer K, unknown]>;
-  };
-} ? K : never;
+interface WritesAttributes {
+  setAttribute(name: never, value: never): void;
+  removeAttribute(name: never): void;
+}
 
-type AttributeProperties<K> = { [P in K & AttributeKey]?: Attribute<P>; };
+interface WritesStatements {
+  addNode(node: never): void;
+  addEdge(edge: never): void;
+  addSubgraph(subgraph: never): void;
+  addAttributeList(kind: never, attributes: never): unknown;
+}
+
+type AttributeProperties<T extends AttributeKey, S, E extends object> = [keyof S] extends [never] ? { [K in T]?: Attribute<K>; } : AttributesObject<T, E>;
 
 type DSLNodeRefLike = NodeRefLike | ModelView<ReadonlyNodeModel>;
+
+type GraphSchemaOf<T> = T extends DSLGraphModel ? SchemaOfModel<T> : never;
+
+type KitOfSchema<T, M extends AnyModelTypes> = [GraphSchemaOf<T>] extends [never] ? unknown : [SchemaOf<M>, GraphSchemaOf<T>] extends [GraphSchemaOf<T>, SchemaOf<M>] ? unknown : {
+  readonly "~the kit is of another schema than the graph": never;
+};
 ```

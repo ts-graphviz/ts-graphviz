@@ -407,6 +407,26 @@ export interface DotObjectModel<T extends DotObjectType = DotObjectType> {
 }
 
 /**
+ * The schema of a model, for the types: `'~schema'` is never set at run
+ * time. It names the schema in one place, so that the schema of a model
+ * (as the DOT DSL reads it) is found without comparing the whole model, and
+ * a model of one schema is not one of another (unless that schema's type
+ * is assignable to the other's), whichever attributes they share.
+ *
+ * The core classes declare it. A class that implements a model interface
+ * itself, instead of extending a core class, declares it too
+ * (`declare readonly '~schema'?: S;`): without it, the DSL of the class's
+ * models is typed as without a schema.
+ *
+ * @typeParam S - The schema of the model.
+ * @group Models
+ */
+export interface HasSchema<S extends Schema = EmptySchema> {
+  /** Type only: never present at run time. */
+  readonly '~schema'?: S;
+}
+
+/**
  * @group Models
  */
 export interface HasComment {
@@ -619,7 +639,8 @@ export interface Port {
  * @group Models
  */
 export interface NodeModel<S extends Schema = EmptySchema>
-  extends HasComment,
+  extends HasSchema<S>,
+    HasComment,
     HasComments,
     Attributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
     HasAttributes<NodeAttributeKey, SchemaAttributeTypes<S, 'node'>>,
@@ -639,7 +660,8 @@ export interface NodeModel<S extends Schema = EmptySchema>
  * @group Models
  */
 export interface EdgeModel<S extends Schema = EmptySchema>
-  extends HasComment,
+  extends HasSchema<S>,
+    HasComment,
     HasComments,
     Attributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
     HasAttributes<EdgeAttributeKey, SchemaAttributeTypes<S, 'edge'>>,
@@ -765,7 +787,8 @@ export interface GraphBaseModel<
   T extends DotObjectType = DotObjectType,
   K extends AttributeKey = AttributeKey,
   S extends Schema = EmptySchema,
-> extends HasComment,
+> extends HasSchema<S>,
+    HasComment,
     HasComments<CommentPosition>,
     Attributes<K, GraphSchemaAttributeTypes<T, S>>,
     DotObjectModel<T> {
@@ -939,7 +962,8 @@ export interface RootGraphModel<S extends Schema = EmptySchema>
  * @group Models
  */
 export interface DotModel<S extends Schema = EmptySchema>
-  extends HasComment,
+  extends HasSchema<S>,
+    HasComment,
     HasComments<'leading' | 'end'>,
     DotObjectModel<'Dot'> {
   /** Root graphs in the order they appear in the source. */
