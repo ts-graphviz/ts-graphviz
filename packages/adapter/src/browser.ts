@@ -1,8 +1,8 @@
 /**
  * @module @ts-graphviz/adapter
  */
-import { withCode } from '@ts-graphviz/common';
-import type { Layout, Options } from './types.js';
+import { type EmptySchema, type Schema, withCode } from '@ts-graphviz/common';
+import type { Layout, Options, SchemaLayout } from './types.js';
 
 export { isFormat, isLayout } from './formats.js';
 export type * from './types.js';
@@ -24,9 +24,8 @@ Learn more: https://github.com/ts-graphviz/ts-graphviz`;
  * `code: 'TSG_ERR_UNSUPPORTED_ENVIRONMENT'`.
  */
 export function toBlob<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(_dot: string, _options?: Options<T, F, L>): Promise<Blob> {
+  const S extends Schema = EmptySchema,
+  T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>,
+>(_dot: string, _options?: Options<T, S>): Promise<Blob> {
   throw withCode(new Error(ERROR_MESSAGE), 'TSG_ERR_UNSUPPORTED_ENVIRONMENT');
 }

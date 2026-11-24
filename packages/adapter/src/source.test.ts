@@ -1,7 +1,8 @@
+import { attr, defineSchema, values } from '@ts-graphviz/common';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { attributeArgs } from './create-command-args.js';
-import { ownAdapterOptions } from './options.js';
+import { type AnyOptions, ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
 
 const dot = 'digraph { a }';
@@ -85,11 +86,78 @@ describe('a custom format while sanitize is on', { tags: ['SM-4'] }, () => {
     expect(sourceToRender(dot, { format: 'mp4', sanitize: false })).toBe(dot);
   });
 
-  it('listed in customFormats, is checked by sanitize as the adapter reads it', () => {
+  it('is checked with the schema of the sanitize options when they name one', () => {
+    const own = defineSchema({ node: { tier: attr<string>() } });
+    const dot = 'digraph { a [tier=core] }';
+    const strict = { policy: 'strict' as const };
+    expect(
+      sourceToRender(dot, { schema: own, sanitize: strict, format: 'svg' }),
+    ).toContain('tier');
+    expect(() =>
+      sourceToRender(dot, {
+        schema: own,
+        sanitize: { ...strict, schema: defineSchema({}) },
+        format: 'svg',
+      }),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
+  });
+
+  it('checks the attribute arguments of a schema by their kind', () => {
+    const schema = defineSchema({ node: { tier: attr<string>() } });
+    const strict = { policy: 'strict' as const };
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { node: { tier: 'x' } },
+      } as never),
+    ).not.toThrow();
+    expect(() =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: strict,
+        format: 'svg',
+        attributes: { graph: { tier: 'x' } },
+      } as never),
+    ).toThrow(expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }));
+  });
+
+  it('checks every attribute argument of a schema by its own kind', () => {
+    const schema = defineSchema({
+      graph: { hoge: attr<string>() },
+      edge: { weight2: attr<number>() },
+    });
+    const render = (attributes: unknown) =>
+      sourceToRender(dot, {
+        schema,
+        sanitize: { policy: 'strict' },
+        format: 'svg',
+        attributes,
+      } as never);
+    expect(() =>
+      render({ graph: { hoge: 'x' }, edge: { weight2: 1 } }),
+    ).not.toThrow();
+    for (const attributes of [
+      { node: { hoge: 'x' } },
+      { node: { weight2: 1 } },
+      { graph: { weight2: 1 } },
+      { edge: { hoge: 'x' } },
+    ]) {
+      expect(() => render(attributes)).toThrow(
+        expect.objectContaining({ code: 'TSG_ERR_UNSAFE_DOT' }),
+      );
+    }
+  });
+
+  it('of a schema, is checked by sanitize as the adapter reads it', () => {
     const listed = (format: string) =>
       sourceToRender(
         dot,
-        ownAdapterOptions({ customFormats: [format], format }),
+        ownAdapterOptions({
+          schema: defineSchema({ types: { format: values.extend(format) } }),
+          format,
+        } as unknown as AnyOptions),
       );
     expect(listed('png:cairo')).toBe(sourceToRender(dot, { format: 'png' }));
     expect(() => listed('mp4')).toThrow(

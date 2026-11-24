@@ -27,14 +27,19 @@ const isLetter = (c: number) =>
 /**
  * Whether `value` is a comma-separated list of known style names and
  * `setlinewidth(n)` items, with spaces and tabs around the items and
- * inside `setlinewidth( n )`.
+ * inside `setlinewidth( n )`. `schema` holds the style names a schema
+ * adds, in lower case; a name of other characters than letters never
+ * matches, as the items are read as runs of letters.
  *
  * A single pass over the value: each character is looked at a bounded
  * number of times, so the time is linear in the length of the value.
  *
  * @internal
  */
-export function isStyleList(value: string): boolean {
+export function isStyleList(
+  value: string,
+  schema: ReadonlySet<string> = new Set(),
+): boolean {
   const n = value.length;
   let i = 0;
   const skipBlanks = () => {
@@ -70,7 +75,10 @@ export function isStyleList(value: string): boolean {
       if (value[i] !== ')') return false;
       i++;
       skipBlanks();
-    } else if (!STYLE_NAMES.has(word.toLowerCase())) {
+    } else if (
+      !STYLE_NAMES.has(word.toLowerCase()) &&
+      !schema.has(word.toLowerCase())
+    ) {
       return false;
     }
     if (i === n) return true;

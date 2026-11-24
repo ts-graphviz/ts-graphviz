@@ -47,6 +47,11 @@ export interface SchemaEntry<
   Mode extends SchemaEntryMode = SchemaEntryMode,
 > {
   readonly mode: Mode;
+  /**
+   * The names an entry of `values` was given (`values.extend('mp4')`), at
+   * run time; none for an entry given only a type argument.
+   */
+  readonly values?: readonly T[];
   /** Type only: never present at run time. */
   readonly '~type'?: { readonly type: T };
 }
@@ -78,7 +83,8 @@ export type SubgraphSchemaAttributeEntries = SchemaAttributeEntries & {
 
 /**
  * The value types a {@link Schema} changes, by name. `style`, `arrowType`
- * and `compass` take strings, the words their values are built from.
+ * and `compass` take strings, the words their values are built from;
+ * `format` and `layout` the names of output formats and layout engines.
  * @group Schema
  */
 export type SchemaValueTypeEntries = {
@@ -86,6 +92,21 @@ export type SchemaValueTypeEntries = {
     N extends 'style' | 'arrowType' | 'compass' ? string : DotValue,
     'extend' | 'override'
   >;
+} & {
+  /**
+   * Output formats a Graphviz plugin adds, for the adapter's `format`:
+   * `values.extend('mp4')`, with the names.
+   */
+  readonly format?: SchemaEntry<string, 'extend'> & {
+    readonly values: readonly string[];
+  };
+  /**
+   * Layout engines a Graphviz plugin adds, for the adapter's `layout`:
+   * `values.extend('my-layout')`, with the names.
+   */
+  readonly layout?: SchemaEntry<string, 'extend'> & {
+    readonly values: readonly string[];
+  };
 };
 
 /**

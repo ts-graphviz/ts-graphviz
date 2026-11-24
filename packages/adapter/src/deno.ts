@@ -4,6 +4,7 @@
  */
 export type * from './types.js';
 
+import type { EmptySchema, Schema } from '@ts-graphviz/common';
 import { createCommandAndArgs } from './create-command-and-args.js';
 import { CommandExecutionError } from './errors.js';
 import { outputLimit, outputLimitExceeded, TailBuffer } from './limits.js';
@@ -11,7 +12,7 @@ import { OutputParts } from './media-type.js';
 import type { AnyOptions } from './options.js';
 import { ownAdapterOptions } from './options.js';
 import { sourceToRender } from './source.js';
-import type { Layout, Options } from './types.js';
+import type { Layout, Options, SchemaLayout } from './types.js';
 
 export * from './errors.js';
 export { isFormat, isLayout } from './formats.js';
@@ -60,10 +61,9 @@ async function readAll(
  * @throws `signal.reason` when `signal` aborts.
  */
 export async function toBlob<
-  const F extends string = never,
-  const L extends string = never,
-  T extends Layout | L = Layout | L,
->(dot: string, options?: Options<T, F, L>): Promise<Blob> {
+  const S extends Schema = EmptySchema,
+  T extends Layout | SchemaLayout<S> = Layout | SchemaLayout<S>,
+>(dot: string, options?: Options<T, S>): Promise<Blob> {
   const opts = ownAdapterOptions(options as AnyOptions | undefined);
   const [command, args] = createCommandAndArgs(
     opts,

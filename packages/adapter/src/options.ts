@@ -1,4 +1,10 @@
-import { ownOptions, withCode } from '@ts-graphviz/common';
+import {
+  defineSchema,
+  ownOptions,
+  type Schema,
+  type SchemaErrors,
+  withCode,
+} from '@ts-graphviz/common';
 import { isFormat, isLayout } from './formats.js';
 import type {
   CommonOptions,
@@ -9,11 +15,13 @@ import type {
 
 /**
  * The options as the adapter reads them once the public signature has
- * checked the call: any custom format; a custom layout is read as a
+ * checked the call: of any schema; a layout of a schema is read as a
  * `Layout` (it gets no layout-specific arguments).
  */
-export type AnyOptions = CommonOptions<string> &
-  (NeatoOptions | FdpOptions | OtherOptions);
+export type AnyOptions = Omit<CommonOptions, 'format' | 'schema'> & {
+  format?: string;
+  schema?: Schema | undefined;
+} & (NeatoOptions | FdpOptions | OtherOptions);
 
 /**
  * The options as given, without anything inherited, and checked: the options
@@ -50,7 +58,7 @@ export function ownAdapterOptions(options: AnyOptions | undefined): AnyOptions {
   }
   // Copies of the elements the arrays own (a hole would read an inherited
   // index), read once: the copy is what is checked and used.
-  for (const key of ['library', 'customFormats', 'customLayouts'] as const) {
+  for (const key of ['library'] as const) {
     const list: unknown = own[key];
     if (Array.isArray(list)) {
       const copy: unknown[] = [];
@@ -63,6 +71,11 @@ export function ownAdapterOptions(options: AnyOptions | undefined): AnyOptions {
   if (typeof own.sanitize === 'object' && own.sanitize !== null) {
     expectObject(own.sanitize, 'sanitize');
     own.sanitize = ownOptions(own.sanitize);
+  }
+  // Checked (and copied) as defineSchema checks it; the copy is what the
+  // checks below and sanitize read.
+  if (own.schema !== undefined) {
+    own.schema = defineSchema(own.schema as Schema & SchemaErrors<Schema>);
   }
   checkOptions(own);
   return own;
@@ -203,52 +216,45 @@ const SIZE_LIMITS = ['maxInputSize', 'maxASTNodes'] as const;
  * - `sanitize` must be a boolean or an options object; its parser limits
  *   must be non-negative numbers (depth limits finite) and `policy` one of
  *   `'default'` / `'strict'`.
- * - `dotCommand`, `library`, `customFormats` and `customLayouts` are
- *   configuration, not data: they are only checked to be a non-empty string
- *   and arrays of strings (non-empty, without NUL, for the custom names), so
- *   a value of another type is rejected rather than converted.
+ * - `dotCommand` and `library` are configuration, not data: they are only
+ *   checked to be a non-empty string and an array of strings, so a value of
+ *   another type is rejected rather than converted. `schema`, configuration
+ *   too, is checked by `defineSchema` before this.
  *
  * `maxOutputSize` is checked by `outputLimit`, with the same code.
  */
 function checkOptions(own: AnyOptions): void {
   const options = own as Record<string, unknown>;
-  const {
-    format,
-    layout,
-    dotCommand,
-    library,
-    customFormats,
-    customLayouts,
-    attributes,
-    sanitize,
-  } = ownOptions(options);
+  const { format, layout, dotCommand, library, schema, attributes, sanitize } =
+    ownOptions(options);
 
-  // Configuration first: the custom names widen what format and layout may be.
-  expectNames(customFormats, 'customFormats');
-  expectNames(customLayouts, 'customLayouts');
+  // The schema's names widen what format and layout may be.
+  const types = (schema as Schema | undefined)?.types;
+  const schemaFormats: readonly string[] = types?.format?.values ?? [];
+  const schemaLayouts: readonly string[] = types?.layout?.values ?? [];
 
   if (
     format !== undefined &&
     !isFormat(format) &&
-    !(customFormats as string[] | undefined)?.includes(format as string)
+    !schemaFormats.includes(format as string)
   ) {
     if (typeof format !== 'string') {
       throw invalidType(`format must be a string, not ${show(format)}.`);
     }
     throw invalidValue(
-      `format must be one of the documented output formats (without a ":renderer" suffix) or of customFormats, not ${show(format)}.`,
+      `format must be one of the documented output formats (without a ":renderer" suffix) or of the schema's types.format, not ${show(format)}.`,
     );
   }
   if (
     layout !== undefined &&
     !isLayout(layout) &&
-    !(customLayouts as string[] | undefined)?.includes(layout as string)
+    !schemaLayouts.includes(layout as string)
   ) {
     if (typeof layout !== 'string') {
       throw invalidType(`layout must be a string, not ${show(layout)}.`);
     }
     throw invalidValue(
-      `layout must be one of the documented layout engines or of customLayouts, not ${show(layout)}.`,
+      `layout must be one of the documented layout engines or of the schema's types.layout, not ${show(layout)}.`,
     );
   }
 
@@ -326,31 +332,6 @@ function checkOptions(own: AnyOptions): void {
           `library[${i}] must be a string, not ${show(library[i])}.`,
         );
       }
-    }
-  }
-}
-
-/**
- * `customFormats` / `customLayouts`: trusted configuration naming formats or
- * layout engines a plugin adds. Each name must be a non-empty string without
- * a NUL character; nothing else is checked.
- */
-function expectNames(names: unknown, name: string): void {
-  if (names === undefined) return;
-  if (!Array.isArray(names)) {
-    throw invalidType(
-      `${name} must be an array of strings, not ${show(names)}.`,
-    );
-  }
-  for (let i = 0; i < names.length; i++) {
-    const value: unknown = names[i];
-    if (typeof value !== 'string') {
-      throw invalidType(`${name}[${i}] must be a string, not ${show(value)}.`);
-    }
-    if (value === '' || value.includes('\0')) {
-      throw invalidValue(
-        `${name}[${i}] must be a non-empty string without a NUL character, not ${show(value)}.`,
-      );
     }
   }
 }

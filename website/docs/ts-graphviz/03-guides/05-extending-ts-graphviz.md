@@ -193,24 +193,31 @@ With `ts-graphviz`, you can extend the library's type system to customize graph 
 
 ### Types of your own
 
-Attributes and value types of your own are added by a schema (`defineSchema`), for the models of one kit; layout engines and output formats a Graphviz plugin adds are named per call. Nothing is changed for the whole program: the types are not extended with declaration merging (`declare module '@ts-graphviz/common'`).
+Attributes and value types of your own, and the layout engines and output formats a Graphviz plugin adds, are named in a schema (`defineSchema`): its attributes type the models of one kit, and its formats and layouts the calls of the adapter given it. Nothing is changed for the whole program: the types are not extended with declaration merging (`declare module '@ts-graphviz/common'`).
 
 ### Use Cases
 
 #### Specifying Custom Graph Layout and Output Formats
 
-Layout engines and output formats that a Graphviz plugin adds are named per call with the `customLayouts` and `customFormats` options. They are trusted configuration, like `dotCommand`: define them in your code, never from end-user input. A `format` or `layout` from a request is checked against the documented names only (`isFormat` / `isLayout`).
+Layout engines and output formats that a Graphviz plugin adds are named in a schema's `types.layout` and `types.format`, with the names (`values.extend('mp4')`), and the schema is given to the adapter's `schema` option. A schema is trusted configuration, like `dotCommand`: define it in your code, never from end-user input. `isFormat` / `isLayout` answer for the documented names only: check a `format` or `layout` from a request with them, so that a request cannot choose a plugin's.
 
 ```typescript
 import { toBlob } from '@ts-graphviz/adapter';
+import { defineSchema, values } from '@ts-graphviz/common';
 
-// List the names your Graphviz plugins add for this call: they are accepted
-// at run time and widen the types of `format` and `layout` for this call
-// only. Nothing is changed globally, and `isFormat` / `isLayout` still
-// answer for the documented names only.
+// Name the layout engines and output formats your Graphviz plugins add in a
+// schema: given as `schema`, they are accepted at run time and widen the
+// types of `layout` and `format` for that call only. Nothing is changed
+// globally, and `isFormat` / `isLayout` still answer for the documented
+// names only.
+const schema = defineSchema({
+  types: {
+    layout: values.extend('my-custom-algorithm'),
+    format: values.extend('mp4'),
+  },
+});
 const video = await toBlob('digraph { a -> b }', {
-  customLayouts: ['my-custom-algorithm'],
-  customFormats: ['mp4'],
+  schema,
   layout: 'my-custom-algorithm',
   format: 'mp4',
   // sanitize refuses formats it has not checked
@@ -253,9 +260,9 @@ console.log(
 
 ### Extensions and security
 
-Type extensions change TypeScript types only; nothing is added at run time. They are the application's responsibility, and two things follow when the DOT comes from an untrusted party (see the [Security model](../11-advanced-topics/06-security-model.md), SM-5 and SM-7):
+A schema types your extensions; the names it gives at run time (`values.extend('sketchy')`) also reach the adapter and `sanitize`. Extensions are the application's responsibility, and two things follow when the DOT comes from an untrusted party (see the [Security model](../11-advanced-topics/06-security-model.md), SM-5 and SM-7):
 
-- `sanitize`, which the adapter runs by default, does not know your extensions. A custom output format is refused while it is on; pass `sanitize: false` only if the DOT is your own. With `policy: 'strict'`, custom attributes are rejected as unknown.
+- `sanitize`, which the adapter runs by default, takes the schema (the adapter passes its `schema` option). With `policy: 'strict'`, a schema's attributes are accepted on the kind of object the schema gives them to and rejected elsewhere, and an attribute that reads files is rejected whatever the schema says; the style names the schema gives are known styles. An output format `sanitize` has not checked, a plugin's included, is refused while it is on; pass `sanitize: false` only if the DOT is your own.
 - A custom attribute is passed to Graphviz like any other. Before rendering untrusted values in it, make sure the Graphviz plugin that reads it does not read files or write its value unescaped.
 
 ---
