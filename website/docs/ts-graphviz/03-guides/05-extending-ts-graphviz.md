@@ -232,7 +232,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // a number instead of the built-in type
   },
-  types: { style: values.extend<'my-style'>() }, // every style attribute
+  types: { style: values.extend<'sketchy'>() }, // every style attribute
 });
 
 const { digraph } = withModelKit({ schema });
@@ -240,7 +240,7 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
     }),
   ),
 );

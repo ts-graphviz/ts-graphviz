@@ -169,7 +169,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // 用数字代替内置类型
   },
-  types: { style: values.extend<'my-style'>() }, // 所有 style 类型的属性
+  types: { style: values.extend<'sketchy'>() }, // 所有 style 类型的属性
 });
 
 const { digraph } = withModelKit({ schema });
@@ -177,7 +177,7 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
     }),
   ),
 );
