@@ -239,7 +239,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // a number instead of the built-in type
   },
-  types: { style: values.extend<'my-style'>() }, // every style attribute
+  types: { style: values.extend<'sketchy'>() }, // every style attribute
 });
 
 const { digraph } = withModelKit({ schema });
@@ -247,7 +247,7 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
     }),
   ),
 );
@@ -260,9 +260,9 @@ console.log(
 
 ### Extensions and security
 
-Type extensions change TypeScript types only; nothing is added at run time. They are the application's responsibility, and two things follow when the DOT comes from an untrusted party (see the [Security model](../11-advanced-topics/06-security-model.md), SM-5 and SM-7):
+A schema types your extensions; the names it gives at run time (`values.extend('sketchy')`) also reach the adapter and `sanitize`. Extensions are the application's responsibility, and two things follow when the DOT comes from an untrusted party (see the [Security model](../11-advanced-topics/06-security-model.md), SM-5 and SM-7):
 
-- `sanitize`, which the adapter runs by default, does not know your extensions. A custom output format is refused while it is on; pass `sanitize: false` only if the DOT is your own. With `policy: 'strict'`, custom attributes are rejected as unknown.
+- `sanitize`, which the adapter runs by default, takes the schema (the adapter passes its `schema` option). With `policy: 'strict'`, a schema's attributes are accepted on the kind of object the schema gives them to and rejected elsewhere, and an attribute that reads files is rejected whatever the schema says; the style names the schema gives are known styles. An output format `sanitize` has not checked, a plugin's included, is refused while it is on; pass `sanitize: false` only if the DOT is your own.
 - A custom attribute is passed to Graphviz like any other. Before rendering untrusted values in it, make sure the Graphviz plugin that reads it does not read files or write its value unescaped.
 
 ---
