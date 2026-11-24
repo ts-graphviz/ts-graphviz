@@ -1,4 +1,5 @@
 import {
+  createComponents,
   createLabelContext,
   createRoot,
   Digraph,
@@ -18,7 +19,15 @@ import type {
   NodeModel,
   RootGraphModel,
 } from 'ts-graphviz';
-import { Digraph as DigraphModel, isNodeModel } from 'ts-graphviz';
+import {
+  attr,
+  createModelKit,
+  Digraph as DigraphModel,
+  defaultModelKit,
+  defineSchema,
+  isNodeModel,
+  Node as NodeClass,
+} from 'ts-graphviz';
 import { describe, expectTypeOf, it } from 'vitest';
 
 // What users of `@ts-graphviz/react` get from its JSX types and inference.
@@ -105,5 +114,97 @@ describe('rendering', () => {
     expectTypeOf(root.getTopLevelModels<NodeModel>()).toEqualTypeOf<
       NodeModel[]
     >();
+  });
+});
+
+describe('createComponents', () => {
+  const schema = defineSchema({
+    node: { tier: attr<'core' | 'edge'>(), label: attr.override<number>() },
+    edge: { weight2: attr<number>() },
+  });
+  const C = createComponents(createModelKit({ schema }));
+
+  it('types the props with the schema of the kit', () => {
+    <C.Digraph id="G">
+      <C.Node id="a" tier="core" />
+      <C.Edge targets={['a', 'b']} weight2={1} />
+    </C.Digraph>;
+    // @ts-expect-error not a value of the schema's attribute
+    <C.Node id="a" tier="other" />;
+    // @ts-expect-error an attribute of nodes, not edges
+    <C.Edge targets={['a', 'b']} tier="core" />;
+    // @ts-expect-error without the kit, not an attribute
+    <Node id="a" tier="core" />;
+  });
+
+  it('types a cluster label with the schema where it changes it', () => {
+    const clusterSchema = defineSchema({
+      cluster: { label: attr.override<number>() },
+    });
+    const K = createComponents(createModelKit({ schema: clusterSchema }));
+    <K.Subgraph id="cluster_a" label={1} />;
+    // @ts-expect-error the schema makes a cluster's label a number
+    <K.Subgraph id="cluster_a" label="A" />;
+    <Subgraph id="cluster_a" label="A" />;
+  });
+
+  it('keeps the other members of a label type with strings', () => {
+    const mixedSchema = defineSchema({
+      cluster: { label: attr.override<string | number>() },
+    });
+    const K = createComponents(createModelKit({ schema: mixedSchema }));
+    <K.Subgraph id="cluster_a" label={1} />;
+    <K.Subgraph id="cluster_a" label="A" />;
+    <K.Subgraph id="cluster_a" label={<dot:b>A</dot:b>} />;
+    // @ts-expect-error neither a string nor a number
+    <K.Subgraph id="cluster_a" label={true} />;
+  });
+
+  it('types the labels with the schema where it changes them', () => {
+    <C.Node id="a" label={1} />;
+    // @ts-expect-error the schema makes a node's label a number
+    <C.Node id="a" label="A" />;
+    <C.Node id="a" label={<dot:b>A</dot:b>} />;
+    <Node id="a" label="A" />;
+  });
+
+  it('gives the models of the classes of the kit to refs', () => {
+    class MyNode extends NodeClass<typeof schema> {
+      extra(): string {
+        return this.id;
+      }
+    }
+    class MyDigraph extends DigraphModel<typeof schema> {
+      tag(): string {
+        return 'g';
+      }
+    }
+    const K = createComponents(
+      createModelKit({ schema, Node: MyNode, Digraph: MyDigraph }),
+    );
+    <K.Node
+      id="a"
+      ref={(n) => {
+        n?.extra();
+      }}
+    />;
+    <K.Digraph
+      ref={(g) => {
+        if (g instanceof MyDigraph) g.tag();
+      }}
+    />;
+    const ref = { current: null } as { current: GraphBaseModel | null };
+    <Digraph ref={ref} />;
+  });
+
+  it('keeps the default components as they were', () => {
+    expectTypeOf(createComponents(defaultModelKit).Node).toEqualTypeOf<
+      typeof Node
+    >();
+  });
+
+  it('takes a schema in createRoot and fromElement', () => {
+    createRoot({ models: { schema } });
+    fromElement(<C.Digraph />, { models: { schema } });
   });
 });

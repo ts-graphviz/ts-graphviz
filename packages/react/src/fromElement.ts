@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type { DotModel, ModelClasses, RootGraphModel } from 'ts-graphviz';
+import type { DotModel, ModelKitOptions, RootGraphModel } from 'ts-graphviz';
 import { createModelKit, MODEL, modelOf, ownOptions } from 'ts-graphviz';
 
 import type { Context } from './contexts/GraphvizContext.js';
@@ -23,10 +23,12 @@ export interface FromElementOptions<
    */
   container?: Container | { readonly [MODEL]: Container };
   /**
-   * Model classes used to create graphs, nodes and edges.
-   * The default classes are used for the kinds left out.
+   * Model classes used to create graphs, nodes and edges, and the schema of
+   * the models (`defineSchema`), as `createModelKit` takes them. The default
+   * classes are used for the kinds left out. Components typed with the
+   * schema come from `createComponents`.
    */
-  models?: Partial<ModelClasses>;
+  models?: ModelKitOptions;
   /**
    * Stop waiting: when the signal aborts, `fromElement` rejects with
    * `signal.reason` (an `AbortError`, or a `TimeoutError` for

@@ -1,13 +1,17 @@
 import type {
+  AnyModelTypes,
+  AttributeKey,
+  DotObjectType,
   EdgeAttributesObject,
-  EdgeModel,
+  EscStringValue,
   GraphAttributesObject,
   GraphBaseModel,
   HasComment,
   HTMLLikeLabel,
+  ModelTypes,
   NodeAttributesObject,
-  NodeModel,
   ReadonlyEdgeTargetLikeTuple,
+  SchemaOf,
   SubgraphAttributesFor,
   SubgraphAttributesObject,
 } from '@ts-graphviz/common';
@@ -16,25 +20,34 @@ import type { Attributes, ReactElement, ReactNode, Ref } from 'react';
 // Re-export ReactNode to ensure it's available for JSX declarations
 export type { ReactNode };
 
-/** Common attribute values of objects under cluster */
-export interface GraphBaseAttributesProps {
+/**
+ * Common attribute values of objects under cluster.
+ *
+ * The props of the components take the model types `M` of the kit they
+ * create with: their attributes are those of its schema, and their `ref`
+ * gives its models. By default those of the default kit; components typed
+ * with a kit come from `createComponents(kit)`.
+ */
+export interface GraphBaseAttributesProps<
+  M extends AnyModelTypes = ModelTypes,
+> {
   /** Attribute value for Edges */
-  edge?: EdgeAttributesObject;
+  edge?: EdgeAttributesObject<SchemaOf<M>>;
   /** Attribute value for Nodes */
-  node?: NodeAttributesObject;
+  node?: NodeAttributesObject<SchemaOf<M>>;
   /** Attribute value for Graphs */
-  graph?: SubgraphAttributesObject;
+  graph?: SubgraphAttributesObject<SchemaOf<M>>;
 }
 
 /** Options for RootGraph */
-export interface RootGraphOptions
-  extends GraphAttributesObject,
-    GraphBaseAttributesProps {
-  /** Cluster id */
-  id?: string;
-  /** Strict graph: at most one edge between a pair of nodes. */
-  strict?: boolean;
-}
+export type RootGraphOptions<M extends AnyModelTypes = ModelTypes> =
+  GraphAttributesObject<SchemaOf<M>> &
+    GraphBaseAttributesProps<M> & {
+      /** Cluster id */
+      id?: string;
+      /** Strict graph: at most one edge between a pair of nodes. */
+      strict?: boolean;
+    };
 
 /** Options for Subgraph */
 /**
@@ -45,59 +58,97 @@ export interface RootGraphOptions
  */
 export type SubgraphOptions<
   Id extends string | undefined = string | undefined,
+  M extends AnyModelTypes = ModelTypes,
 > =
   // `id` and `comment` here are the subgraph's name and the model comment,
   // not the Graphviz attributes of the same names.
-  DistributiveOmit<SubgraphAttributesFor<Id>, 'id' | 'comment'> &
-    GraphBaseAttributesProps &
+  DistributiveOmit<SubgraphAttributesFor<Id, SchemaOf<M>>, 'id' | 'comment'> &
+    GraphBaseAttributesProps<M> &
     HasComment & {
       /** Subgraph id; one starting with `cluster` makes a cluster. */
       id?: Id;
     };
 
 /** Options for Edge */
-export interface EdgeOptions extends EdgeAttributesObject {}
+export type EdgeOptions<M extends AnyModelTypes = ModelTypes> =
+  EdgeAttributesObject<SchemaOf<M>>;
 
 /** Options for Node */
-export interface NodeOptions extends NodeAttributesObject {}
+export type NodeOptions<M extends AnyModelTypes = ModelTypes> =
+  NodeAttributesObject<SchemaOf<M>>;
 
 /** Props for RootGraph component */
-export interface RootGraphProps extends Omit<RootGraphOptions, 'label'> {
-  label?: ReactElement | string;
+export type RootGraphProps<M extends AnyModelTypes = ModelTypes> = Omit<
+  RootGraphOptions<M>,
+  'label'
+> & {
+  label?:
+    | ReactElement
+    | LabelValue<GraphAttributesObject<SchemaOf<M>>, 'label'>;
   children?: ReactNode;
-  ref?: Ref<GraphBaseModel>;
-}
+  ref?: Ref<GraphRef<M, M['Graph'] | M['Digraph']>>;
+};
 
 /** Props for Edge component */
-export interface EdgeProps extends Omit<EdgeOptions, 'label'> {
+export type EdgeProps<M extends AnyModelTypes = ModelTypes> = Omit<
+  EdgeOptions<M>,
+  'label'
+> & {
   /** Edge targets */
   targets: ReadonlyEdgeTargetLikeTuple;
   /** Edge label */
-  label?: ReactElement | string;
-  ref?: Ref<EdgeModel>;
-}
+  label?: ReactElement | LabelValue<EdgeOptions<M>, 'label'>;
+  ref?: Ref<M['Edge']>;
+};
 
 /** Props for Node component */
-export interface NodeProps extends Omit<NodeOptions, 'label' | 'xlabel'> {
+export type NodeProps<M extends AnyModelTypes = ModelTypes> = Omit<
+  NodeOptions<M>,
+  'label' | 'xlabel'
+> & {
   /** Node id */
   id: string;
   /** Node label */
-  label?: ReactElement | string;
+  label?: ReactElement | LabelValue<NodeOptions<M>, 'label'>;
   /** Node xlabel */
-  xlabel?: ReactElement | string;
-  ref?: Ref<NodeModel>;
-}
+  xlabel?: ReactElement | LabelValue<NodeOptions<M>, 'xlabel'>;
+  ref?: Ref<M['Node']>;
+};
 
 /** Props for Subgraph component */
 /**
  * Props for Subgraph component: {@link SubgraphOptions}, with `label` taking
  * a React element (an HTML-like label) where a label applies.
  */
-export type SubgraphProps<Id extends string | undefined = string | undefined> =
-  WithReactLabel<SubgraphOptions<Id>> & {
-    children?: ReactNode;
-    ref?: Ref<GraphBaseModel>;
-  };
+export type SubgraphProps<
+  Id extends string | undefined = string | undefined,
+  M extends AnyModelTypes = ModelTypes,
+> = WithReactLabel<SubgraphOptions<Id, M>> & {
+  children?: ReactNode;
+  ref?: Ref<GraphRef<M, M['Subgraph']>>;
+};
+
+/**
+ * A label prop's value besides a React element: a string where the type
+ * takes strings (an escString or HTML-like value is given as a string or an
+ * element instead), with the other members of the type the kit's schema
+ * gives the attribute.
+ */
+type LabelValue<O, K extends string> = O extends {
+  readonly [P in K]?: infer V;
+}
+  ? string extends Exclude<V, undefined>
+    ? string | Exclude<V, undefined | string | EscStringValue | HTMLLikeLabel>
+    : Exclude<V, undefined>
+  : string;
+
+/**
+ * What the `ref` of a graph or subgraph component gives: the graph, typed
+ * with the kit's schema, or a model of the kit's class.
+ */
+type GraphRef<M extends AnyModelTypes, Model> =
+  | GraphBaseModel<DotObjectType, AttributeKey, SchemaOf<M>>
+  | Model;
 
 /** `Omit` applied to each member of a union, so the union stays discriminated. */
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown
@@ -113,7 +164,7 @@ type WithReactLabel<T> = T extends unknown
     ? T
     : Omit<T, 'label'> & {
         /** Subgraph label */
-        label?: ReactElement | string;
+        label?: ReactElement | LabelValue<T, 'label'>;
       }
   : never;
 
