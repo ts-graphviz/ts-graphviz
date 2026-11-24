@@ -180,7 +180,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // 組み込みの型ではなく数値
   },
-  types: { color: values.extend<'brand-blue'>() }, // color 型のすべての属性
+  types: { style: values.extend<'my-style'>() }, // style 型のすべての属性
 });
 
 const { digraph } = withModelKit({ schema });
@@ -188,14 +188,14 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, color: 'brand-blue' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
     }),
   ),
 );
 ```
 
 - `attr<T>()` は属性を追加します。`attr.extend<T>()`（組み込みの型か `T`）と `attr.override<T>()`（`T` に置き換え）は組み込みの属性を変更します。各エントリは型を指定し、どちらを適用するかを必ず明示します。組み込みの属性に `attr<T>()` を使うと型エラーになります。
-- `types` は値の型（`color`、`style`、`shape`、`arrowType` など）を `values.extend<T>()` または `values.override<T>()` で変更し、その型を使うすべての属性に反映します。
+- `types` は値の型（`color`、`style`、`shape`、`arrowType` など）を `values.extend<T>()` または `values.override<T>()` で変更し、その型を使うすべての属性に反映します。型を付けるだけなので、足す名前は描画先の出力が理解できるものにしてください。Graphviz は知らないスタイルを PostScript 出力に手続きの呼び出しとして書き出し、`dot -l` で読み込んだ PostScript ライブラリがそれを定義できます。SVG 出力では警告を出して無視します。
 - 種類は `graph`、`subgraph`、`cluster`、`node`、`edge` です。
 - スキーマで型付けされるのはそのキットのモデルだけです：`withModelKit({ schema })`、`createModelKit({ schema, Node: MyNode })`（`class MyNode extends Node<typeof schema> {}` とともに）、`fromDot(dot, { convert: { models: { schema } } })`。ライブラリのグラフなど、ほかのグラフは変わりません。
 
