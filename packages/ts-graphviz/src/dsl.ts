@@ -10,6 +10,7 @@ import {
   type EdgeModel,
   type ForwardRefNode,
   type GraphBaseModel,
+  invalidArguments,
   isAttributeAssignmentModel,
   isAttributeListModel,
   isDotModel,
@@ -25,17 +26,17 @@ import {
   type NodeAttributesObject,
   type NodeModel,
   type NodeRefLike,
-  type NonClusterSubgraphAttributesObject,
   type Port,
   type ReadonlyEdgeTargetLikeTuple,
   type ReadonlyNodeModel,
   type RootGraphModel,
-  type SubgraphAttributesFor,
+  readArguments,
   type SubgraphAttributesObject,
   type SubgraphModel,
   withCode,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
+import { isArray, isFunction, isRecord, isString } from './arguments.js';
 import { isLegacyKit } from './legacy-kit.js';
 
 /**
@@ -247,8 +248,12 @@ export interface GraphDSLMembers<
  * `graph`.
  *
  * `node`, `edge` and `subgraph` create with the DSL's kit and add to the
- * graph. Their callbacks receive what the statement gives and, second, the
- * kit: its `create*` only create.
+ * graph. Their callbacks receive what the statement gives.
+ *
+ * The arguments are read by position, in the order of the signatures below.
+ * A call that fits none of them (two ids, an id after the attributes, a
+ * callback before them) throws a `TypeError` with code
+ * `TSG_ERR_INVALID_ARGUMENTS`.
  * @group DSL
  */
 export interface GraphDSLStatements<
@@ -260,42 +265,20 @@ export interface GraphDSLStatements<
    * statement written again in DOT, it is another declaration when the
    * graph has a subgraph with the id; Graphviz merges their contents.
    *
-   * The callback receives the subgraph.
+   * The callback receives the subgraph. As in DOT, a subgraph takes no
+   * attributes in its header: write them in its body. Cluster attributes
+   * such as `color` or `label` apply to an id starting with `cluster` (or
+   * with `cluster = true`), and Graphviz ignores them elsewhere.
    *
    * ```ts
    * const G = digraph('G', (g) => {
-   *   g.subgraph('A', (A) => {
-   *     A.node('A1');
-   *   });
-   * });
-   * // digraph "G" {
-   * //   subgraph "A" {
-   * //     "A1";
-   * //   }
-   * // }
-   * ```
-   */
-  subgraph<const Id extends string>(
-    id: Id,
-    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
-  ): DSL<M['Subgraph'], M>;
-  /**
-   * A new subgraph with this id and these attributes (another declaration
-   * when the graph has one with the id).
-   *
-   * The id picks the attributes ({@link SubgraphAttributesFor}): cluster
-   * attributes such as `color` or `label` apply to an id starting with
-   * `cluster` (or with `cluster: true`), and Graphviz ignores them elsewhere.
-   *
-   * ```ts
-   * const G = digraph('G', (g) => {
-   *   g.subgraph('cluster_A', { color: 'red', label: 'my label' }, (A) => {
+   *   g.subgraph('cluster_A', (A) => {
+   *     A.label = 'my label';
    *     A.node('A1');
    *   });
    * });
    * // digraph "G" {
    * //   subgraph "cluster_A" {
-   * //     color = "red";
    * //     label = "my label";
    * //     "A1";
    * //   }
@@ -304,29 +287,6 @@ export interface GraphDSLStatements<
    */
   subgraph<const Id extends string>(
     id: Id,
-    attributes: SubgraphAttributesFor<Id>,
-    callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
-  ): DSL<M['Subgraph'], M>;
-  /**
-   * A new anonymous subgraph with these attributes.
-   *
-   * ```ts
-   * const G = digraph('G', (g) => {
-   *   g.subgraph({ cluster: true, color: 'red' }, (A) => {
-   *     A.node('A1');
-   *   });
-   * });
-   * // digraph "G" {
-   * //   subgraph {
-   * //     cluster = true;
-   * //     color = "red";
-   * //     "A1";
-   * //   }
-   * // }
-   * ```
-   */
-  subgraph(
-    attributes: NonClusterSubgraphAttributesObject,
     callback?: (subgraph: DSL<M['Subgraph'], M>) => void,
   ): DSL<M['Subgraph'], M>;
   /** A new anonymous subgraph, as `subgraph { ... }` in DOT. */
@@ -852,18 +812,7 @@ function statements(
   return table;
 }
 
-function find<T>(
-  args: unknown[],
-  is: (arg: unknown) => arg is T,
-): T | undefined {
-  return args.find(is);
-}
-
-const isString = (arg: unknown): arg is string => typeof arg === 'string';
-const isObject = (arg: unknown): arg is object =>
-  typeof arg === 'object' && arg !== null;
-const isFunction = (arg: unknown): arg is (view: unknown) => void =>
-  typeof arg === 'function';
+type Callback = ((view: unknown) => void) | undefined;
 
 /**
  * The DOT statements: the kit creates and the graph adds, so they follow
@@ -874,12 +823,22 @@ const isFunction = (arg: unknown): arg is (view: unknown) => void =>
 function createStatements(g: GraphBaseModel, kit: ModelKit) {
   const viewOf = (model: AnyDotObjectModel) => viewWith(model, kit);
   const legacy = isLegacyKit(kit);
+  // The arguments are read by position (see readArguments): a call that
+  // fits none of a statement's signatures throws.
   return {
-    node(first: unknown, ...rest: unknown[]): unknown {
-      if (typeof first === 'string') {
-        const attributes = find(rest, isObject) as
-          | NodeAttributesObject
-          | undefined;
+    node(...args: unknown[]): unknown {
+      if (isRecord(args[0])) {
+        if (args.length > 1) throw invalidArguments('node()', args);
+        return viewOf(
+          g.addAttributeList('Node', args[0] as NodeAttributesObject),
+        );
+      }
+      if (typeof args[0] === 'string') {
+        const [first, attributes, callback] = readArguments('node()', args, [
+          isString,
+          isRecord,
+          isFunction,
+        ]) as [string, NodeAttributesObject | undefined, Callback];
         // Another declaration of the id, where it is written; a legacy
         // kit gives the first one.
         let node = legacy ? g.getNodes(first)[0] : undefined;
@@ -895,67 +854,62 @@ function createStatements(g: GraphBaseModel, kit: ModelKit) {
           node.setAttributes(attributes);
         }
         const view = viewOf(node);
-        find(rest, isFunction)?.(view);
+        callback?.(view);
         return view;
       }
-      if (isObject(first)) {
+      throw invalidArguments('node()', args);
+    },
+    edge(...args: unknown[]): unknown {
+      if (isRecord(args[0])) {
+        if (args.length > 1) throw invalidArguments('edge()', args);
         return viewOf(
-          g.addAttributeList('Node', first as NodeAttributesObject),
+          g.addAttributeList('Edge', args[0] as EdgeAttributesObject),
         );
       }
-      return undefined;
-    },
-    edge(first: unknown, ...rest: unknown[]): unknown {
-      if (Array.isArray(first)) {
+      if (Array.isArray(args[0])) {
+        const [targets, attributes, callback] = readArguments('edge()', args, [
+          isArray,
+          isRecord,
+          isFunction,
+        ]) as [unknown[], EdgeAttributesObject | undefined, Callback];
         const edge = kit.createEdge(
-          unwrap(first) as ReadonlyEdgeTargetLikeTuple,
-          find(rest, isObject) as EdgeAttributesObject | undefined,
+          unwrap(targets) as ReadonlyEdgeTargetLikeTuple,
+          attributes,
         );
         g.addEdge(edge);
         const view = viewOf(edge);
-        find(rest, isFunction)?.(view);
+        callback?.(view);
         return view;
       }
-      if (isObject(first)) {
-        return viewOf(
-          g.addAttributeList('Edge', first as EdgeAttributesObject),
-        );
-      }
-      return undefined;
+      throw invalidArguments('edge()', args);
     },
     subgraph(...args: unknown[]): unknown {
-      const id = find(args, isString);
-      const attributes = find(args, isObject) as
-        | SubgraphAttributesObject
-        | undefined;
+      const [id, callback] = readArguments('subgraph()', args, [
+        isString,
+        isFunction,
+      ]) as [string | undefined, Callback];
       let subgraph =
         legacy && id !== undefined ? g.getSubgraphs(id)[0] : undefined;
       if (subgraph === undefined) {
-        // The constructor gets the id and the attributes in the shape the
-        // statement has them. The statement was checked against its id
-        // where it was written; here they are those of any subgraph.
+        // The constructor gets the id in the shape the statement has it.
         const create = kit.createSubgraph as (
-          ...args: (string | SubgraphAttributesObject)[]
+          ...args: string[]
         ) => SubgraphModel;
-        subgraph = create.apply(
-          kit,
-          [id, attributes].filter((arg) => arg !== undefined),
-        );
+        subgraph = create.apply(kit, id === undefined ? [] : [id]);
         g.addSubgraph(subgraph);
-      } else if (attributes !== undefined) {
-        subgraph.setAttributes(attributes);
       }
       const view = viewOf(subgraph);
-      find(args, isFunction)?.(view);
+      callback?.(view);
       return view;
     },
-    graph(attributes: unknown): unknown {
-      if (isObject(attributes)) {
+    graph(...args: unknown[]): unknown {
+      const [attributes] = args;
+      if (isRecord(attributes) && args.length === 1) {
         return viewOf(
           g.addAttributeList('Graph', attributes as SubgraphAttributesObject),
         );
       }
-      return undefined;
+      throw invalidArguments('graph()', args);
     },
   };
 }

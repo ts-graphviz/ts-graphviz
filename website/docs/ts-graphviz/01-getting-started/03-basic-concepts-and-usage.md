@@ -66,7 +66,8 @@ Subgraphs allow you to group nodes and edges, often used to create clusters or t
 import { digraph } from 'ts-graphviz';
 
 const g = digraph('G');
-g.subgraph('ClusterA', { label: 'Cluster A' }, (cluster) => {
+g.subgraph('ClusterA', (cluster) => {
+  cluster.label = 'Cluster A';
   cluster.node('A1');
   cluster.node('A2');
   cluster.edge(['A1', 'A2']);
@@ -92,13 +93,16 @@ g.subgraph('ClusterA', { label: 'Cluster A' }, (cluster) => {
 ```typescript
 import { digraph } from 'ts-graphviz';
 
-const g = digraph('G', { newrank: true }, (g) => {
+const g = digraph('G', (g) => {
+  g.newrank = true;
   g.node('Node1', { label: 'My Node 1', color: 'red' });
   g.node('Node2', { label: 'My Node 2', color: 'green' });
 
   g.edge(['Node1', 'Node2'], { label: 'Edge Label', color: 'blue' });
 
-  g.subgraph('ClusterA', { label: 'Cluster A', color: 'lightgrey' }, (cluster) => {
+  g.subgraph('ClusterA', (cluster) => {
+    cluster.label = 'Cluster A';
+    cluster.color = 'lightgrey';
     cluster.node('A1', { shape: 'box' });
     cluster.node('A2', { shape: 'ellipse' });
     cluster.edge(['A1', 'A2'], { style: 'dashed' });

@@ -232,7 +232,8 @@ import { digraph, toDot } from 'ts-graphviz';
 
 const G = digraph('G', (g) => {
   g.node('a', { label: 'from the DSL' });
-  g.subgraph('cluster_x', { label: 'X' }, (s) => {
+  g.subgraph('cluster_x', (s) => {
+    s.label = 'X';
     s.node('x1');
   });
 });

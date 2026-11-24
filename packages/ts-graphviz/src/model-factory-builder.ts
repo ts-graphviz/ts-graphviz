@@ -1,10 +1,11 @@
-import type {
-  GraphAttributesObject,
-  ModelKit,
-  ModelTypes,
-  RootGraphModel,
+import {
+  type ModelKit,
+  type ModelTypes,
+  type RootGraphModel,
+  readArguments,
 } from '@ts-graphviz/common';
 import { defaultModelKit } from '@ts-graphviz/core';
+import { isFunction, isString } from './arguments.js';
 import { type DSL, dsl } from './dsl.js';
 import type { ModelFactories, ModelFactory } from './types.js';
 
@@ -21,18 +22,18 @@ export function ModelFactoryBuilder(
   directed: boolean,
   strictMode: boolean,
 ): ModelFactory {
+  const name = directed ? 'digraph()' : 'graph()';
   return (...args: unknown[]) => {
-    const id = args.find((arg): arg is string => typeof arg === 'string');
-    const attributes = args.find(
-      (arg): arg is GraphAttributesObject => typeof arg === 'object',
-    );
-    const callback = args.find(
-      (arg): arg is (g: DSL<RootGraphModel>) => void =>
-        typeof arg === 'function',
-    );
+    // By position: an id, then the callback, either of which may be left
+    // out.
+    const [id, callback] = readArguments(name, args, [
+      isString,
+      isFunction,
+    ]) as [string | undefined, ((g: DSL<RootGraphModel>) => void) | undefined];
+    const options = { strict: strictMode };
     const g = directed
-      ? this.createDigraph(id, strictMode, attributes)
-      : this.createGraph(id, strictMode, attributes);
+      ? this.createDigraph(id, options)
+      : this.createGraph(id, options);
     const view = dsl(g, this);
     if (typeof callback === 'function') {
       callback(view);

@@ -1,9 +1,4 @@
-import type {
-  GraphAttributesObject,
-  ModelKit,
-  ModelTypes,
-  RootGraphModel,
-} from '@ts-graphviz/common';
+import type { ModelTypes, RootGraphModel } from '@ts-graphviz/common';
 import type { DSL } from './dsl.js';
 
 /**
@@ -19,8 +14,13 @@ export type ModelFactoryCallback<
  * ModelFactory creates a root graph and gives its DOT DSL ({@link DSL}).
  *
  * @param id - Optional string parameter that specifies the id of the graph.
- * @param attributes - Optional GraphAttributesObject parameter that specifies the attributes of the graph.
  * @param callback - Optional callback function that receives the graph's DSL.
+ *
+ * The arguments are read by position, in this order, and each may be left
+ * out. A graph takes no attributes here: as in DOT, they are statements of
+ * its body, which the callback writes (`g.rankdir = 'LR'`). A call that fits
+ * neither signature (two ids, 3.x's attributes argument) throws a
+ * `TypeError` with code `TSG_ERR_INVALID_ARGUMENTS`.
  *
  * @returns The graph's DSL. {@link modelOf} gives the {@link RootGraphModel}.
  * @typeParam G - The graph.
@@ -31,15 +31,6 @@ export interface ModelFactory<
   G extends RootGraphModel = RootGraphModel,
   M extends ModelTypes = ModelTypes,
 > {
-  (
-    id?: string,
-    attributes?: GraphAttributesObject,
-    callback?: ModelFactoryCallback<G, M>,
-  ): DSL<G, M>;
-  (
-    attributes?: GraphAttributesObject,
-    callback?: ModelFactoryCallback<G, M>,
-  ): DSL<G, M>;
   (id?: string, callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
   (callback?: ModelFactoryCallback<G, M>): DSL<G, M>;
 }

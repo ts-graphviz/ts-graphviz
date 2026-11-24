@@ -6,8 +6,10 @@ export default digraph((g) => {
     shape: 'circle',
   });
 
-  g.subgraph('cluster_creation', { label: 'Graph Creation' }, (sg) => {
-    sg.subgraph('cluster_parsing', { label: 'Parsing' }, (parsing) => {
+  g.subgraph('cluster_creation', (sg) => {
+    sg.label = 'Graph Creation';
+    sg.subgraph('cluster_parsing', (parsing) => {
+      parsing.label = 'Parsing';
       parsing.node('dot_input', {
         label: 'DOT\nString',
       });
@@ -40,7 +42,8 @@ export default digraph((g) => {
     sg.edge(['dot_input', 'parsed_ast', 'model']);
   });
 
-  g.subgraph('cluster_core_processing', { label: 'Core Processing' }, (sg) => {
+  g.subgraph('cluster_core_processing', (sg) => {
+    sg.label = 'Core Processing';
     sg.node('ast', {
       label: 'AST',
     });
@@ -50,7 +53,8 @@ export default digraph((g) => {
     });
   });
 
-  g.subgraph('cluster_rendering', { label: 'Rendering' }, (sg) => {
+  g.subgraph('cluster_rendering', (sg) => {
+    sg.label = 'Rendering';
     sg.node('node_adapter', {
       label: 'Node\nAdapter',
       shape: 'box',

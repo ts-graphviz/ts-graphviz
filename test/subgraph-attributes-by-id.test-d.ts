@@ -1,5 +1,4 @@
 import {
-  attribute as _,
   type ClusterSubgraphAttributesObject,
   type ClusterSubgraphId,
   type DSL,
@@ -15,10 +14,11 @@ import {
 import { describe, expectTypeOf, it } from 'vitest';
 
 // Graphviz draws a subgraph as a cluster when its id starts with
-// "cluster" (or it has cluster=true), and ignores attributes that do not apply.
+// "cluster" (or it has cluster=true), and ignores attributes that do not
+// apply. The attributes of a subgraph are statements of its body, so the id
+// picks them only where an object of them goes with an id, as the props of
+// @ts-graphviz/react's <Subgraph> do.
 describe('subgraph attributes by id', () => {
-  const g = digraph('G');
-
   it('picks the attribute object from the id', () => {
     expectTypeOf<
       SubgraphAttributesFor<'cluster_a'>
@@ -34,138 +34,49 @@ describe('subgraph attributes by id', () => {
     >().toEqualTypeOf<SubgraphAttributesObject>();
   });
 
-  it('takes cluster attributes on a cluster id', () => {
-    expectTypeOf(
-      g.subgraph('cluster_a', { [_.pencolor]: 'red', [_.label]: 'A' }),
-    ).toEqualTypeOf<DSL<SubgraphModel>>();
-    defaultModelKit.createSubgraph('cluster_b', { bgcolor: 'lightgrey' });
-    // @ts-expect-error rank applies to subgraphs that are not clusters
-    g.subgraph('cluster_c', { rank: 'same' });
-  });
-
-  it('takes subgraph attributes on any other id', () => {
-    g.subgraph('row', { rank: 'same' });
-    defaultModelKit.createSubgraph('row2', { [_.rank]: 'min' });
-    // @ts-expect-error pencolor applies to clusters
-    g.subgraph('not_a_cluster', { pencolor: 'red' });
-    // @ts-expect-error label applies to clusters
-    defaultModelKit.createSubgraph('not_a_cluster', { label: 'x' });
-    // @ts-expect-error "cluster" must start the id
-    g.subgraph('my_cluster', { pencolor: 'red' });
-    // @ts-expect-error not even next to a subgraph attribute
-    g.subgraph('row', { rank: 'same', pencolor: 'red' });
-    // @ts-expect-error nor next to only the id-independent ones
-    g.subgraph({ rank: 'same', label: 'x' });
-  });
-
-  it('takes cluster attributes with cluster: true, on any id or none', () => {
-    g.subgraph('domestic_cats', { cluster: true, pencolor: 'red', label: 'x' });
-    g.subgraph({ [_.cluster]: true, [_.color]: 'red' });
-    defaultModelKit.createSubgraph({ cluster: true, label: 'x' });
-    // @ts-expect-error rank does not apply once it is a cluster
-    g.subgraph('s', { cluster: true, rank: 'same' });
-  });
-
   it('matches the "cluster" prefix in any case, as Graphviz does', () => {
-    g.subgraph('CLUSTER_a', { label: 'A' });
-    g.subgraph('Cluster_b', { pencolor: 'red' });
-    // @ts-expect-error rank applies to subgraphs that are not clusters
-    g.subgraph('CLUSTER_c', { rank: 'same' });
+    expectTypeOf<'cLUSTEr'>().toExtend<ClusterSubgraphId>();
+    expectTypeOf<'ClUsTeR_d'>().toExtend<ClusterSubgraphId>();
+    expectTypeOf<'clustr_a'>().not.toExtend<ClusterSubgraphId>();
+    expectTypeOf<'_cluster'>().not.toExtend<ClusterSubgraphId>();
+    expectTypeOf<'cluste'>().not.toExtend<ClusterSubgraphId>();
+    expectTypeOf<string>().not.toExtend<ClusterSubgraphId>();
   });
+});
 
-  it('takes only what holds for every id of a union', () => {
-    const id = Math.random() > 0.5 ? ('row' as const) : ('cluster_b' as const);
-    g.subgraph(id, { cluster: true, label: 'x' });
-    // @ts-expect-error pencolor does not apply when the id is "row"
-    g.subgraph(id, { pencolor: 'red' });
-    // @ts-expect-error rank does not apply when the id is "cluster_b"
-    g.subgraph(id, { rank: 'same' });
-  });
+describe('a subgraph takes an id only', () => {
+  const g = digraph('G');
 
-  it('treats an explicit undefined id as no id', () => {
-    defaultModelKit.createSubgraph(undefined, { rank: 'same' });
-    defaultModelKit.createSubgraph(undefined, { cluster: true, label: 'x' });
-    // @ts-expect-error label applies to clusters
-    defaultModelKit.createSubgraph(undefined, { label: 'x' });
-    const maybe = undefined as string | undefined;
-    defaultModelKit.createSubgraph(maybe, { label: 'x', rank: 'same' }); // not known: loose
-  });
-
-  it('applies the same rules to anonymous subgraphs', () => {
-    g.subgraph({ rank: 'same' });
-    defaultModelKit.createSubgraph({ rank: 'source' });
-    // @ts-expect-error label applies to clusters
-    g.subgraph({ label: 'x' });
-  });
-
-  it('keeps an id known only at run time loose', () => {
-    const id: string = `cluster_${Math.random()}`;
-    g.subgraph(id, { pencolor: 'red', rank: 'same' });
-    defaultModelKit.createSubgraph(id, { label: 'x' });
-  });
-
-  it('keeps the calls without attributes', () => {
+  it('in the DSL, with its attributes in the callback', () => {
     expectTypeOf(g.subgraph('a')).toEqualTypeOf<DSL<SubgraphModel>>();
-    expectTypeOf(g.subgraph('a', (s) => s.node('x'))).toEqualTypeOf<
-      DSL<SubgraphModel>
-    >();
-    expectTypeOf(g.subgraph()).toEqualTypeOf<DSL<SubgraphModel>>();
     expectTypeOf(
-      defaultModelKit.createSubgraph(),
-    ).toEqualTypeOf<SubgraphModel>();
+      g.subgraph('cluster_a', (s) => {
+        s.label = 'A';
+        s.pencolor = 'red';
+      }),
+    ).toEqualTypeOf<DSL<SubgraphModel>>();
+    expectTypeOf(g.subgraph()).toEqualTypeOf<DSL<SubgraphModel>>();
+    // @ts-expect-error as in DOT, no attributes in the header
+    g.subgraph('cluster_a', { label: 'A' });
+    // @ts-expect-error nor for an anonymous one
+    g.subgraph({ rank: 'same' });
+  });
+
+  it('from a kit, a constructor and SubgraphConstructor', () => {
     expectTypeOf(
       defaultModelKit.createSubgraph('a'),
     ).toEqualTypeOf<SubgraphModel>();
     expectTypeOf(
-      defaultModelKit.createSubgraph('cluster_a', { label: 'A' }),
+      defaultModelKit.createSubgraph(),
     ).toEqualTypeOf<SubgraphModel>();
-  });
-
-  describe('the constructor', () => {
-    it('takes cluster attributes on a cluster id', () => {
-      new Subgraph('cluster_a', { pencolor: 'red', label: 'A' });
-      new Subgraph('Cluster_b', { pencolor: 'red' });
-      new Subgraph('CLUSTER_c', { bgcolor: 'lightgrey' });
-      // Any case, as Graphviz compares the prefix.
-      new Subgraph('ClUsTeR_d', { pencolor: 'red' });
-      expectTypeOf<'cLUSTEr'>().toExtend<ClusterSubgraphId>();
-      expectTypeOf<'clustr_a'>().not.toExtend<ClusterSubgraphId>();
-      expectTypeOf<'_cluster'>().not.toExtend<ClusterSubgraphId>();
-      expectTypeOf<'cluste'>().not.toExtend<ClusterSubgraphId>();
-      expectTypeOf<string>().not.toExtend<ClusterSubgraphId>();
-    });
-
-    it('is what SubgraphConstructor takes, which a custom class fits', () => {
-      const C: SubgraphConstructor = Subgraph;
-      new C('ClUsTeR_d', { pencolor: 'red' });
-      // @ts-expect-error pencolor applies to clusters
-      new C('row', { pencolor: 'red' });
-    });
-
-    it('takes subgraph attributes on any other id, or none', () => {
-      new Subgraph('row', { rank: 'same' });
-      new Subgraph({ rank: 'same' });
-      // @ts-expect-error pencolor applies to clusters
-      new Subgraph('row', { pencolor: 'red' });
-      // @ts-expect-error label applies to clusters
-      new Subgraph({ label: 'x' });
-    });
-
-    it('takes cluster attributes with cluster: true, on any id or none', () => {
-      new Subgraph('row', { cluster: true, pencolor: 'red' });
-      new Subgraph({ cluster: true, label: 'x' });
-    });
-
-    it('needs cluster: true for an id known only at run time', () => {
-      const id: string = `cluster_${Math.random()}`;
-      new Subgraph(id, { rank: 'same' });
-      new Subgraph(id, { cluster: true, label: 'x' });
-      // @ts-expect-error not known to be a cluster
-      new Subgraph(id, { label: 'x' });
-    });
-
-    it('still takes rank on a cluster id: only a kit refuses it', () => {
-      new Subgraph('cluster_a', { rank: 'same' });
-    });
+    new Subgraph('cluster_a');
+    const C: SubgraphConstructor = Subgraph;
+    new C('row');
+    // @ts-expect-error no attributes
+    defaultModelKit.createSubgraph('cluster_b', { bgcolor: 'lightgrey' });
+    // @ts-expect-error no attributes
+    new Subgraph('row', { rank: 'same' });
+    // @ts-expect-error no attributes
+    new C({ cluster: true });
   });
 });

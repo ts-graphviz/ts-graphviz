@@ -7,7 +7,8 @@ import styles from './styles.module.css';
 
 const script = `import { digraph, attribute as _ } from 'ts-graphviz';
 
-digraph('state_machine', { [_.newrank]: true }, (g) => {
+digraph('state_machine', (g) => {
+  g[_.newrank] = true;
   g.node({ shape: 'circle' });
 
   g.edge(['Model', 'DOT'], { [_.label]: 'toDot', [_.constraint]: false });

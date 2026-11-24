@@ -22,7 +22,8 @@ async function testEsmFromCjsTypescript() {
 
     // Test 2: Create graph with full type checking
     console.log('\nTest 2: Creating typed graph from CJS TypeScript');
-    const graph = new Digraph('G', {
+    const graph = new Digraph('G');
+    graph.setAttributes({
       comment: 'CJS TypeScript test',
       [attribute.rankdir]: 'TB',
       [attribute.nodesep]: 0.5,

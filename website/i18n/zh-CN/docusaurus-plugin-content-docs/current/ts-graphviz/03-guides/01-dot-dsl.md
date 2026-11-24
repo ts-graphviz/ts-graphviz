@@ -44,8 +44,8 @@ DSL 代表图的模型，即 [DOT Object Model（DOM）](./02-model-api.md)，�
 | `node [shape = box];` | `g.node({ shape: 'box' });` |
 | `edge [color = gray];` | `g.edge({ color: 'gray' });` |
 | `graph [fontname = Helvetica];` | `g.graph({ fontname: 'Helvetica' });` |
-| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', { label: 'Group' }, (s) => { s.node('d'); s.node('e'); });` |
-| `{ rank = same; b; c; }` | `g.subgraph({ rank: 'same' }, (s) => { s.node('b'); s.node('c'); });` |
+| `subgraph cluster_0 { label = Group; d; e; }` | `g.subgraph('cluster_0', (s) => { s.label = 'Group'; s.node('d'); s.node('e'); });` |
+| `{ rank = same; b; c; }` | `g.subgraph((s) => { s.rank = 'same'; s.node('b'); s.node('c'); });` |
 | `// note` | `a.addComment('note');` |
 
 合在一起：
@@ -60,11 +60,13 @@ const G = digraph('G', (g) => {
   g.edge([a, 'b', 'c']);
   g.edge(['c', ['d', 'e']]);
   g.edge(['a:p1:n', a.port({ port: 'p2', compass: 's' })]);
-  g.subgraph('cluster_0', { label: 'Group' }, (s) => {
+  g.subgraph('cluster_0', (s) => {
+    s.label = 'Group';
     s.node('d');
     s.node('e');
   });
-  g.subgraph({ rank: 'same' }, (s) => {
+  g.subgraph((s) => {
+    s.rank = 'same';
     s.node('b');
     s.node('c');
   });
@@ -134,12 +136,13 @@ digraph((g) => {
 
 在图或子图的 DSL 上，属性名就是 DOT 语句，正如 DOT 中的 `rankdir = LR;`：`g.rankdir = 'LR'` 每执行一次，就在执行的位置写出一条 `rankdir = "LR";`（图属性赋值；在 Graphviz 中，后面的赋值会覆盖前面的）。它只能写入：读取 `g.rankdir` 或 `delete g.rankdir` 会抛出带有代码 `TSG_ERR_WRITE_ONLY_PROPERTY` 的 `TypeError`，赋值 `undefined` 会抛出带有代码 `TSG_ERR_INVALID_ATTRIBUTE_ASSIGNMENT` 的 `TypeError`。JavaScript 和工具会在任何对象上查找的名字（`then`、`toJSON` 以及 `Object.prototype` 上的名字）读取为 `undefined`，因此图的 DSL 可以被 await 或序列化。
 
-工厂函数的属性参数写出主体最前面的赋值，图的属性则通过模型（`modelOf(g).getAttribute`、`setAttribute`）读写。图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。构造函数和工厂函数的属性按给出的顺序成为最前面的赋值。
+图的属性通过模型（`modelOf(g).getAttribute`、`setAttribute`）读写。图的属性就是它的赋值，没有单独的表。`getAttribute(key)` 是该键最后一条赋值的值（不读取 `graph [...]` 列表的值）；`setAttribute(key, value)` 修改该键第一条赋值的值并删除其余的赋值，没有赋值时则在主体开头（已有赋值之后）添加一条；`removeAttribute(key)` 删除该键的所有赋值；`getAttributeNames()` 列出被赋值的键。
 
 ```typescript
 import { digraph, modelOf, toDot } from 'ts-graphviz';
 
-const G = digraph('G', { bgcolor: 'white' }, (g) => {
+const G = digraph('G', (g) => {
+  g.bgcolor = 'white';
   g.node('a');
   g.bgcolor = 'gray'; // 在这里写出 bgcolor = "gray";
   g.node('b');

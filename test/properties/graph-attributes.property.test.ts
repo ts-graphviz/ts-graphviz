@@ -51,8 +51,6 @@ const step: fc.Arbitrary<Step> = fc.letrec<{ step: Step }>((tie) => ({
 })).step;
 
 const steps = fc.array(step, { maxLength: 8 });
-/** Attributes for the factory or constructor: the first assignments. */
-const initial = fc.dictionary(key, value, { maxKeys: 2 });
 
 /** A body, statement by statement. */
 function shapeOf(g: GraphBaseModel): unknown[] {
@@ -82,7 +80,7 @@ function byModel(g: GraphBaseModel, list: Step[]): void {
 describe('graph attributes as statements', () => {
   it('the DSL builds the same graph as the model does', () => {
     fc.assert(
-      fc.property(initial, steps, (attributes, list) => {
+      fc.property(steps, (list) => {
         const apply = (
           g: DSL<RootGraphModel | SubgraphModel>,
           l: Step[],
@@ -94,8 +92,8 @@ describe('graph attributes as statements', () => {
             else g.subgraph(s.id, (sub) => apply(sub, s.steps));
           }
         };
-        const G = digraph('G', attributes, (g) => apply(g, list));
-        const model = new Digraph('G', attributes);
+        const G = digraph('G', (g) => apply(g, list));
+        const model = new Digraph('G');
         byModel(model, list);
         expect(shapeOf(modelOf(G))).toStrictEqual(shapeOf(model));
         expect(toDot(G)).toBe(toDot(model));
@@ -105,8 +103,8 @@ describe('graph attributes as statements', () => {
 
   it('model -> DOT -> model keeps the shape and the attributes', () => {
     fc.assert(
-      fc.property(initial, steps, (attributes, list) => {
-        const model = new Digraph('G', attributes);
+      fc.property(steps, (list) => {
+        const model = new Digraph('G');
         byModel(model, list);
         const back = fromDot(toDot(model));
         expect(shapeOf(back)).toStrictEqual(shapeOf(model));
@@ -121,8 +119,8 @@ describe('graph attributes as statements', () => {
 
   it('DOT -> model -> DOT prints the same DOT', () => {
     fc.assert(
-      fc.property(initial, steps, (attributes, list) => {
-        const model = new Digraph('G', attributes);
+      fc.property(steps, (list) => {
+        const model = new Digraph('G');
         byModel(model, list);
         const dot = toDot(model);
         expect(toDot(fromDot(dot))).toBe(dot);

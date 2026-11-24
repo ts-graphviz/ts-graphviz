@@ -14,7 +14,8 @@ async function testEsmImport() {
     console.log('\nTest 2: Creating a simple graph');
     const { Digraph, Node, Edge, toDot, attribute } = tsGraphviz;
 
-    const graph = new Digraph('G', { comment: 'Test from CJS' });
+    const graph = new Digraph('G');
+    graph.setAttribute('comment', 'Test from CJS');
     const nodeA = new Node('A', { [attribute.label]: 'Node A' });
     const nodeB = new Node('B', { [attribute.label]: 'Node B' });
     const edge = new Edge([nodeA, nodeB], { [attribute.color]: 'blue' });

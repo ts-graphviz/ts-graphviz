@@ -40,46 +40,41 @@ function random(seed: number): () => number {
 const next = random(SEED);
 const pick = <T,>(items: T[]): T => items[Math.floor(next() * items.length)];
 
-const graph = digraph(
-  'hero',
-  {
-    rankdir: 'LR',
-    // close to the hero's own proportions, so little is cropped
-    size: '16,10!',
-    ratio: 'fill',
-    nodesep: 0.18,
-    ranksep: 0.55,
-    bgcolor: 'transparent',
-    pad: 0,
-    margin: 0,
-  },
-  (g) => {
-    g.node({
-      shape: 'box',
-      style: 'rounded',
-      width: 0.42,
-      height: 0.2,
-      fixedsize: true,
-      label: '',
-      penwidth: 1.2,
-    });
-    g.edge({ arrowsize: 0.5, penwidth: 1 });
-    let previous = ['r0_0'];
-    g.node('r0_0');
-    for (let rank = 1; rank < RANKS; rank++) {
-      const width = MIN_WIDTH + Math.floor(next() * (MAX_WIDTH - MIN_WIDTH + 1));
-      const current: string[] = [];
-      for (let i = 0; i < width; i++) {
-        const id = `r${rank}_${i}`;
-        current.push(id);
-        g.node(id);
-        g.edge([pick(previous), id]);
-        if (next() < 0.35) g.edge([pick(previous), id]);
-      }
-      previous = current;
+const graph = digraph('hero', (g) => {
+  g.rankdir = 'LR';
+  // close to the hero's own proportions, so little is cropped
+  g.size = '16,10!';
+  g.ratio = 'fill';
+  g.nodesep = 0.18;
+  g.ranksep = 0.55;
+  g.bgcolor = 'transparent';
+  g.pad = 0;
+  g.margin = 0;
+  g.node({
+    shape: 'box',
+    style: 'rounded',
+    width: 0.42,
+    height: 0.2,
+    fixedsize: true,
+    label: '',
+    penwidth: 1.2,
+  });
+  g.edge({ arrowsize: 0.5, penwidth: 1 });
+  let previous = ['r0_0'];
+  g.node('r0_0');
+  for (let rank = 1; rank < RANKS; rank++) {
+    const width = MIN_WIDTH + Math.floor(next() * (MAX_WIDTH - MIN_WIDTH + 1));
+    const current: string[] = [];
+    for (let i = 0; i < width; i++) {
+      const id = `r${rank}_${i}`;
+      current.push(id);
+      g.node(id);
+      g.edge([pick(previous), id]);
+      if (next() < 0.35) g.edge([pick(previous), id]);
     }
-  },
-);
+    previous = current;
+  }
+});
 
 const graphviz = await Graphviz.load();
 const rendered = graphviz.dot(toDot(graph));

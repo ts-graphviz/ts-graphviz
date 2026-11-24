@@ -6,17 +6,15 @@ import type {
   EdgeAttributesObject,
   EdgeConstructor,
   EdgeModel,
-  GraphAttributesObject,
   ModelTypes,
   NodeAttributesObject,
   NodeConstructor,
   NodeModel,
-  NonClusterSubgraphAttributesObject,
   ReadonlyEdgeTargetLikeTuple,
   RootGraphConstructor,
   RootGraphModel,
+  RootGraphOptions,
   SchemaOf,
-  SubgraphAttributesFor,
   SubgraphConstructor,
   SubgraphModel,
 } from './models.js';
@@ -66,49 +64,24 @@ export interface ModelKit<
   S extends Schema = SchemaOf<M>,
 > extends ModelClasses<M, S> {
   /**
-   * Create a directed graph.
+   * Create a directed graph: an id and the options, either of which may be
+   * left out (`createDigraph('G', { strict: true })`). Its attributes are
+   * statements of its body, added after.
    */
-  createDigraph(
-    id?: string,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Digraph'];
-  createDigraph(
-    id?: string,
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Digraph'];
-  createDigraph(
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Digraph'];
-  createDigraph(attributes?: GraphAttributesObject<S>): M['Digraph'];
+  createDigraph(id?: string, options?: RootGraphOptions): M['Digraph'];
+  createDigraph(options: RootGraphOptions): M['Digraph'];
   /**
-   * Create an undirected graph.
+   * Create an undirected graph: an id and the options, either of which may
+   * be left out.
    */
-  createGraph(id?: string, attributes?: GraphAttributesObject<S>): M['Graph'];
-  createGraph(
-    id?: string,
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Graph'];
-  createGraph(
-    strict?: boolean,
-    attributes?: GraphAttributesObject<S>,
-  ): M['Graph'];
-  createGraph(attributes?: GraphAttributesObject<S>): M['Graph'];
+  createGraph(id?: string, options?: RootGraphOptions): M['Graph'];
+  createGraph(options: RootGraphOptions): M['Graph'];
   /**
    * Create a subgraph. It is not added to any graph.
    *
    * @param id - Subgraph ID
-   * @param attributes - Subgraph attribute object
    */
-  createSubgraph<const Id extends string | undefined = undefined>(
-    id?: Id,
-    attributes?: SubgraphAttributesFor<Id, S>,
-  ): M['Subgraph'];
-  createSubgraph(
-    attributes?: NonClusterSubgraphAttributesObject<S>,
-  ): M['Subgraph'];
+  createSubgraph(id?: string): M['Subgraph'];
   /**
    * Create a node. It is not added to any graph.
    */

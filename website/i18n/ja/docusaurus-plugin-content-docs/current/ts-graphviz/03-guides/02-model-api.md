@@ -16,13 +16,15 @@ DSL はそれぞれ DOM の一つのモデルの代わりです。`modelOf(dsl)`
 ```typescript
 import { Digraph, Edge, Node, Subgraph, toDot } from 'ts-graphviz';
 
-const g = new Digraph('G', { rankdir: 'LR' });
+const g = new Digraph('G');
+g.setAttribute('rankdir', 'LR');
 const a = new Node('a', { label: 'Start' });
 const b = new Node('b');
 g.addNode(a);
 g.addNode(b);
 g.addEdge(new Edge([a, b], { color: 'red' }));
-const s = new Subgraph('cluster_0', { label: 'Group' });
+const s = new Subgraph('cluster_0');
+s.setAttribute('label', 'Group');
 g.addSubgraph(s);
 s.addNode(new Node('c'));
 
@@ -42,6 +44,8 @@ console.log(toDot(g));
 //   }
 // }
 ```
+
+コンストラクターは引数を位置で読みます。ノードとエッジは ID やターゲットの後に属性を受け取ります。グラフとサブグラフは属性を受け取りません。DOT と同じく、属性は本体の文です（`setAttribute`、`addAttributeAssignment`）。ルートグラフは ID の後にオプションを受け取ります。`new Digraph('G', { strict: true })` は strict なグラフを作ります。どのシグネチャにも合わない呼び出しは、コード `TSG_ERR_INVALID_ARGUMENTS` の `TypeError` を投げます。
 
 単独で作ったモデルは `addNode`、`addEdge`、`addSubgraph` で追加します。
 
@@ -145,7 +149,7 @@ console.log(toDot(g));
 
 ## グラフ属性の代入
 
-グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。グラフの属性のメソッドはこれらの文を扱います。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。コンストラクタやファクトリの属性は、渡した順で最初の代入になります。
+グラフの本体にある `bgcolor=gray;` は、Graphviz にとっては書かれた位置の `graph [bgcolor=gray]` と同じです。後の代入がこれを上書きし、これが既定値になるのは後に続くサブグラフだけです。`addAttributeAssignment(key, value)` は代入をグラフの最後の文として追加し、`AttributeAssignmentModel` を返します。これは `key` と `value` を持ち（`value` を設定するとその位置のまま変わります）、コメントも持てます。`removeAttributeAssignment` で取り除けます。グラフの属性のメソッドはこれらの文を扱います。グラフの属性はその代入であり、別の表はありません。`getAttribute(key)` はそのキーの最後の代入の値です（`graph [...]` リストの値は読みません）。`setAttribute(key, value)` はそのキーの最初の代入の値を変えて残りを削除し、代入がなければ本体の先頭（すでにある代入の後）に追加します。`removeAttribute(key)` はそのキーの代入をすべて削除し、`getAttributeNames()` は代入されたキーを並べます。
 
 ```typescript
 import { Digraph, Node, toDot } from 'ts-graphviz';
