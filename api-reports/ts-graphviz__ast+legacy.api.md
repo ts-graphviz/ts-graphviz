@@ -22,11 +22,11 @@ interface ASTCommonProperties {
   danglingComments?: CommentASTNode[];
 }
 
-interface AttributeASTNode<T extends AttributeKey = AttributeKey> extends ASTBaseNode, AttributeASTProperties<T> {
+interface AttributeASTNode<T extends string = string> extends ASTBaseNode, AttributeASTProperties<T> {
   type: "Attribute";
 }
 
-interface AttributeASTProperties<T extends AttributeKey = AttributeKey> extends ASTCommonProperties {
+interface AttributeASTProperties<T extends string = string> extends ASTCommonProperties {
   key: LiteralASTNode<T>;
   value: LiteralASTNode;
 }

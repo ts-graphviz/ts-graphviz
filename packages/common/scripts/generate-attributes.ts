@@ -2,13 +2,15 @@
  * Generate `src/attributes/attribute.ts` from the Graphviz documentation snapshot in
  * `graphviz-docs/attrs.json` (see `fetch-graphviz-docs.ts`).
  *
- * The output keeps the structure that user code can augment (see the
- * "Extending the Type System" section of the ts-graphviz README):
+ * The output is type aliases, which declaration merging cannot extend:
+ * attributes of your own are added by a schema (`defineSchema`), for the
+ * models of one kit.
  *
  * - `EdgeAttributeKey`, `NodeAttributeKey`, `GraphAttributeKey`,
- *   `SubgraphAttributeKey`, `ClusterSubgraphAttributeKey` namespaces with
- *   `$values` / `$exclude` interfaces,
- * - `Attribute.$keys` (key names with TSDoc) and `Attribute.$types` (value types).
+ *   `SubgraphAttributeKey`, `ClusterSubgraphAttributeKey`: the keys of each
+ *   kind of object,
+ * - `Attribute.keys` (key names with TSDoc) and `Attribute.types` (value
+ *   types), `AttributeValueTypeNames` (value type names).
  *
  * The declarations are written as plain text and formatted by Biome via
  * `pnpm codegen`. (They used to be built with the TypeScript factory API,
@@ -227,23 +229,8 @@ const quote = (text: string) => `'${text.replace(/[\\']/g, '\\$&')}'`;
 /** Members joined by `|`; no members is `never` (as the TypeScript printer wrote it). */
 const union = (members: string[]) =>
   members.length === 0 ? 'never' : members.join(' | ');
-/** `keyof $exclude | symbol | number` */
-const EXCLUDED_KEYS = 'keyof $exclude | symbol | number';
-
 const namespace = (name: string, body: string[]) =>
   `export namespace ${name} {\n${body.join('\n')}\n}`;
-
-/** `export type values = Exclude<keyof $values, keyof $exclude | symbol | number>;` */
-const valuesAlias = () =>
-  `export type values = Exclude<keyof $values, ${EXCLUDED_KEYS}>;`;
-
-/** `export interface $values extends $keywords<'a' | 'b'> {}` */
-const valuesInterface = (keys: string[]) =>
-  `export interface $values extends $keywords<${union(keys.map(quote))}> {}`;
-
-/** `export interface $exclude extends $keywordsValidation {}` */
-const excludeInterface = () =>
-  'export interface $exclude extends $keywordsValidation {}';
 
 // Fail with a useful message before an unmapped type or a name that is not an
 // identifier reaches the output.
@@ -263,7 +250,7 @@ for (const attr of docs) {
 const statements: string[] = [];
 
 // import type { ... } from './types.js';
-const valueTypeNames = new Set<string>(['$keywords', '$keywordsValidation']);
+const valueTypeNames = new Set<string>();
 for (const attr of docs) {
   for (const t of typeNamesOf(attr).map(tsTypeOf)) {
     if (!PRIMITIVES.has(t)) valueTypeNames.add(t);
@@ -281,16 +268,8 @@ for (const obj of OBJECTS) {
     .sort(byName);
   statements.push(
     withDoc(
-      `export type ${obj.name} = ${obj.name}.values;`,
+      `export type ${obj.name} = ${union(keys.map(quote))};`,
       `*\n * ${obj.doc}\n * @group Attribute\n `,
-    ),
-    withDoc(
-      namespace(obj.name, [
-        valuesAlias(),
-        valuesInterface(keys),
-        excludeInterface(),
-      ]),
-      '* @hidden ',
     ),
   );
 }
@@ -315,28 +294,21 @@ const sortedDocs = [...docs].sort((a, b) => byName(a.name, b.name));
 
 statements.push(
   namespace('Attribute', [
-    `export type keys = Omit<$keys, ${EXCLUDED_KEYS}>;`,
-    `export type types = Omit<$types, ${EXCLUDED_KEYS}>;`,
-    // No TSDoc on this declaration: `@hidden` on one declaration of a merged
-    // interface hides the whole interface from typedoc, including the
-    // documented keys below.
-    'export interface $keys extends $keywords<AttributeKey> {}',
-    excludeInterface(),
     withDoc(
-      `export interface $keys {\n${sortedDocs
+      `export type keys = {\n${sortedDocs
         .map((attr) =>
           withDoc(`${attr.name}: ${quote(attr.name)};`, tsdocFor(attr)),
         )
         .join('\n')}\n}`,
-      '*\n * @group Attribute\n ',
+      '*\n * Each attribute key, by itself, with its documentation.\n * @group Attribute\n ',
     ),
     withDoc(
-      `export interface $types {\n${sortedDocs
+      `export type types = {\n${sortedDocs
         .map(
           (attr) => `${attr.name}: ${union(typeNamesOf(attr).map(tsTypeOf))};`,
         )
         .join('\n')}\n}`,
-      '*\n * $types is an interface that defines a set of attributes that can be used to configure a graph.\n ',
+      '*\n * The value type of each attribute.\n * @group Attribute\n ',
     ),
   ]),
 );
@@ -344,7 +316,7 @@ statements.push(
 // export interface AttributeValueTypeNames { ... }
 statements.push(
   withDoc(
-    `export interface AttributeValueTypeNames {\n${sortedDocs
+    `export type AttributeValueTypeNames = {\n${sortedDocs
       .map(
         (attr) =>
           `${attr.name}: ${union([...new Set(typeNamesOf(attr))].map(quote))};`,

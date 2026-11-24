@@ -191,9 +191,9 @@ The classes of 3.x kept one set of defaults per graph (`attributes.node`, `attri
 
 With `ts-graphviz`, you can extend the library's type system to customize graph visualization solutions. This is useful when you need to specify custom graph layouts, output formats, or add custom attributes not supported by default.
 
-### Customization with the `$` Symbol
+### Types of your own
 
-To allow for customization, types intended for extension are named with the `$` symbol. If you need to extend a type definition not listed below, check the source code to see if it can be extended with `$...`. If not, please create an issue or pull request.
+Attributes and value types of your own are added by a schema (`defineSchema`), for the models of one kit; layout engines and output formats a Graphviz plugin adds are named per call. Nothing is changed for the whole program: the types are not extended with declaration merging (`declare module '@ts-graphviz/common'`).
 
 ### Use Cases
 
@@ -220,42 +220,36 @@ const video = await toBlob('digraph { a -> b }', {
 
 #### Adding Custom Attributes
 
-You can add custom attributes by extending the types in `@ts-graphviz/common`:
+A schema lists the attributes and value types the models of a kit take beyond (or instead of) the built-in ones:
 
 ```typescript
-import { $keywords } from '@ts-graphviz/common';
-import { digraph, toDot, attribute as _ } from 'ts-graphviz';
+import { attr, defineSchema, toDot, values, withModelKit } from 'ts-graphviz';
 
-// 1. Declare the '@ts-graphviz/common' module.
-declare module '@ts-graphviz/common' {
-  export namespace GraphAttributeKey {
-    // 2. Define the $values interface in the GraphAttributeKey namespace.
-    // 3. Extend $keywords with the name of your custom attribute.
-    export interface $values extends $keywords<'hoge'> {}
-  }
+// The attributes and value types your graphs take beyond the built-in ones.
+const schema = defineSchema({
+  graph: { hoge: attr<string>() }, // a new attribute
+  node: {
+    'data-id': attr<number>(),
+    label: attr.override<number>(), // a number instead of the built-in type
+  },
+  types: { style: values.extend<'sketchy'>() }, // every style attribute
+});
 
-  export namespace Attribute {
-    // 4. Define the $keys interface in the Attribute namespace.
-    // 5. Extend $keywords with the name of your custom attribute.
-    export interface $keys extends $keywords<'hoge'> {}
-
-    // 6. Define the $types interface in the Attribute namespace.
-    // 7. Specify the type of your custom attribute.
-    export interface $types {
-      hoge: string;
-    }
-  }
-}
-
-// Now you can use your custom attribute.
+const { digraph } = withModelKit({ schema });
 console.log(
   toDot(
     digraph((g) => {
-      g[_.hoge] = 'fuga';
+      g.hoge = 'fuga';
+      g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
     }),
   ),
 );
 ```
+
+- `attr<T>()` adds an attribute; `attr.extend<T>()` (the built-in type, or `T`) and `attr.override<T>()` (`T` instead) change a built-in one. Each entry gives its type, and which of them applies is always said: `attr<T>()` on a built-in attribute is a type error.
+- `types` changes a value type (`color`, `style`, `shape`, `arrowType`, …) and so every attribute that uses it, with `values.extend<T>()` or `values.override<T>()`. It types the names only: a name you add must be one the output you render to understands. Graphviz writes a style it does not know into PostScript output as a procedure call, which a PostScript library loaded with `dot -l` can define; SVG output ignores it with a warning.
+- The kinds are `graph`, `subgraph`, `cluster`, `node` and `edge`.
+- Only the models of that kit are typed with the schema: `withModelKit({ schema })`, `createModelKit({ schema, Node: MyNode })` (with `class MyNode extends Node<typeof schema> {}`) and `fromDot(dot, { convert: { models: { schema } } })`. Other graphs, a library's for instance, are not changed.
 
 ### Extensions and security
 
