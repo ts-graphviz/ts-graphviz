@@ -769,7 +769,7 @@ export type Double = number;
 
 export type DoubleList = Double | `${Double}:${Double}` | `${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}` | `${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}:${Double}`;
 
-export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED"];
+export declare const ERROR_CODES: readonly ["TSG_ERR_DOT_SYNTAX", "TSG_ERR_PARSE_FAILED", "TSG_ERR_AST_NODE_COUNT_EXCEEDED", "TSG_ERR_EDGE_TARGET_COUNT_EXCEEDED", "TSG_ERR_CYCLIC_STRUCTURE", "TSG_ERR_SHARED_NODE_COUNT_EXCEEDED", "TSG_ERR_NUL_CHARACTER", "TSG_ERR_INVALID_HTML_LIKE", "TSG_ERR_INVALID_ARROW", "TSG_ERR_INVALID_EDGE_TARGETS", "TSG_ERR_INVALID_PORT", "TSG_ERR_INVALID_ATTRIBUTE_LIST_KIND", "TSG_ERR_INVALID_COMMENT", "TSG_ERR_NO_PLUGIN", "TSG_ERR_UNCONVERTIBLE_AST", "TSG_ERR_NO_GRAPH", "TSG_ERR_MULTIPLE_GRAPHS", "TSG_ERR_NOT_A_MODEL", "TSG_ERR_NOT_A_MODEL_KIT", "TSG_ERR_UNWRITABLE_PROPERTY", "TSG_ERR_UNSUPPORTED_ENVIRONMENT", "TSG_ERR_COMMAND_FAILED", "TSG_ERR_OUTPUT_LIMIT_EXCEEDED", "TSG_ERR_UNSAFE_DOT", "TSG_ERR_INVALID_OPTION", "TSG_ERR_NO_CURRENT_GRAPH", "TSG_ERR_ROOT_UNMOUNTED", "TSG_ERR_INVALID_SCHEMA"];
 
 export type EdgeAttributeKey = EdgeAttributeKey.values;
 export declare namespace EdgeAttributeKey {
@@ -981,6 +981,7 @@ export interface ModelClasses<M extends AnyModelTypes = ModelTypes, S extends Sc
 }
 
 export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema = SchemaOf<M>> extends ModelClasses<M, S> {
+  readonly schema: S;
   createDigraph(id?: string, attributes?: GraphAttributesObject<S>): M["Digraph"];
   createDigraph(id?: string, strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
   createDigraph(strict?: boolean, attributes?: GraphAttributesObject<S>): M["Digraph"];
@@ -994,6 +995,25 @@ export interface ModelKit<M extends AnyModelTypes = ModelTypes, S extends Schema
   createNode(id: string, attributes?: NodeAttributesObject<S>): M["Node"];
   createEdge(targets: ReadonlyEdgeTargetLikeTuple, attributes?: EdgeAttributesObject<S>): M["Edge"];
 }
+
+export interface ModelKitOptions {
+  readonly schema?: Schema | undefined;
+  readonly Dot?: AnyConstructor;
+  readonly Graph?: AnyConstructor;
+  readonly Digraph?: AnyConstructor;
+  readonly Subgraph?: AnyConstructor;
+  readonly Node?: AnyConstructor;
+  readonly Edge?: AnyConstructor;
+}
+
+export type ModelKitOptionsOf<P> = P & {
+  readonly Dot?: ClassCheck<P, "Dot">;
+  readonly Graph?: ClassCheck<P, "Graph">;
+  readonly Digraph?: ClassCheck<P, "Digraph">;
+  readonly Subgraph?: ClassCheck<P, "Subgraph">;
+  readonly Node?: ClassCheck<P, "Node">;
+  readonly Edge?: ClassCheck<P, "Edge">;
+};
 
 export type ModelOf<T> = T extends ModelView<infer U> ? U : T;
 
@@ -1181,25 +1201,25 @@ export interface ReadonlySubgraphModel extends ReadonlyGraphBaseModel<"Subgraph"
 
 export type Rect = `${Double},${Double},${Double},${Double}`;
 
-export interface ResolvedModelTypes<P extends Partial<ModelClasses> = Record<never, never>> extends ModelTypes {
+export interface ResolvedModelTypes<P extends ModelKitOptions = Record<never, never>, S extends Schema = SchemaOfOptions<P>> extends ModelTypes<S> {
   Dot: P extends {
     Dot: infer C;
-  } ? Creates<C, DotModel> : DotModel;
+  } ? Creates<C, DotModel<S>> : DotModel<S>;
   Graph: P extends {
     Graph: infer C;
-  } ? Creates<C, RootGraphModel> : RootGraphModel;
+  } ? Creates<C, RootGraphModel<S>> : RootGraphModel<S>;
   Digraph: P extends {
     Digraph: infer C;
-  } ? Creates<C, RootGraphModel> : RootGraphModel;
+  } ? Creates<C, RootGraphModel<S>> : RootGraphModel<S>;
   Subgraph: P extends {
     Subgraph: infer C;
-  } ? Creates<C, SubgraphModel> : SubgraphModel;
+  } ? Creates<C, SubgraphModel<S>> : SubgraphModel<S>;
   Node: P extends {
     Node: infer C;
-  } ? Creates<C, NodeModel> : NodeModel;
+  } ? Creates<C, NodeModel<S>> : NodeModel<S>;
   Edge: P extends {
     Edge: infer C;
-  } ? Creates<C, EdgeModel> : EdgeModel;
+  } ? Creates<C, EdgeModel<S>> : EdgeModel<S>;
 }
 
 export interface RootGraphConstructor<G extends ReadonlyRootGraphModel = RootGraphModel, S extends Schema = EmptySchema> {
@@ -1242,6 +1262,8 @@ export interface SchemaEntry<T extends DotValue = DotValue, Mode extends SchemaE
 
 export type SchemaEntryMode = "add" | "extend" | "override";
 
+export type SchemaErrors<S> = { [Kind in keyof S]: Kind extends SchemaKind ? EntryErrors<S[Kind], SchemaKindAttributeKeys[Kind]> : unknown; };
+
 export type SchemaKind = "graph" | "subgraph" | "cluster" | "node" | "edge";
 
 export interface SchemaKindAttributeKeys {
@@ -1253,6 +1275,10 @@ export interface SchemaKindAttributeKeys {
 }
 
 export type SchemaOf<M extends AnyModelTypes> = M["Schema"];
+
+export type SchemaOfOptions<P> = P extends {
+  readonly schema: infer S extends Schema;
+} ? S : EmptySchema;
 
 export type SchemaValueTypeEntries = { readonly [N in ValueTypeName]?: SchemaEntry<N extends "style" | "arrowType" | "compass" ? string : DotValue, "extend" | "override">; };
 
@@ -1337,6 +1363,8 @@ export declare namespace TBbalanceType {
   interface $exclude extends $keywordsValidation {}
 }
 
+export declare const VALUE_TYPE_NAMES: readonly ValueTypeName[];
+
 export type ValueTypeName = keyof ValueTypes;
 
 export type ValueTypeNamesUsing<N extends ValueTypeName> = N | ("compass" extends N ? "portPos" : never);
@@ -1361,6 +1389,14 @@ export interface ValueTypes {
 }
 
 export type ViewPort = `${Double},${Double},${Double},${Double},${Double}` | `${Double},${Double},${Double},${string}`;
+
+export declare const attr: {
+  <T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "add">;
+  extend<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "extend">;
+  override<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "override">;
+};
+
+export declare function defineSchema<const S extends Schema>(schema: S & SchemaErrors<S>): S;
 
 export declare function escString(value: string): EscStringValue;
 
@@ -1405,11 +1441,18 @@ export declare function toNodeRef(target: NodeRefLike): NodeRef;
 
 export declare function toNodeRefGroup(targets: ReadonlyNodeRefGroupLike): NodeRefGroup;
 
+export declare const values: {
+  extend<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "extend">;
+  override<T extends DotValue = never>(...typeArgumentRequired: TypeArgumentRequired<T>): SchemaEntry<T, "override">;
+};
+
 export declare function withCode<E extends Error, C extends ErrorCode>(error: E, code: C): Omit<E, "code"> & CodedError<C>;
 
 // Used by the exports, not exported
 
 declare const built: unique symbol;
+
+type AnyConstructor = abstract new (...args: any[]) => unknown;
 
 type AnyKindAttributesObject<S extends Schema> = AttributesObject<Exclude<NodeAttributeKey & EdgeAttributeKey & (SubgraphAttributeKey | ClusterSubgraphAttributeKey), keyof SchemaAttributeTypes<S, "node"> | keyof SchemaAttributeTypes<S, "edge"> | keyof SubgraphSchemaAttributeTypes<S>>>;
 
@@ -1431,11 +1474,15 @@ type ChangedKeys<Keys extends AttributeKey, T> = Keys extends AttributeKey ? [Ex
 
 type ChangedNames<T> = ValueTypeNamesUsing<keyof T & ValueTypeName>;
 
+type ClassCheck<P, K extends keyof ModelClasses> = P extends { readonly [_ in K]?: infer C; } ? [C] extends [ModelClasses<ModelTypes<SchemaOfOptions<P>>>[K] | undefined] ? unknown : [AnyConstructor] extends [C] ? unknown : "a class of the models of the schema (or of none, without one)" : unknown;
+
 type ClusterOnlyAttributeKey<S> = Exclude<ClusterSubgraphAttributeKey | keyof SchemaAttributeTypes<S, "cluster">, SubgraphAttributeKey | keyof SchemaAttributeTypes<S, "subgraph">>;
 
 type Creates<C, Base> = C extends (abstract new (...args: any[]) => infer I) ? I extends Base ? I : Base : Base;
 
 type EntriesOf<S, Kind extends SchemaKind> = S extends { readonly [P in Kind]: infer A extends object; } ? A : EmptySchema;
+
+type EntryErrors<Entries, BuiltIn> = { [K in keyof Entries]: Entries[K] extends SchemaEntry<DotValue, infer Mode> ? K extends BuiltIn ? [Mode] extends ["add"] ? "a built-in attribute: use attr.extend<T>() or attr.override<T>()" : unknown : [Mode] extends ["add"] ? unknown : "not a built-in attribute: use attr<T>()" : unknown; };
 
 type KindAttributeType<S, Kind extends SchemaKind, K extends PropertyKey> = K extends keyof SchemaAttributeTypes<S, Kind> ? SchemaAttributeTypes<S, Kind>[K] : K extends SchemaKindAttributeKeys[Kind] ? Attribute<K> : never;
 
@@ -1448,6 +1495,8 @@ type ReadonlyModelOf<K extends DotObjectType> = Extract<AnyReadonlyDotObjectMode
 }>;
 
 type SchemaAttributesObject<E extends object> = [keyof E] extends [never] ? unknown : { [K in keyof NoInferType<E> & string]?: SchemaAttribute<E, K>; };
+
+type TypeArgumentRequired<T> = [T] extends [never] ? [typeArgumentRequired: never] : [];
 
 type TypedAttribute<K extends AttributeKey, T> = [Extract<ValueTypeNamesOf<K>, ChangedNames<T>>] extends [never] ? Attribute<K> : AttributeValueTypes<SchemaValueTypes<T>>[ValueTypeNamesOf<K>];
 

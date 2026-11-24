@@ -6,11 +6,14 @@ import type {
 import {
   type EdgeModel,
   type ModelClasses,
+  type ModelKitOptions,
+  type ModelKitOptionsOf,
   type ModelTypes,
   type NodeModel,
   ownOptions,
   type ResolvedModelTypes,
   type RootGraphModel,
+  type SchemaOfOptions,
   type SubgraphModel,
 } from '@ts-graphviz/common';
 import { createModelKit } from '@ts-graphviz/core';
@@ -66,7 +69,7 @@ export type FromDotResult<
  */
 export type FromDotOptions<
   T extends FromDotRule,
-  P extends Partial<ModelClasses> = Partial<ModelClasses>,
+  P extends ModelKitOptions = NoSchemaClasses,
   D extends boolean = false,
 > = {
   /**
@@ -94,7 +97,21 @@ export type FromDotOptions<
    * @defaultValue `false`
    */
   dsl?: D;
-} & (D extends true ? { dsl: true } : unknown);
+} & (D extends true ? { dsl: true } : unknown) &
+  // With a schema in `P`, the classes and schema are given: the result is
+  // typed by them.
+  ([keyof SchemaOfOptions<P>] extends [never]
+    ? unknown
+    : { convert: { models: P } });
+
+/**
+ * The classes of `convert.models` without a schema: the models of the
+ * overloads that take them are of no schema.
+ * @group Convert DOT to Model
+ */
+export type NoSchemaClasses = Partial<ModelClasses> & {
+  readonly schema?: undefined;
+};
 
 /**
  * fromDot is a function that converts a DOT string to a model.
@@ -108,12 +125,12 @@ export type FromDotOptions<
  * With `dsl: true`, its DOT DSL.
  */
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<'Dot' | 'Graph', P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -121,13 +138,13 @@ export function fromDot<
   ResolvedModelTypes<P>
 >;
 export function fromDot<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
   options: FromDotOptions<R, P, D> & {
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   FromDotModel<R, ResolvedModelTypes<P>>,
@@ -140,18 +157,18 @@ export function fromDot(
 ): RootGraphModel;
 export function fromDot<const D extends boolean>(
   dot: string,
-  options: FromDotOptions<'Dot' | 'Graph', Partial<ModelClasses>, D>,
+  options: FromDotOptions<'Dot' | 'Graph', NoSchemaClasses, D>,
 ): FromDotResult<RootGraphModel, D>;
 export function fromDot<
   const R extends FromDotRule,
   const D extends boolean = false,
 >(
   dot: string,
-  options: FromDotOptions<R, Partial<ModelClasses>, D>,
+  options: FromDotOptions<R, NoSchemaClasses, D>,
 ): FromDotResult<FromDotModel<R>, D>;
 export function fromDot(
   dot: string,
-  options?: FromDotOptions<FromDotRule, Partial<ModelClasses>, boolean>,
+  options?: FromDotOptions<FromDotRule, ModelKitOptions, boolean>,
 ): AnyFromDotModel | DSL<AnyFromDotModel> {
   // Own properties only: an inherited one is never an option.
   const own = ownOptions(options);
@@ -170,13 +187,13 @@ export function fromDot(
  * @returns The graphs, possibly none; with `dsl: true`, their DOT DSLs.
  */
 export function fromDotAll<
-  const P extends Partial<ModelClasses>,
+  const P extends ModelKitOptions,
   const D extends boolean = false,
 >(
   dot: string,
   options: Omit<FromDotOptions<'Dot', P, D>, 'parse'> & {
     parse?: CommonParseOptions;
-    convert: { models: P };
+    convert: { models: ModelKitOptionsOf<P> };
   },
 ): FromDotResult<
   ResolvedModelTypes<P>['Graph'] | ResolvedModelTypes<P>['Digraph'],
@@ -191,16 +208,13 @@ export function fromDotAll(
 ): RootGraphModel[];
 export function fromDotAll<const D extends boolean>(
   dot: string,
-  options: Omit<FromDotOptions<'Dot', Partial<ModelClasses>, D>, 'parse'> & {
+  options: Omit<FromDotOptions<'Dot', NoSchemaClasses, D>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): FromDotResult<RootGraphModel, D>[];
 export function fromDotAll(
   dot: string,
-  options?: Omit<
-    FromDotOptions<'Dot', Partial<ModelClasses>, boolean>,
-    'parse'
-  > & {
+  options?: Omit<FromDotOptions<'Dot', ModelKitOptions, boolean>, 'parse'> & {
     parse?: CommonParseOptions;
   },
 ): (RootGraphModel | DSL<RootGraphModel>)[] {

@@ -1,4 +1,5 @@
 export * from './attributes/attribute.js';
+export * from './attributes/define-schema.js';
 export * from './attributes/schema.js';
 export * from './attributes/types.js';
 export * from './attributes/value-types.js';

@@ -78,6 +78,8 @@ export const ERROR_CODES = [
   'TSG_ERR_NO_CURRENT_GRAPH',
   /** A React root was rendered after `unmount()` (`Error`). */
   'TSG_ERR_ROOT_UNMOUNTED',
+  /** `defineSchema`, or a model kit, was given something that is not a schema `attr` and `values` describe (`TypeError`). */
+  'TSG_ERR_INVALID_SCHEMA',
 ] as const;
 // Shared by every module of the process: frozen, so no code can change what
 // isTsGraphvizError accepts.

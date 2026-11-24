@@ -1,4 +1,4 @@
-import type { Schema } from '../attributes/schema.js';
+import type { EmptySchema, Schema } from '../attributes/schema.js';
 import type {
   AnyModelTypes,
   DotConstructor,
@@ -53,8 +53,8 @@ export interface ModelClasses<
  * so they may be taken off the kit.
  *
  * `@ts-graphviz/core` provides the default kit (`defaultModelKit`) and
- * `createModelKit()` to make one from other classes; `toModel` and `fromDot`
- * create every model with the kit in their options.
+ * `createModelKit()` to make one from other classes or with a schema;
+ * `toModel` and `fromDot` create every model with the kit in their options.
  *
  * @typeParam M - The model types the kit creates.
  * @typeParam S - The schema of the models, which types the attributes the
@@ -65,6 +65,12 @@ export interface ModelKit<
   M extends AnyModelTypes = ModelTypes,
   S extends Schema = SchemaOf<M>,
 > extends ModelClasses<M, S> {
+  /**
+   * The schema of the models the kit creates: the attributes and value
+   * types they take beyond (or instead of) the built-in ones. A kit
+   * without one has the empty schema (`{}`).
+   */
+  readonly schema: S;
   /**
    * Create a directed graph.
    */
@@ -136,25 +142,93 @@ type Creates<C, Base> = C extends abstract new (
   : Base;
 
 /**
- * The model types of a kit made from the classes `P` (as passed to
- * `createModelKit` or `withModelKit`): a class given there gives its
- * instance type, and a slot left out gives the base interface.
+ * What `createModelKit`, `withModelKit` and `fromDot`'s `convert.models`
+ * take: the classes to create the models from (the default ones for the
+ * kinds left out) and the schema of the models (none by default).
+ *
+ * The classes are those of the schema: a class whose models are of another
+ * schema, or of none, is a type error ({@link ModelKitOptionsOf}).
  *
  * @group Model Kit
  */
+export interface ModelKitOptions {
+  readonly schema?: Schema | undefined;
+  readonly Dot?: AnyConstructor;
+  readonly Graph?: AnyConstructor;
+  readonly Digraph?: AnyConstructor;
+  readonly Subgraph?: AnyConstructor;
+  readonly Node?: AnyConstructor;
+  readonly Edge?: AnyConstructor;
+}
+
+type AnyConstructor = abstract new (...args: any[]) => unknown;
+
+/**
+ * The schema of the kit options `P`: its `schema`, or the empty schema.
+ * @group Model Kit
+ */
+export type SchemaOfOptions<P> = P extends {
+  readonly schema: infer S extends Schema;
+}
+  ? S
+  : EmptySchema;
+
+/**
+ * `P` where each class it gives is a constructor of the models of its
+ * schema; otherwise a type that no class fits, with the reason. The type of
+ * the argument of `createModelKit`, `withModelKit` and `fromDot`'s
+ * `convert.models`.
+ * @group Model Kit
+ */
+export type ModelKitOptionsOf<P> = P & {
+  readonly Dot?: ClassCheck<P, 'Dot'>;
+  readonly Graph?: ClassCheck<P, 'Graph'>;
+  readonly Digraph?: ClassCheck<P, 'Digraph'>;
+  readonly Subgraph?: ClassCheck<P, 'Subgraph'>;
+  readonly Node?: ClassCheck<P, 'Node'>;
+  readonly Edge?: ClassCheck<P, 'Edge'>;
+};
+
+/**
+ * Nothing when the class `P` gives for `K` (if any) creates the models of
+ * the schema of `P`, or is not known; otherwise a type no class fits. A conditional type,
+ * so that `P` is inferred from the argument alone.
+ */
+type ClassCheck<P, K extends keyof ModelClasses> = P extends {
+  readonly [_ in K]?: infer C;
+}
+  ? [C] extends [ModelClasses<ModelTypes<SchemaOfOptions<P>>>[K] | undefined]
+    ? unknown
+    : // Options typed as ModelKitOptions itself say nothing of the class.
+      [AnyConstructor] extends [C]
+      ? unknown
+      : 'a class of the models of the schema (or of none, without one)'
+  : unknown;
+
+/**
+ * The model types of a kit made from the options `P` (as passed to
+ * `createModelKit` or `withModelKit`): of its schema, and a class given
+ * there gives its instance type, while a kind left out gives the model
+ * interface of the schema.
+ *
+ * @typeParam P - The options.
+ * @typeParam S - The schema of the options; leave it to its default.
+ * @group Model Kit
+ */
 export interface ResolvedModelTypes<
-  P extends Partial<ModelClasses> = Record<never, never>,
-> extends ModelTypes {
-  Dot: P extends { Dot: infer C } ? Creates<C, DotModel> : DotModel;
+  P extends ModelKitOptions = Record<never, never>,
+  S extends Schema = SchemaOfOptions<P>,
+> extends ModelTypes<S> {
+  Dot: P extends { Dot: infer C } ? Creates<C, DotModel<S>> : DotModel<S>;
   Graph: P extends { Graph: infer C }
-    ? Creates<C, RootGraphModel>
-    : RootGraphModel;
+    ? Creates<C, RootGraphModel<S>>
+    : RootGraphModel<S>;
   Digraph: P extends { Digraph: infer C }
-    ? Creates<C, RootGraphModel>
-    : RootGraphModel;
+    ? Creates<C, RootGraphModel<S>>
+    : RootGraphModel<S>;
   Subgraph: P extends { Subgraph: infer C }
-    ? Creates<C, SubgraphModel>
-    : SubgraphModel;
-  Node: P extends { Node: infer C } ? Creates<C, NodeModel> : NodeModel;
-  Edge: P extends { Edge: infer C } ? Creates<C, EdgeModel> : EdgeModel;
+    ? Creates<C, SubgraphModel<S>>
+    : SubgraphModel<S>;
+  Node: P extends { Node: infer C } ? Creates<C, NodeModel<S>> : NodeModel<S>;
+  Edge: P extends { Edge: infer C } ? Creates<C, EdgeModel<S>> : EdgeModel<S>;
 }

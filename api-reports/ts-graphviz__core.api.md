@@ -181,7 +181,7 @@ export declare class Subgraph<S extends Schema = EmptySchema> extends GraphBase<
   isSubgraphCluster(): boolean;
 }
 
-export declare function createModelKit<const P extends Partial<ModelClasses> = Record<never, never>>(classes?: P): ModelKit<ResolvedModelTypes<P>>;
+export declare function createModelKit<const P extends ModelKitOptions = Record<never, never>>(options?: ModelKitOptionsOf<P>): ModelKit<ResolvedModelTypes<P>>;
 
 export declare const defaultModelKit: ModelKit;
 
