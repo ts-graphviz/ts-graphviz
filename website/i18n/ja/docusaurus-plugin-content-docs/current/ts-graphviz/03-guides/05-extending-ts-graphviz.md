@@ -180,7 +180,7 @@ const schema = defineSchema({
     'data-id': attr<number>(),
     label: attr.override<number>(), // 組み込みの型ではなく数値
   },
-  types: { style: values.extend<'my-style'>() }, // style 型のすべての属性
+  types: { style: values.extend<'sketchy'>() }, // style 型のすべての属性
 });
 
 const { digraph } = withModelKit({ schema });
@@ -188,7 +188,7 @@ console.log(
   toDot(
     digraph((g) => {
       g.hoge = 'fuga';
-      g.node('a', { 'data-id': 1, label: 2, style: 'my-style' });
+      g.node('a', { 'data-id': 1, label: 2, style: 'sketchy' });
     }),
   ),
 );
