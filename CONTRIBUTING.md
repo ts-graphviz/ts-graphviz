@@ -126,7 +126,8 @@ describe('renders with dot', { tags: ['process'] }, () => {
 script says so) plus Graphviz, and the container has:
 
 - no network (`--network none`);
-- the repository, with the `node_modules` installed on your machine, mounted
+- the repository, with the `node_modules` installed on your machine, and
+  pnpm's global virtual store they link into (`<store-path>/links`), mounted
   read-only, a read-only root file system and a `/tmp` tmpfs as the only
   writable place; `.git` and every top-level entry git does not track
   (`.env`, notes, caches), except `node_modules`, hidden behind an empty

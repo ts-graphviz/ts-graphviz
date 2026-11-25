@@ -4,6 +4,11 @@ packages:
   - 'examples/*'
   - 'website'
 
+# Link packages from the machine-wide virtual store (<store-path>/links)
+# instead of a per-checkout node_modules/.pnpm, so each git worktree installs
+# with symlinks only.
+enableGlobalVirtualStore: true
+
 allowBuilds:
   '@biomejs/biome': true
   esbuild: true

@@ -13,7 +13,8 @@
  * this script (or the nearest one it has, when there is no image for that
  * version yet), plus Graphviz. The repository is mounted read-only with the
  * node_modules installed on the host, so this needs a Linux host on the
- * architecture the dependencies were installed for.
+ * architecture the dependencies were installed for. pnpm's global virtual
+ * store, which those node_modules link into, is mounted read-only too.
  *
  * Only an allowlist of variables reaches the tests: PATH, HOME=/tmp,
  * TMPDIR=/tmp, LANG, and CI, TZ, FC_NUM_RUNS, FC_SEED when they are set;
@@ -29,7 +30,7 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -106,6 +107,28 @@ function untracked() {
 const hide = untracked();
 
 /**
+ * pnpm's global virtual store (`enableGlobalVirtualStore`), when it lies
+ * outside the repository: node_modules then holds only symlinks into it.
+ * It is mounted read-only at the same path. The symlinks are relative, and
+ * the `..` they have left over under /repo stop at /, so they reach it.
+ */
+function virtualStore(): string | undefined {
+  const file = join(root, 'node_modules', '.modules.yaml');
+  if (!existsSync(file)) return undefined;
+  // pnpm writes this file as JSON (which is also YAML).
+  const modules = JSON.parse(readFileSync(file, 'utf8')) as {
+    virtualStoreDir?: string;
+  };
+  if (modules.virtualStoreDir === undefined) return undefined;
+  const dir = resolve(root, 'node_modules', modules.virtualStoreDir);
+  const inside = relative(root, dir);
+  const outside =
+    inside === '..' || inside.startsWith(`..${sep}`) || isAbsolute(inside);
+  return outside ? dir : undefined;
+}
+const store = virtualStore();
+
+/**
  * Mounts that hide those entries: an empty tmpfs over a directory,
  * /dev/null over a file.
  */
@@ -144,6 +167,9 @@ const sandbox = (runtime: string) => [
   '/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777',
   '--mount',
   `type=bind,source=${root},target=/repo,readonly`,
+  ...(store === undefined
+    ? []
+    : ['--mount', `type=bind,source=${store},target=${store},readonly`]),
   ...hidden(runtime),
   '--workdir',
   '/repo',
