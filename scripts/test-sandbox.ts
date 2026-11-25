@@ -13,7 +13,9 @@
  * this script (or the nearest one it has, when there is no image for that
  * version yet), plus Graphviz. The repository is mounted read-only with the
  * node_modules installed on the host, so this needs a Linux host on the
- * architecture the dependencies were installed for.
+ * architecture the dependencies were installed for. pnpm's global virtual
+ * store, which those node_modules link into, is mounted read-only too; both
+ * at their own paths, so that the links resolve.
  *
  * Only an allowlist of variables reaches the tests: PATH, HOME=/tmp,
  * TMPDIR=/tmp, LANG, and CI, TZ, FC_NUM_RUNS, FC_SEED when they are set;
@@ -21,7 +23,9 @@
  *
  * Read-only is not private: what the tests can read, they can print. So
  * `.git` and every top-level entry git does not track (`.env`, notes,
- * caches), except node_modules, is hidden behind an empty mount.
+ * caches), except node_modules, is hidden behind an empty mount. The global
+ * virtual store is shared by the projects on this machine that use it, and
+ * the tests can read all of it.
  *
  * The run is stopped (and its container removed) after
  * SANDBOX_TIMEOUT_MINUTES, 30 by default.
@@ -29,7 +33,7 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -106,6 +110,35 @@ function untracked() {
 const hide = untracked();
 
 /**
+ * pnpm's global virtual store (`enableGlobalVirtualStore`), when it lies
+ * outside node_modules: node_modules then holds only relative symlinks into
+ * it. The repository and the store are mounted at their own paths, so that
+ * those symlinks resolve in the container as they do here (and the store
+ * after the mounts that hide untracked entries, in case it is in one).
+ */
+function virtualStore(): string | undefined {
+  const file = join(root, 'node_modules', '.modules.yaml');
+  if (!existsSync(file)) return undefined;
+  const text = readFileSync(file, 'utf8');
+  let dir: unknown;
+  try {
+    // pnpm 12 writes it as JSON (which is also YAML)
+    dir = JSON.parse(text).virtualStoreDir;
+  } catch {
+    // earlier versions as YAML
+    dir = /^virtualStoreDir: *(['"]?)(.+)\1 *$/m.exec(text)?.[2];
+  }
+  if (typeof dir !== 'string') return undefined;
+  const modules = join(root, 'node_modules');
+  const store = resolve(modules, dir);
+  const inside = relative(modules, store);
+  const outside =
+    inside === '..' || inside.startsWith(`..${sep}`) || isAbsolute(inside);
+  return outside ? store : undefined;
+}
+const store = virtualStore();
+
+/**
  * Mounts that hide those entries: an empty tmpfs over a directory,
  * /dev/null over a file.
  */
@@ -115,11 +148,11 @@ function hidden(runtime: string): string[] {
       ? [
           '--tmpfs',
           // Podman would copy the directory's files into the tmpfs.
-          `/repo/${entry.name}:ro,size=4k,mode=0555${runtime === 'podman' ? ',notmpcopyup' : ''}`,
+          `${root}/${entry.name}:ro,size=4k,mode=0555${runtime === 'podman' ? ',notmpcopyup' : ''}`,
         ]
       : [
           '--mount',
-          `type=bind,source=/dev/null,target=/repo/${entry.name},readonly`,
+          `type=bind,source=/dev/null,target=${root}/${entry.name},readonly`,
         ],
   );
 }
@@ -143,10 +176,13 @@ const sandbox = (runtime: string) => [
   '--tmpfs',
   '/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777',
   '--mount',
-  `type=bind,source=${root},target=/repo,readonly`,
+  `type=bind,source=${root},target=${root},readonly`,
   ...hidden(runtime),
+  ...(store === undefined
+    ? []
+    : ['--mount', `type=bind,source=${store},target=${store},readonly`]),
   '--workdir',
-  '/repo',
+  root,
   '--user',
   `${uid}:${gid}`,
   // Rootless Podman: the same uid inside as outside, to read the files.
@@ -208,7 +244,7 @@ function prepare(runtime: string): string | undefined {
     '    { echo "$p is not hidden" >&2; exit 1; }',
     'done',
   ].join('\n');
-  const paths = hide.map((entry) => `/repo/${entry.name}`);
+  const paths = hide.map((entry) => `${root}/${entry.name}`);
   const check = spawnSync(
     runtime,
     [...sandbox(runtime), 'sh', '-c', script, 'sh', ...paths],
