@@ -111,27 +111,30 @@ const hide = untracked();
 
 /**
  * pnpm's global virtual store (`enableGlobalVirtualStore`), when it lies
- * outside the repository: node_modules then holds only relative symlinks
- * into it. The repository and the store are mounted at their own paths, so
- * that those symlinks resolve in the container as they do here.
+ * outside node_modules: node_modules then holds only relative symlinks into
+ * it. The repository and the store are mounted at their own paths, so that
+ * those symlinks resolve in the container as they do here (and the store
+ * after the mounts that hide untracked entries, in case it is in one).
  */
 function virtualStore(): string | undefined {
   const file = join(root, 'node_modules', '.modules.yaml');
   if (!existsSync(file)) return undefined;
-  let modules: { virtualStoreDir?: unknown };
+  const text = readFileSync(file, 'utf8');
+  let dir: unknown;
   try {
-    // pnpm writes it as JSON (which is also YAML); one it did not gets no
-    // store mount.
-    modules = JSON.parse(readFileSync(file, 'utf8'));
+    // pnpm 12 writes it as JSON (which is also YAML)
+    dir = JSON.parse(text).virtualStoreDir;
   } catch {
-    return undefined;
+    // earlier versions as YAML
+    dir = /^virtualStoreDir: *(['"]?)(.+)\1 *$/m.exec(text)?.[2];
   }
-  if (typeof modules.virtualStoreDir !== 'string') return undefined;
-  const dir = resolve(root, 'node_modules', modules.virtualStoreDir);
-  const inside = relative(root, dir);
+  if (typeof dir !== 'string') return undefined;
+  const modules = join(root, 'node_modules');
+  const store = resolve(modules, dir);
+  const inside = relative(modules, store);
   const outside =
     inside === '..' || inside.startsWith(`..${sep}`) || isAbsolute(inside);
-  return outside ? dir : undefined;
+  return outside ? store : undefined;
 }
 const store = virtualStore();
 
@@ -174,10 +177,10 @@ const sandbox = (runtime: string) => [
   '/tmp:rw,exec,nosuid,nodev,size=1g,mode=1777',
   '--mount',
   `type=bind,source=${root},target=${root},readonly`,
+  ...hidden(runtime),
   ...(store === undefined
     ? []
     : ['--mount', `type=bind,source=${store},target=${store},readonly`]),
-  ...hidden(runtime),
   '--workdir',
   root,
   '--user',
