@@ -3,20 +3,17 @@ import { ownOptions } from './own-options.js';
 import type { Layout, Options } from './types.js';
 
 /**
- * escapeValue is a function that escapes a given Attribute value of a given AttributeKey.
- * It checks the type of the value and adds quotes if the value is of type string and contains whitespace.
+ * Serializes an attribute value for a Graphviz argv option.
+ * spawn passes arguments directly, so shell-style quoting would become part of the value.
+ * Double backslashes to keep Graphviz label escape sequences literal.
  *
  * @param value The value of an Attribute of type T that extends AttributeKey
- * @returns The escaped Attribute value
+ * @returns The attribute value prefixed by =, or an empty string for true
  */
 export function escapeValue<T extends AttributeKey>(value: Attribute<T>) {
-  if (value !== true) {
-    if (typeof value === 'string' && /\s/g.test(value)) {
-      return `="${value}"`;
-    }
-    return `=${value}`;
-  }
-  return '';
+  return value === true
+    ? ''
+    : `=${typeof value === 'string' ? value.replace(/\\/g, '\\\\') : value}`;
 }
 
 /**
